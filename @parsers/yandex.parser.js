@@ -63,6 +63,7 @@ async function parsePage(browser, group, album) {
 }
 
 
+// https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(group, album) {
     console.log('YANDEX PARSER:START...');
 

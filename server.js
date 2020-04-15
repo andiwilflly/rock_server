@@ -9,9 +9,9 @@ app.get('/', function (req, res) {
 });
 
 app.get('/find/:group/:album', async function (req, res) {
-    await yandexParser('Asking Alexandria', 'Down To Hell');
+    const yandex = await yandexParser('Asking Alexandria', 'Down To Hell');
     res.send({
-        test: `${req.params.group}, ${req.params.album}`
+        yandex
     });
 });
 
