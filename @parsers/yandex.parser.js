@@ -1,17 +1,3 @@
-const fs = require('fs');
-const puppeteer = require('puppeteer-extra');
-
-
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-puppeteer.use(StealthPlugin());
-puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')());
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
-puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
-
-
-let browser = null;
-
-
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
@@ -58,17 +44,8 @@ async function parsePage(browser, group, album) {
 }
 
 
-// https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-async function start(group, album) {
+async function start(browser, group, album) {
     console.log('✨ YANDEX PARSER:START...');
-
-    //  const browser = await puppeteer.launch({
-    //         args: [`--proxy-server=${newProxyUrl}`],
-    //     });
-    browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
 
     const response = await parsePage(browser, group, album);
     browser.close();
