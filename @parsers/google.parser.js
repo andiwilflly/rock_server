@@ -21,7 +21,6 @@ async function parsePage(browser, group, album) {
         await page.waitFor(3000);
         console.log(`✨ GOOGLE PARSER | page loaded...`);
 
-
         const albumsPageLink = await page.evaluate(()=> {
             const $albumsShowMoreBtn = [...document.querySelectorAll('.sv0AUd.bs3Xnd')]
                 .find($title => $title.innerText === 'Альбоми' || $title.innerText === 'Albums')
@@ -34,6 +33,7 @@ async function parsePage(browser, group, album) {
         console.log(`✨ GOOGLE PARSER | albums page link received... ${albumsPageLink}`);
 
 
+        // Albums page
         await page.goto(`https://play.google.com${albumsPageLink}`, {
             waitUntil: 'networkidle2'
         });
@@ -47,10 +47,25 @@ async function parsePage(browser, group, album) {
             return $albumLink ? $albumLink.getAttribute('href') : null;
         }, album);
         if(!albumLink) return { error: `Can't find album ${album}` };
-
         console.log(`✨ GOOGLE PARSER | album link received... ${albumLink}`);
 
-        return { link: `https://play.google.com${albumLink}` };
+
+        // Album page
+        await page.goto(`https://play.google.com${albumLink}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(3000);
+        console.log(`✨ GOOGLE PARSER | album page loaded...`);
+
+        const albumImg = await page.evaluate(()=> {
+            const $img = document.querySelector('.hkhL9e img')
+            return $img ? $img.getAttribute('src') : null
+        });
+
+        return {
+            link: `https://play.google.com${albumLink}`,
+            albumImg: `https://play.google.com${albumImg}`
+        };
     } catch(e) {
         return { error: e };
     }
