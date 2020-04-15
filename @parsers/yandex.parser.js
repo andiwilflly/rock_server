@@ -64,7 +64,7 @@ async function parsePage(browser, group, album) {
 
 
 async function start(group, album) {
-    console.log('YANDEX PARSER:START');
+    console.log('YANDEX PARSER:START!');
 
     //  const browser = await puppeteer.launch({
     //         args: [`--proxy-server=${newProxyUrl}`],
