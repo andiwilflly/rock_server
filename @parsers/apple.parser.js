@@ -19,7 +19,8 @@ async function parsePage(browser, group, album) {
         console.log(`✨ APPLE PARSER | albums page link received... ${albumPageLink}`);
 
         return {
-           link: `${albumPageLink}`.replace('beta.', '')
+            source: 'https://music.apple.com',
+            link: `${albumPageLink}`.replace('beta.', '')
         };
     } catch(e) {
         return { error: e };

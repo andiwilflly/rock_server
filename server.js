@@ -9,13 +9,14 @@ const express = require('express');
 const yandexParser = require('./@parsers/yandex.parser');
 const googleParser = require('./@parsers/google.parser');
 const appleParser = require('./@parsers/apple.parser');
+const youTobeParser = require('./@parsers/youtobe.parser');
 
 const app = express();
 
 let browser = null;
 async function setupBrowser() {
-    browser = browser || await puppeteer.launch({
-        headless: false,
+    browser = await puppeteer.launch({
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 }
@@ -32,7 +33,8 @@ app.get('/find/:group/:album', async function (req, res) {
     Promise.all([
         yandexParser(browser, req.params.group, req.params.album),
         googleParser(browser, req.params.group, req.params.album),
-        appleParser(browser, req.params.group, req.params.album)
+        appleParser(browser, req.params.group, req.params.album),
+        youTobeParser(browser, req.params.group, req.params.album)
     ]).then((results)=> {
         browser.close();
         res.send(results);

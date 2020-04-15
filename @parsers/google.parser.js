@@ -49,6 +49,7 @@ async function parsePage(browser, group, album) {
         });
 
         return {
+            source: 'https://play.google.com',
             link: `https://play.google.com${albumLink}`,
             albumImg: `${albumImg}`
         };

@@ -36,7 +36,10 @@ async function parsePage(browser, group, album) {
 
         console.log('✨ YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
 
-        return { link: `https://music.yandex.ua${albumLink}` };
+        return {
+            source: 'https://music.yandex.ua',
+            link: `https://music.yandex.ua${albumLink}`
+        };
 
     } catch(e) {
         return { error: e };
