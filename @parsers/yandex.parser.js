@@ -31,7 +31,7 @@ async function parsePage(browser, group, album) {
 
         console.log(`✨ YANDEX PARSER | press suggest-button...`);
 
-        await page.waitFor(3000);
+        await page.waitFor(5000);
 
         const artistLink = await page.evaluate((_group)=> {
             const $artistLink = [ ...document.querySelectorAll('.serp-snippet__artists > .artist .artist__name a') ]
@@ -47,7 +47,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua${artistLink}/albums`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(3000);
+        await page.waitFor(5000);
 
 
         const albumLink = await page.evaluate((_album)=> {
