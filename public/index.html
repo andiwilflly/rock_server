@@ -15,12 +15,8 @@
     <!--    &lt;!&ndash; initialize the SDK after all desired features are loaded &ndash;&gt;-->
     <!--    <script defer src="/__/firebase/init.js"></script>-->
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-functions.js"></script>
 
     <script>
         // Your web app's Firebase configuration
@@ -42,19 +38,42 @@
     <style media="screen">
         body {
             background: #ECEFF1;
+            padding: 20px;
             color: rgba(0, 0, 0, 0.87);
             font-family: Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 0;
         }
 
     </style>
 </head>
 <body>
 <div id="message">
-    <h2>New Rock Bot API</h2>
+    <h1>New Rock Bot API</h1>
+    <br/>
+    <ul>
+        <li><a target="_blank" href="https://music.youtube.com">https://music.youtube.com</a></li>
+        <li><a target="_blank" href="https://music.yandex.ua/home">https://music.yandex.ua/home</a></li>
+        <li><a target="_blank" href="https://play.google.com/store/music">https://play.google.com/store/music</a></li>
+        <li><a target="_blank" href="https://music.apple.com/us/artist/make-them-suffer/421186855">https://music.apple.com/us/artist/make-them-suffer/421186855</a></li>
+    </ul>
+
+    <h3>Link example:</h3>
+    <p>Asking Alexandria | Down To Hell</p>
+    <i>https://newrockbot.web.app/find?name=Asking%20Alexandria&album=Down%20To%20Hell</i>
+
+    <hr />
+    <pre>
+        Роман Лихацкий, [15.04.20 11:38]
+        кстати в эпл так просто не найдешь, надо искать через бэту
+
+        Роман Лихацкий, [15.04.20 11:39]
+        https://beta.music.apple.com/us/album/like-a-house-on-fire/1500484034
+
+        Роман Лихацкий, [15.04.20 11:39]
+        а ссылка нужна
+        https://music.apple.com/us/album/like-a-house-on-fire/1500484034
+    </pre>
 </div>
-<p id="load">Firebase SDK Loading&hellip;</p>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -70,13 +89,12 @@
 
         try {
             let app = firebase.app();
-            let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-            document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
             console.error(e);
-            document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
     });
 </script>
+
+<script type="text/javascript" src="./index.js"></script>
 </body>
 </html>
