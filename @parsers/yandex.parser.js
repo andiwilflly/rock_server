@@ -15,23 +15,12 @@ let browser = null;
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
-        await page.goto(`https://music.yandex.ua`, {
+        await page.goto(`https://music.yandex.ua/search?text=${group}`, {
             waitUntil: 'networkidle2'
         });
-
-        console.log(`✨ YANDEX PARSER | page loaded...`);
-
         await page.waitFor(3000);
 
-        await page.evaluate((_group)=> {
-            const email = document.querySelector('input.deco-input_suggest');
-            email.value = _group;
-        }, group);
-        await page.click('button.suggest-button');
-
-        console.log(`✨ YANDEX PARSER | press suggest-button...`);
-
-        await page.waitFor(5000);
+        console.log(`✨ YANDEX PARSER | search groups page loaded...`);
 
         const artistLink = await page.evaluate((_group)=> {
             const $artistLink = [ ...document.querySelectorAll('.serp-snippet__artists > .artist .artist__name a') ]
