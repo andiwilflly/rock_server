@@ -62,7 +62,7 @@ async function start(group, album) {
     console.log('✨ GOOGLE PARSER:START...');
 
     browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
