@@ -10,11 +10,9 @@ puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 
 let browser = null;
-const group = 'Asking Alexandria';
-const album = 'Down To Hell';
 
 
-async function parsePage(browser) {
+async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
         await page.goto(`https://music.yandex.ua`, {
@@ -65,7 +63,7 @@ async function parsePage(browser) {
 }
 
 
-async function start() {
+async function start(group, album) {
     console.log('YANDEX PARSER:START');
 
     //  const browser = await puppeteer.launch({
@@ -73,10 +71,10 @@ async function start() {
     //     });
     browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox']
+        // args: ['--no-sandbox']
     });
 
-    const response = await parsePage(browser);
+    const response = await parsePage(browser, group, album);
     browser.close();
 
     console.log('YANDEX PARSER:END', response);
