@@ -19,6 +19,8 @@ async function parsePage(browser, group, album) {
             waitUntil: 'networkidle2'
         });
 
+        console.log(`✨ YANDEX PARSER | page loaded...`);
+
         await page.waitFor(3000);
 
         await page.evaluate((_group)=> {
@@ -26,6 +28,9 @@ async function parsePage(browser, group, album) {
             email.value = _group;
         }, group);
         await page.click('button.suggest-button');
+
+        console.log(`✨ YANDEX PARSER | press suggest-button...`);
+
         await page.waitFor(3000);
 
         const artistLink = await page.evaluate((_group)=> {
@@ -37,7 +42,7 @@ async function parsePage(browser, group, album) {
 
         if(!artistLink) return { error: `No such group: ${group}` };
 
-        console.log('---->', `https://music.yandex.ua${artistLink}`);
+        console.log(`✨ YANDEX PARSER | find artistLink: https://music.yandex.ua${artistLink}...`);
 
         await page.goto(`https://music.yandex.ua${artistLink}/albums`, {
             waitUntil: 'networkidle2'
@@ -54,7 +59,8 @@ async function parsePage(browser, group, album) {
 
         if(!albumLink) return { error: `No such album: ${album}` };
 
-        console.log('✨YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
+        console.log('✨ YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
+
         return { link: `https://music.yandex.ua${albumLink}` };
 
     } catch(e) {
@@ -65,7 +71,7 @@ async function parsePage(browser, group, album) {
 
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(group, album) {
-    console.log('YANDEX PARSER:START...');
+    console.log('✨ YANDEX PARSER:START...');
 
     //  const browser = await puppeteer.launch({
     //         args: [`--proxy-server=${newProxyUrl}`],
@@ -78,7 +84,7 @@ async function start(group, album) {
     const response = await parsePage(browser, group, album);
     browser.close();
 
-    console.log('YANDEX PARSER:END', response);
+    console.log('✨ YANDEX PARSER:END', response);
     return response;
 }
 
