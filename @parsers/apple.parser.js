@@ -4,7 +4,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://beta.music.apple.com/us/search?term=${encodeURIComponent(group)}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(3000);
+        await page.waitFor(300);
         console.log(`✨ APPLE PARSER | page loaded...`);
 
         const albumPageLink = await page.evaluate((_album)=> {

@@ -4,7 +4,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua/search?text=${group}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(3000);
+        await page.waitFor(300);
 
         console.log(`✨ YANDEX PARSER | search groups page loaded...`);
 
@@ -22,7 +22,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua${artistLink}/albums`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(5000);
+        await page.waitFor(500);
 
 
         const albumLink = await page.evaluate((_album)=> {

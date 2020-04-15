@@ -40,7 +40,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://play.google.com${albumLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(3000);
+        await page.waitFor(300);
         console.log(`✨ GOOGLE PARSER | album page loaded...`);
 
         const albumImg = await page.evaluate(()=> {

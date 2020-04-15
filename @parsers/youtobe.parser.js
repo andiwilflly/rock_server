@@ -4,7 +4,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.youtube.com/search?q=${encodeURIComponent(group)}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(3000);
+        await page.waitFor(300);
         console.log(`✨ YOUTOBE PARSER | page loaded...`);
 
 
@@ -24,7 +24,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.youtube.com/${artistPageLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(3000);
+        await page.waitFor(300);
         console.log(`✨ YOUTOBE PARSER | artist page loaded...`);
 
 
