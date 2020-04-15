@@ -71,7 +71,7 @@ async function start(group, album) {
     //     });
     browser = await puppeteer.launch({
         headless: true,
-        // args: ['--no-sandbox']
+        args: ['--no-sandbox']
     });
 
     const response = await parsePage(browser, group, album);
