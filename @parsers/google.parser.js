@@ -18,7 +18,6 @@ async function parsePage(browser, group, album) {
         if(!albumsPageLink) return { error: `Can't open albums page` };
         console.log(`✨ GOOGLE PARSER | albums page link received... ${albumsPageLink}`);
 
-
         // Albums page
         await page.goto(`https://play.google.com${albumsPageLink}`, {
             waitUntil: 'networkidle2'
