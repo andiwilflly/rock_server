@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!--    &lt;!&ndash; update the version number as needed &ndash;&gt;-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-app.js"></script>-->
+    <!--    &lt;!&ndash; include only the Firebase features as you need &ndash;&gt;-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-auth.js"></script>-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-database.js"></script>-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-messaging.js"></script>-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-storage.js"></script>-->
+    <!--    &lt;!&ndash; initialize the SDK after all desired features are loaded &ndash;&gt;-->
+    <!--    <script defer src="/__/firebase/init.js"></script>-->
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDJjTBG3HPioF_WeLURsCUnuWHahxWxAu8",
+            authDomain: "newrockbot.firebaseapp.com",
+            databaseURL: "https://newrockbot.firebaseio.com",
+            projectId: "newrockbot",
+            storageBucket: "newrockbot.appspot.com",
+            messagingSenderId: "189865837490",
+            appId: "1:189865837490:web:8c804a9c56202894af1aab",
+            measurementId: "G-5YETLX51NK"
+        };
+        // Initialize Firebase
+        window.firebase.initializeApp(firebaseConfig);
+        window.firebase.analytics();
+    </script>
+
+    <style media="screen">
+        body {
+            background: #ECEFF1;
+            color: rgba(0, 0, 0, 0.87);
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+</head>
+<body>
+<div id="message">
+    <h2>New Rock Bot API</h2>
+</div>
+<p id="load">Firebase SDK Loading&hellip;</p>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+            let app = firebase.app();
+            let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+            document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+            console.error(e);
+            document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        }
+    });
+</script>
+</body>
+</html>
