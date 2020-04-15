@@ -64,7 +64,7 @@ async function parsePage(browser, group, album) {
 
         return {
             link: `https://play.google.com${albumLink}`,
-            albumImg: `https://play.google.com${albumImg}`
+            albumImg: `${albumImg}`
         };
     } catch(e) {
         return { error: e };
