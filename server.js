@@ -39,7 +39,7 @@ app.get('/', function (req, res) {
 // https://soundcloud.com/
 app.get('/find/:group/:album', async function (req, res) {
 
-    const resources = (req.query.q || []).toLowerCase().split(',');
+    const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
     await setupBrowser();
     const group = req.params.group.toLowerCase();
     const album = req.params.album.toLowerCase();
@@ -52,7 +52,7 @@ app.get('/find/:group/:album', async function (req, res) {
         !resources.length || resources.includes('youtobe') ? youTobeParser(browser, group, album, req.params.group) : null,
     ]).then((results)=> {
         browser.close();
-        res.send(results);
+        res.send(results.filter(Boolean));
     })
     //const yandex = await yandexParser(browser, 'Asking Alexandria', 'Down To Hell');
 
