@@ -1,58 +1,12 @@
-const blockedResourceTypes = [
-    'image',
-    'media',
-    'font',
-    'texttrack',
-    'object',
-    'beacon',
-    'csp_report',
-    'imageset',
-];
-
-const skippedResources = [
-    'quantserve',
-    'adzerk',
-    'doubleclick',
-    'adition',
-    'exelator',
-    'sharethrough',
-    'cdn.api.twitter',
-    'google-analytics',
-    'googletagmanager',
-    'google',
-    'fontawesome',
-    'facebook',
-    'analytics',
-    'optimizely',
-    'clicktale',
-    'mixpanel',
-    'zedo',
-    'clicksor',
-    'tiqcdn',
-];
-
-
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
-        await page.setRequestInterception(true);
-        page.on('request', request => {
-            const requestUrl = request._url.split('?')[0].split('#')[0];
-            if (
-                blockedResourceTypes.indexOf(request.resourceType()) !== -1 ||
-                skippedResources.some(resource => requestUrl.indexOf(resource) !== -1)
-            ) {
-                request.abort();
-            } else {
-                request.continue();
-            }
-        });
 
 
         await page.goto(`https://play.google.com/store/search?q=${group.split(' ').join('+')}&c=music`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitFor(100);
         console.log(`✨ GOOGLE PARSER | page loaded...`);
 
         const albumsPageLink = await page.evaluate(()=> {
@@ -63,23 +17,23 @@ async function parsePage(browser, group, album) {
 
             return $albumsShowMoreBtn ? $albumsShowMoreBtn.getAttribute('href') : null;
         });
-        if(!albumsPageLink) return { error: `Can't open albums page` };
+        if(!albumsPageLink) return { source: 'https://play.google.com', error: `Can't open albums page` };
         console.log(`✨ GOOGLE PARSER | albums page link received... ${albumsPageLink}`);
 
         // Albums page
         await page.goto(`https://play.google.com${albumsPageLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitFor(100);
         console.log(`✨ GOOGLE PARSER | albums page loaded...`);
 
         const albumLink = await page.evaluate((_album)=> {
             const $albumLink = [...document.querySelectorAll('.ImZGtf.mpg5gc .b8cIId a')]
-                .find($title => $title.innerText.includes(_album));
+                .find($title => $title.innerText.toLowerCase().includes(_album));
 
             return $albumLink ? $albumLink.getAttribute('href') : null;
         }, album);
-        if(!albumLink) return { error: `Can't find album ${album}` };
+        if(!albumLink) return { source: 'https://play.google.com', error: `Can't find album ${album}` };
         console.log(`✨ GOOGLE PARSER | album link received... ${albumLink}`);
 
 
@@ -87,7 +41,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://play.google.com${albumLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitFor(100);
         console.log(`✨ GOOGLE PARSER | album page loaded...`);
 
         const albumImg = await page.evaluate(()=> {

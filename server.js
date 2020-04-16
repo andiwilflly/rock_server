@@ -36,14 +36,13 @@ app.get('/', function (req, res) {
 
 app.get('/find/:group/:album', async function (req, res) {
     await setupBrowser();
-
-    console.log('GROUP: ', req.params.group, 'ALBUM:', req.params.album);
-
+    const group = req.params.group.toLowerCase();
+    const album = req.params.album.toLowerCase();
     Promise.all([
-        yandexParser(browser, req.params.group, req.params.album),
-        googleParser(browser, req.params.group, req.params.album),
-        appleParser(browser, req.params.group, req.params.album),
-        youTobeParser(browser, req.params.group, req.params.album)
+        yandexParser(browser, group, album),
+        googleParser(browser, group, album),
+        appleParser(browser, group, album),
+        youTobeParser(browser, group, album, req.params.group)
     ]).then((results)=> {
         browser.close();
         res.send(results);

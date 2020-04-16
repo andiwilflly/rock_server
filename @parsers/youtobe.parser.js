@@ -1,53 +1,6 @@
-const blockedResourceTypes = [
-    'image',
-    'media',
-    'font',
-    'texttrack',
-    'object',
-    'beacon',
-    'csp_report',
-    'imageset',
-];
-
-const skippedResources = [
-    'quantserve',
-    'adzerk',
-    'doubleclick',
-    'adition',
-    'exelator',
-    'sharethrough',
-    'cdn.api.twitter',
-    'google-analytics',
-    'googletagmanager',
-    'google',
-    'fontawesome',
-    'facebook',
-    'analytics',
-    'optimizely',
-    'clicktale',
-    'mixpanel',
-    'zedo',
-    'clicksor',
-    'tiqcdn',
-];
-
-
-async function parsePage(browser, group, album) {
+async function parsePage(browser, group, album, originalGroupName) {
     try {
         const page = await browser.newPage();
-        await page.setRequestInterception(true);
-        page.on('request', request => {
-            const requestUrl = request._url.split('?')[0].split('#')[0];
-            if (
-                blockedResourceTypes.indexOf(request.resourceType()) !== -1 ||
-                skippedResources.some(resource => requestUrl.indexOf(resource) !== -1)
-            ) {
-                request.abort();
-            } else {
-                request.continue();
-            }
-        });
-
 
         await page.goto(`https://music.youtube.com/search?q=${encodeURIComponent(group)}`, {
             waitUntil: 'networkidle2'
@@ -55,24 +8,26 @@ async function parsePage(browser, group, album) {
         await page.waitFor(1000);
         console.log(`✨ YOUTOBE PARSER | page loaded...`);
 
-
-        // [...document.querySelectorAll('h2.title')].find($title => $title.innerText.includes('Виконавці')).parentElement.querySelector('#contents [aria-label="Asking Alexandria"]').getAttribute('href')
-
-        const artistPageLink = await page.evaluate((_album)=> {
+        const artistPageLink = await page.evaluate((_originalGroupName)=> {
             const $artistPageLink = [...document.querySelectorAll('h2.title')]
-                .find($title => $title.innerText.includes('Виконавці') || $title.innerText.includes('Artists'))
-                .parentElement.querySelector('#contents [aria-label="Asking Alexandria"]');
+                .find($title =>
+                    $title.innerText.includes('Виконавці') ||
+                    $title.innerText.includes('Artists') ||
+                    $title.innerText.includes('Найпопулярніші') ||
+                    $title.innerText.includes('Top result'))
+                .parentElement.querySelector('a');
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
-        }, album);
-        if(!artistPageLink) return { error: `Can't find artistPageLink` };
+        }, originalGroupName);
+        if(!artistPageLink) return { source: 'https://music.youtube.com', error: `Can't find artistPageLink` };
 
 
         // Artist page
         await page.goto(`https://music.youtube.com/${artistPageLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitFor(100);
+
         console.log(`✨ YOUTOBE PARSER | artist page loaded...`);
 
 
@@ -81,17 +36,17 @@ async function parsePage(browser, group, album) {
                 .find($title => $title.innerText.includes('Альбоми')  || $title.innerText.includes('Albums'))
                 .parentElement.parentElement
                 .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
-                .find($item => $item.querySelector('yt-formatted-string').innerText.includes("Down To Hell"));
+                .find($item => $item.querySelector('yt-formatted-string').innerText.toLowerCase().includes(_album));
 
             $albumPageLink = $albumPageLink || [...[...document.querySelectorAll('#contents h2')]
                 .find($title => $title.innerText.includes('Сингли') || $title.innerText.includes('Singles'))
                 .parentElement.parentElement
                 .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
-                .find($item => $item.querySelector('yt-formatted-string').innerText.includes("Down To Hell"));
+                .find($item => $item.querySelector('yt-formatted-string').innerText.toLowerCase().includes(_album));
 
             return $albumPageLink ? $albumPageLink.querySelector('a').getAttribute('href') : null;
         }, album);
-        if(!albumPageLink) return { error: `Can't find albumPageLink` };
+        if(!albumPageLink) return { source: 'https://music.youtube.com', error: `Can't find albumPageLink` };
 
         console.log(`✨ YOUTOBE PARSER | albums page link received... ${albumPageLink}`);
 
