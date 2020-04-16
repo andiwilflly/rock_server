@@ -27,6 +27,7 @@ async function parsePage(browser, group, album) {
             }, group);
             console.log(`✨ APPLE PARSER | groupPageLink received... ${groupPageLink}`);
 
+
             if(groupPageLink) {
                 await page.goto(`${groupPageLink}#see-all/full-albums`, {
                     waitUntil: 'networkidle2'
