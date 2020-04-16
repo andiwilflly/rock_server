@@ -24,7 +24,7 @@ async function parsePage(browser, group, album) {
             link: `${albumPageLink}`.replace('beta.', '')
         };
     } catch(e) {
-        return { error: e };
+        return { source: 'https://music.apple.com', error: e.toString() };
     }
 }
 

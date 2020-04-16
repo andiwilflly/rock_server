@@ -37,25 +37,19 @@ async function parsePage(browser, group, album) {
         console.log(`✨ GOOGLE PARSER | album link received... ${albumLink}`);
 
 
-        // Album page
-        await page.goto(`https://play.google.com${albumLink}`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(100);
-        console.log(`✨ GOOGLE PARSER | album page loaded...`);
-
-        const albumImg = await page.evaluate(()=> {
-            const $img = document.querySelector('.hkhL9e img')
-            return $img ? $img.getAttribute('src') : null
-        });
+        // // Album page
+        // await page.goto(`https://play.google.com${albumLink}`, {
+        //     waitUntil: 'networkidle2'
+        // });
+        // await page.waitFor(100);
+        // console.log(`✨ GOOGLE PARSER | album page loaded...`);
 
         return {
             source: 'https://play.google.com',
-            link: `https://play.google.com${albumLink}`,
-            albumImg: `${albumImg}`
+            link: `https://play.google.com${albumLink}`
         };
     } catch(e) {
-        return { error: e };
+        return { source: 'https://play.google.com', error: e.toString() };
     }
 }
 

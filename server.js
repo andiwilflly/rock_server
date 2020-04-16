@@ -17,7 +17,7 @@ const app = express();
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -33,15 +33,23 @@ app.get('/', function (req, res) {
     res.send('Hello World!');
 });
 
+
+// https://www.spotify.com/
+// https://www.deezer.com/
+// https://soundcloud.com/
 app.get('/find/:group/:album', async function (req, res) {
+
+    const resources = (req.query.q || []).toLowerCase().split(',');
     await setupBrowser();
     const group = req.params.group.toLowerCase();
     const album = req.params.album.toLowerCase();
+
+    console.log(resources);
     Promise.all([
-        yandexParser(browser, group, album),
-        googleParser(browser, group, album),
-        appleParser(browser, group, album),
-        youTobeParser(browser, group, album, req.params.group)
+        !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
+        !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
+        !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
+        !resources.length || resources.includes('youtobe') ? youTobeParser(browser, group, album, req.params.group) : null,
     ]).then((results)=> {
         browser.close();
         res.send(results);

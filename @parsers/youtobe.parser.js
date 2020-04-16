@@ -55,7 +55,7 @@ async function parsePage(browser, group, album, originalGroupName) {
             link: `https://music.youtube.com/${albumPageLink}`
         };
     } catch(e) {
-        return { error: e };
+        return { source: 'https://music.youtube.com', error: e.toString() };
     }
 }
 

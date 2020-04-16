@@ -37,13 +37,24 @@ async function parsePage(browser, group, album) {
 
         console.log('✨ YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
 
+
+        // Album page
+        await page.goto(`https://music.yandex.ua${albumLink}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(1000);
+        await page.$eval('.entity-cover__image', ($el)=> $el.click());
+
+        const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
+
         return {
             source: 'https://music.yandex.ua',
-            link: `https://music.yandex.ua${albumLink}`
+            link: `https://music.yandex.ua${albumLink}`,
+            albumImg: albumImg.replace('//', 'https://')
         };
 
     } catch(e) {
-        return { error: e };
+        return { source: 'https://music.yandex.ua', error: e.toString() };
     }
 }
 
