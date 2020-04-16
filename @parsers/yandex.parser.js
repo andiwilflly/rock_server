@@ -1,10 +1,58 @@
+const blockedResourceTypes = [
+    'image',
+    'media',
+    'font',
+    'texttrack',
+    'object',
+    'beacon',
+    'csp_report',
+    'imageset',
+];
+
+const skippedResources = [
+    'quantserve',
+    'adzerk',
+    'doubleclick',
+    'adition',
+    'exelator',
+    'sharethrough',
+    'cdn.api.twitter',
+    'google-analytics',
+    'googletagmanager',
+    'google',
+    'fontawesome',
+    'facebook',
+    'analytics',
+    'optimizely',
+    'clicktale',
+    'mixpanel',
+    'zedo',
+    'clicksor',
+    'tiqcdn',
+];
+
+
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
+        await page.setRequestInterception(true);
+        page.on('request', request => {
+            const requestUrl = request._url.split('?')[0].split('#')[0];
+            if (
+                blockedResourceTypes.indexOf(request.resourceType()) !== -1 ||
+                skippedResources.some(resource => requestUrl.indexOf(resource) !== -1)
+            ) {
+                request.abort();
+            } else {
+                request.continue();
+            }
+        });
+
+
         await page.goto(`https://music.yandex.ua/search?text=${group}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(300);
+        await page.waitFor(1000);
 
         console.log(`✨ YANDEX PARSER | search groups page loaded...`);
 
@@ -22,7 +70,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua${artistLink}/albums`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(500);
+        await page.waitFor(1000);
 
 
         const albumLink = await page.evaluate((_album)=> {

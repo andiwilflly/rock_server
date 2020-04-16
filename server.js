@@ -13,11 +13,20 @@ const youTobeParser = require('./@parsers/youtobe.parser');
 
 const app = express();
 
+
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--disable-gpu',
+            '--window-size=1920x1080',
+
+        ]
     });
 }
 
