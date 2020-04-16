@@ -28,21 +28,26 @@ async function parsePage(browser, group, album, originalGroupName) {
         });
         await page.waitFor(100);
 
-        console.log(`✨ YOUTOBE PARSER | artist page loaded...`);
+        console.log(`✨ YOUTOBE PARSER | artist page loaded...`, `https://music.youtube.com/${artistPageLink}`);
 
 
         const albumPageLink = await page.evaluate((_album)=> {
-            let $albumPageLink = [...[...document.querySelectorAll('#contents h2')]
-                .find($title => $title.innerText.includes('Альбоми')  || $title.innerText.includes('Albums'))
-                .parentElement.parentElement
-                .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
-                .find($item => $item.querySelector('yt-formatted-string').innerText.toLowerCase().includes(_album));
+            let $albumPageLink = null;
 
-            $albumPageLink = $albumPageLink || [...[...document.querySelectorAll('#contents h2')]
-                .find($title => $title.innerText.includes('Сингли') || $title.innerText.includes('Singles'))
-                .parentElement.parentElement
-                .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
-                .find($item => $item.querySelector('yt-formatted-string').innerText.toLowerCase().includes(_album));
+            try {
+                $albumPageLink = [...[...document.querySelectorAll('#contents h2')]
+                    .find($title => $title.innerText.includes('Альбоми')  || $title.innerText.includes('Albums'))
+                    .parentElement.parentElement
+                    .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
+                    .find($item => $item.querySelector('.title').innerText.toLowerCase().includes(_album));
+
+            } catch(e) {
+                $albumPageLink = $albumPageLink || [...[...document.querySelectorAll('#contents h2')]
+                    .find($title => $title.innerText.includes('Сингли') || $title.innerText.includes('Singles'))
+                    .parentElement.parentElement
+                    .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
+                    .find($item => $item.querySelector('.title').innerText.toLowerCase().includes(_album));
+            }
 
             return $albumPageLink ? $albumPageLink.querySelector('a').getAttribute('href') : null;
         }, album);

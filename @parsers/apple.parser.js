@@ -8,12 +8,38 @@ async function parsePage(browser, group, album) {
         await page.waitFor(100);
         console.log(`✨ APPLE PARSER | page loaded...`);
 
-        const albumPageLink = await page.evaluate((_album)=> {
+        let albumPageLink = await page.evaluate((_album)=> {
             const $albumPageLink = [...document.querySelectorAll('[aria-label="Albums"] .shelf-grid__list-item .lockup__name')]
                 .find($name => $name.innerText.toLowerCase().includes(_album));
 
             return $albumPageLink ? $albumPageLink.getAttribute('href') : null;
         }, album);
+
+        if(!albumPageLink) {
+            const groupPageLink = await page.evaluate((_group)=> {
+                const $groupPageLink = [...[...document.querySelectorAll('h2')]
+                    .find($title => $title.innerText.includes('Artists'))
+                    .parentElement.parentElement
+                    .querySelectorAll('.shelf-grid__list-item')]
+                    .find($item => $item.innerText.toLowerCase().includes(_group));
+
+                return $groupPageLink ? $groupPageLink.querySelector('a').getAttribute('href') : null;
+            }, group);
+            console.log(`✨ APPLE PARSER | groupPageLink received... ${groupPageLink}`);
+
+            if(groupPageLink) {
+                await page.goto(`${groupPageLink}#see-all/full-albums`, {
+                    waitUntil: 'networkidle2'
+                });
+                await page.waitFor(100);
+                console.log(`✨ APPLE PARSER | ${group} page loaded...`);
+
+                albumPageLink = await page.evaluate((_album)=> {
+                    const $albumPageLink = [...document.querySelectorAll('.l-row a')].find(x => x.innerText.toLowerCase().includes(_album))
+                    return $albumPageLink ? $albumPageLink.getAttribute('href') : null
+                }, album);
+            }
+        }
 
         if(!albumPageLink) return { source: 'https://music.apple.com', error: `Can't find album: ${album}` };
 

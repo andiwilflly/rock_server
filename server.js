@@ -17,7 +17,7 @@ const app = express();
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
