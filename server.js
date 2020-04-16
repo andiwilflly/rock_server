@@ -10,10 +10,15 @@ const yandexParser = require('./@parsers/yandex.parser');
 const googleParser = require('./@parsers/google.parser');
 const appleParser = require('./@parsers/apple.parser');
 const youTobeParser = require('./@parsers/youtobe.parser');
+const soundCloudParser = require('./@parsers/soundcloud.parser');
+
 
 const app = express();
 
 
+// When build error
+// heroku restart
+// heroku builds:cancel
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
@@ -49,6 +54,7 @@ app.get('/find/:group/:album', async function (req, res) {
         !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
+        !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
         !resources.length || resources.includes('youtobe') ? youTobeParser(browser, group, album, req.params.group) : null,
     ]).then((results)=> {
         browser.close();
