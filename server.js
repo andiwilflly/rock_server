@@ -11,6 +11,7 @@ const googleParser = require('./@parsers/google.parser');
 const appleParser = require('./@parsers/apple.parser');
 const youTobeParser = require('./@parsers/youtobe.parser');
 const soundCloudParser = require('./@parsers/soundcloud.parser');
+const spotifyParser = require('./@parsers/spotify.pareser');
 
 
 const app = express();
@@ -22,7 +23,8 @@ const app = express();
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
+        ignoreDefaultArgs: ["--mute-audio", "--hide-scrollbars"],
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -41,7 +43,6 @@ app.get('/', function (req, res) {
 
 // https://www.spotify.com/
 // https://www.deezer.com/
-// https://soundcloud.com/
 app.get('/find/:group/:album', async function (req, res) {
 
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
@@ -51,6 +52,7 @@ app.get('/find/:group/:album', async function (req, res) {
 
     console.log(resources);
     Promise.all([
+        // !resources.length || resources.includes('spotify') ? spotifyParser(browser, group, album) : null,
         !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,

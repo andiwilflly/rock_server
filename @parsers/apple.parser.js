@@ -1,8 +1,7 @@
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
-
-        await page.goto(`https://beta.music.apple.com/us/search?term=${encodeURIComponent(group)}`, {
+        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(group)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(100);
@@ -15,6 +14,28 @@ async function parsePage(browser, group, album) {
             return $albumPageLink ? $albumPageLink.getAttribute('href') : null;
         }, album);
 
+
+        // Find song
+        console.log(`✨ APPLE PARSER | trying to find song ${album}...`,);
+        if(!albumPageLink) {
+            let albumPageBtn = await page.evaluate((_album)=> {
+                const $albumPageBtn = [...document.querySelectorAll('[aria-label="Songs"] .shelf-grid__list-item .song')]
+                    .find($item => $item.innerText.toLowerCase().includes(_album));
+                $albumPageBtn ? $albumPageBtn.click() : null;
+
+                return !!$albumPageBtn;
+            }, album);
+
+            console.log(`✨ APPLE PARSER | albumPageBtn...`, albumPageBtn);
+
+            if(albumPageBtn) await page.waitFor(4000);
+            if(albumPageBtn) albumPageLink = page.url();
+            if(albumPageBtn) console.log(`✨ APPLE PARSER | albumPageBtn clicked...`, page.url());
+        }
+
+        await page.waitFor(10000);
+
+        // Try to search in artist page
         if(!albumPageLink) {
             const groupPageLink = await page.evaluate((_group)=> {
                 const $groupPageLink = [...[...document.querySelectorAll('h2')]
