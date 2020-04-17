@@ -23,7 +23,7 @@ const app = express();
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         ignoreDefaultArgs: ["--mute-audio", "--hide-scrollbars"],
         args: [
             '--no-sandbox',
