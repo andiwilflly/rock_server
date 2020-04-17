@@ -20,7 +20,6 @@ const app = express();
 // When build error
 // heroku restart
 // heroku builds:cancel
-
 let browser = null;
 async function setupBrowser() {
     browser = await puppeteer.launch({
