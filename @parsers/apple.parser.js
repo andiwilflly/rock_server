@@ -15,6 +15,7 @@ async function parsePage(browser, group, album) {
         }, album);
 
 
+        await page.waitFor(2000);
         // Find song
         console.log(`✨ APPLE PARSER | trying to find song ${album}...`,);
         if(!albumPageLink) {

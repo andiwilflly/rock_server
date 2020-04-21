@@ -34,23 +34,21 @@ async function parsePage(browser, group, album, originalGroupName) {
         const albumPageLink = await page.evaluate((_album)=> {
             let $albumPageLink = null;
 
-            try {
                 $albumPageLink = [...[...document.querySelectorAll('#contents h2')]
                     .find($title => $title.innerText.includes('Альбоми')  || $title.innerText.includes('Albums'))
                     .parentElement.parentElement
                     .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
                     .find($item => $item.querySelector('.title').innerText.toLowerCase().includes(_album));
 
-            } catch(e) {
                 $albumPageLink = $albumPageLink || [...[...document.querySelectorAll('#contents h2')]
                     .find($title => $title.innerText.includes('Сингли') || $title.innerText.includes('Singles'))
                     .parentElement.parentElement
                     .querySelectorAll('.carousel ytmusic-two-row-item-renderer')]
                     .find($item => $item.querySelector('.title').innerText.toLowerCase().includes(_album));
-            }
 
             return $albumPageLink ? $albumPageLink.querySelector('a').getAttribute('href') : null;
         }, album);
+
         if(!albumPageLink) return { source: 'https://music.youtube.com', error: `Can't find albumPageLink` };
 
         console.log(`✨ YOUTOBE PARSER | albums page link received... ${albumPageLink}`);
