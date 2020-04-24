@@ -9,7 +9,7 @@ const express = require('express');
 const yandexParser = require('./@parsers/yandex.parser');
 const googleParser = require('./@parsers/google.parser');
 const appleParser = require('./@parsers/apple.parser');
-const youTobeParser = require('./@parsers/youtobe.parser');
+const youTubeParser = require('./@parsers/youtube.parser');
 const soundCloudParser = require('./@parsers/soundcloud.parser');
 const spotifyParser = require('./@parsers/spotify.pareser');
 
@@ -58,7 +58,7 @@ app.get('/find/:group/:album', async function (req, res) {
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
-        !resources.length || resources.includes('youtobe') ? youTobeParser(browser, group, album, req.params.group) : null,
+        !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
     ]).then((results)=> {
         browser.close();
         res.send(results.filter(Boolean));
