@@ -1,7 +1,8 @@
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
-        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(group)}`, {
+        // https://music.apple.com/us/search?searchIn=am&term=Asking%20alexandria%20-%20down%20to%20hell
+        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group} - ${album}`)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(100);
