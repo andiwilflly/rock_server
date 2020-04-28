@@ -36,9 +36,19 @@ async function parsePage(browser, group, album) {
         if(!albumLink) return { source: 'https://play.google.com', error: `Can't find album ${album}` };
         console.log(`✨ GOOGLE PARSER | album link received... ${albumLink}`);
 
+
+        await page.goto(`https://play.google.com${albumLink}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(100);
+        console.log(`✨ GOOGLE PARSER | album page loaded...`);
+
+        const copyright = await page.evaluate(()=> document.querySelectorAll('.ZVWMWc .UAO9ie')[3].innerText);
+
         return {
             source: 'https://play.google.com',
-            link: `https://play.google.com${albumLink}`
+            link: `https://play.google.com${albumLink}`,
+            copyright
         };
     } catch(e) {
         return { source: 'https://play.google.com', error: e.toString() };
