@@ -5,8 +5,9 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group} - ${album}`)}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitFor(1000);
         console.log(`✨ APPLE PARSER | page loaded...`);
+
 
         let albumPageLink = await page.evaluate((_album)=> {
             const $albumPageLink = [...document.querySelectorAll('[aria-label="Albums"] .shelf-grid__list-item .lockup__name')]
