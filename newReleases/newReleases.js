@@ -63,6 +63,7 @@ async function init(spotifyToken = '', res) {
 
 	console.log('FOUND NEW ALBUMS: ', Object.values(NEW_RELEASES).map(album => ({
 		name: album.name,
+		artist: album.artist,
 		albumType: album.album_type,
 		releaseDate: album.release_date
 	})));

@@ -72,7 +72,7 @@ async function findNewAlbum(subscription, spotifyToken) {
 
 			const daysFromNow = (Date.now() - (new Date(albumInfo.release_date)).getTime()) / 1000 / 60 / 60 / 24;
 
-			if(daysFromNow < 15) NEW_RELEASES[albumInfo.name] = {
+			if(daysFromNow < 1) NEW_RELEASES[albumInfo.name] = {
 				...albumInfo,
 				user: subscription.user,
 				artist: subscription.name,
