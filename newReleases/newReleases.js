@@ -73,7 +73,6 @@ async function init(spotifyToken = '', res) {
 		albumType: album.album_type,
 		releaseDate: album.release_date
 	})));
-	//process.exit();
 }
 
 
