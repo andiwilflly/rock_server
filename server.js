@@ -6,6 +6,7 @@ const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
 puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 const express = require('express');
+const newReleases = require('./newReleases/newReleases');
 const yandexParser = require('./@parsers/yandex.parser');
 const googleParser = require('./@parsers/google.parser');
 const appleParser = require('./@parsers/apple.parser');
@@ -39,6 +40,10 @@ async function setupBrowser() {
 
 app.get('/', function (req, res) {
     res.send('Hello World!');
+});
+
+app.get('/newAlbums', function (req, res) {
+    newReleases(res);
 });
 
 
