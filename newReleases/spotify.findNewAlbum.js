@@ -10,7 +10,7 @@ async function findNewAlbum(subscription, spotifyToken) {
 	});
 	artist = await artist.json();
 
-	const artistId = artist.artists.items[0].id;
+	const artistId = artist.artists.items ? artist.artists.items[0].id : '';
 
 	console.log('getting spotify artist albums...', artistId);
 
