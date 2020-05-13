@@ -7,24 +7,7 @@ const lastfmFindNewAlbum = require('./lastfm.findNewAlbum');
 
 // Aversions Crown - Born in the Gutter
 async function init(spotifyToken = '', res) {
-	const firebaseConfig = {
-		apiKey: "AIzaSyDJjTBG3HPioF_WeLURsCUnuWHahxWxAu8",
-		authDomain: "newrockbot.firebaseapp.com",
-		databaseURL: "https://newrockbot.firebaseio.com",
-		projectId: "newrockbot",
-		storageBucket: "newrockbot.appspot.com",
-		messagingSenderId: "189865837490",
-		appId: "1:189865837490:web:7f5be511e85d79c8af1aab",
-		measurementId: "G-LEHMM6F8DW"
-	};
-
 	let NEW_RELEASES = {};
-
-	// // Initialize Firebase
-	const app = firebase.initializeApp(firebaseConfig);
-
-	console.log('APP initialized...');
-
 
 	const DB = firebase.firestore();
 	console.log('APP firestore ready...');

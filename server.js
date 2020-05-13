@@ -1,3 +1,4 @@
+const firebase = require('firebase');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
@@ -16,6 +17,22 @@ const lastFmParser = require('./@parsers/last.fm.parser');
 
 
 const app = express();
+
+
+// // Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDJjTBG3HPioF_WeLURsCUnuWHahxWxAu8",
+    authDomain: "newrockbot.firebaseapp.com",
+    databaseURL: "https://newrockbot.firebaseio.com",
+    projectId: "newrockbot",
+    storageBucket: "newrockbot.appspot.com",
+    messagingSenderId: "189865837490",
+    appId: "1:189865837490:web:7f5be511e85d79c8af1aab",
+    measurementId: "G-LEHMM6F8DW"
+};
+firebase.initializeApp(firebaseConfig);
+
+console.log('firebase APP initialized...');
 
 
 // When build error
