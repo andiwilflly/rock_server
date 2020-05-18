@@ -1,14 +1,14 @@
 async function findNewAlbum(subscription, spotifyToken) {
 	let NEW_RELEASES = {};
 
-
-
 	let artist = await fetch(`https://api.spotify.com/v1/search?type=artist&q=${encodeURIComponent(subscription.name)}`, {
 		headers: {
 			'Authorization': `Bearer ${spotifyToken}`
 		}
 	});
 	artist = await artist.json();
+
+	console.log('===>', artist);
 
 	const artistId = artist.artists.items ? artist.artists.items[0].id : '';
 
@@ -35,7 +35,7 @@ async function findNewAlbum(subscription, spotifyToken) {
 	[ ...newReleases.albums.items, ...newReleases2.albums.items ].forEach(album => {
 		const currentArtist = album.artists.find(artist => artist.id === artistId);
 
-		if(!currentArtist) return; // Can`§ find artist in [new releases] list
+		if(!currentArtist) return; // Can`t find artist in [new releases] list
 		const daysFromNow = (Date.now() - (new Date(album.release_date)).getTime()) / 1000 / 60 / 60 / 24;
 
 		console.log('NEW release found...', subscription.name, daysFromNow);
@@ -59,27 +59,24 @@ async function findNewAlbum(subscription, spotifyToken) {
 	});
 	albums = await albums.json();
 
-	await Promise.all(albums.items.map(album => new Promise(async resolve => {
+
+	for(const album of albums.items) {
 		let albumInfo = await fetch(`https://api.spotify.com/v1/albums/${album.id}`, {
 			headers: {
 				'Authorization': `Bearer ${spotifyToken}`
 			}
 		});
 		albumInfo = await albumInfo.json();
-		resolve(albumInfo);
-	}))).then(albumsInfo => {
-		albumsInfo.forEach(albumInfo => {
 
-			const daysFromNow = (Date.now() - (new Date(albumInfo.release_date)).getTime()) / 1000 / 60 / 60 / 24;
+		const daysFromNow = (Date.now() - (new Date(albumInfo.release_date)).getTime()) / 1000 / 60 / 60 / 24;
 
-			if(daysFromNow < 2) NEW_RELEASES[albumInfo.name] = {
-				...albumInfo,
-				user: subscription.user,
-				artist: subscription.name,
-				isActive: true
-			};
-		});
-	});
+		if(daysFromNow < 2) NEW_RELEASES[albumInfo.name] = {
+			...albumInfo,
+			user: subscription.user,
+			artist: subscription.name,
+			isActive: true
+		};
+	}
 
 	return NEW_RELEASES;
 }

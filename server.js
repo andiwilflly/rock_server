@@ -6,6 +6,7 @@ puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')());
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
 puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
+const admin = require("firebase-admin");
 const express = require('express');
 const newReleases = require('./newReleases/newReleases');
 const yandexParser = require('./@parsers/yandex.parser');
@@ -19,7 +20,15 @@ const lastFmParser = require('./@parsers/last.fm.parser');
 const app = express();
 
 
-// // Initialize Firebase
+const serviceAccount = require("./newrockbot-firebase-adminsdk-mb9q7-2767b30f25.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://newrockbot.firebaseio.com"
+});
+
+
+// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDJjTBG3HPioF_WeLURsCUnuWHahxWxAu8",
     authDomain: "newrockbot.firebaseapp.com",
@@ -59,7 +68,7 @@ app.get('/', function (req, res) {
     res.send('Hello World!');
 });
 
-app.get('/newAlbums', function (req, res) {
+app.get('/newReleases', function (req, res) {
     newReleases(res);
 });
 
