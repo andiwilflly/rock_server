@@ -7,9 +7,11 @@ const formatNewReleasesUtil = require('../utils/formatNewReleases.util');
 
 
 module.exports = async function(req, res) {
+    global.LOG.info('/releases/:days');
+
     let NEW_RELEASES = { /* [albumName]: {} */ };
 
-    const days = req.params.days;
+    const days = req.params.days || 5;
     global.LOG.info(`/releases/:days | enter, [:days ${days}]`);
 
     const DB = firebase.firestore();

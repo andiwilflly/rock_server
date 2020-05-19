@@ -6,10 +6,12 @@ const formatNewReleasesUtil = require('../utils/formatNewReleases.util');
 
 
 module.exports = async function(req, res) {
+    global.LOG.info('/releases/:artist/:days');
+
     let NEW_RELEASES = { /* [albumName]: {} */ };
 
     const artistName = req.params.artist;
-    const days = req.params.days;
+    const days = req.params.days || 5;
 
     global.LOG.info('/releases/:artist/:days | start search new releases for', artistName);
 
