@@ -11,6 +11,7 @@ require('./server/parts/initializeFirebase');
 const spotifyFindInNewReleases = require('./server/parts/newReleases/spotify.findInNewReleases');
 const spotifyFindInArtistAlbums = require('./server/parts/newReleases/spotify.findInArtistAlbums');
 // Utils
+require('./server/utils/extendJs.utils');
 const formatNewReleasesUtil = require('./server/utils/formatNewReleases.util');
 // Routes
 const findGroupAlbumRoute = require('./server/routes/find[group][album].get.route');
