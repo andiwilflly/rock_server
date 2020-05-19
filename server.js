@@ -6,6 +6,7 @@ puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')());
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
 puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
+const cron = require('node-cron');
 const admin = require("firebase-admin");
 const express = require('express');
 const newReleases = require('./newReleases/newReleases');
@@ -18,6 +19,11 @@ const lastFmParser = require('./@parsers/last.fm.parser');
 
 
 const app = express();
+
+
+cron.schedule('* * * * *', () => {
+    console.log('running a task every minute');
+});
 
 
 const serviceAccount = require("./newrockbot-firebase-adminsdk-mb9q7-2767b30f25.json");
@@ -68,10 +74,13 @@ app.get('/', function (req, res) {
     res.send('Hello World!');
 });
 
-app.get('/newReleases', function (req, res) {
+app.get('/newReleases/:days', function (req, res) {
     newReleases(res);
 });
 
+app.get('/newReleases/:artist/:days', function (req, res) {
+    // newReleases(res);
+});
 
 
 // https://www.spotify.com/
