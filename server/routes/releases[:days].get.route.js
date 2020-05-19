@@ -2,6 +2,7 @@ const firebase = require('firebase');
 // Parts
 const spotifyFindInNewReleases = require('../parts/newReleases/spotify.findInNewReleases');
 const spotifyFindInArtistAlbums = require('../parts/newReleases/spotify.findInArtistAlbums');
+const lastFmFindInArtistAlbums = require('../parts/newReleases/lastfm.findInArtistAlbums');
 // Utils
 const formatNewReleasesUtil = require('../utils/formatNewReleases.util');
 
@@ -29,12 +30,24 @@ module.exports = async function(req, res) {
         };
 
         // We found new release for current artist
-        if(Object.values(NEW_RELEASES).find(release => release.artist === subscription.name)) continue;
+        if(Object.values(NEW_RELEASES).find(release => {
+            return release.artist === subscription.name && release.user === subscription.user
+        })) continue;
 
         NEW_RELEASES = {
             ...NEW_RELEASES,
             ...formatNewReleasesUtil(subscription, await spotifyFindInArtistAlbums(subscription.name, days))
         };
+
+        if(Object.values(NEW_RELEASES).find(release => {
+            return release.artist === subscription.name && release.user === subscription.user
+        })) continue;
+
+        NEW_RELEASES = {
+            ...NEW_RELEASES,
+            ...formatNewReleasesUtil(subscription, await lastFmFindInArtistAlbums(subscription.name, days))
+        };
+
     }
 
     res.send(NEW_RELEASES);

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const admin = require("firebase-admin");
 const request = require('request');
 const express = require('express');
 // Logger
@@ -44,7 +45,29 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.get('/',(req, res)=> res.send('Hello World!') );
+app.get('/',(req, res)=> {
+
+    const message = {
+        notification: {
+            title: 'New release!',
+            body: '${newRelease.artist} - ${newRelease.name}'
+        },
+        topic: 'allDevices'
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    admin.messaging().send(message)
+        .then((response) => {
+            // Response is a message ID string.
+            console.log('Successfully sent message:', response);
+            res.send('Hello World!');
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error);
+            res.send('Not Hello World!');
+        });
+} );
 app.get('/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);

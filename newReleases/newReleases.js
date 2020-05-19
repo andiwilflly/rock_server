@@ -77,28 +77,6 @@ async function init(spotifyToken = '', res) {
 		albumType: album.album_type,
 		releaseDate: album.release_date
 	})));
-
-
-	// var message = {
-	// 	notification: {
-	// 		title: '850',
-	// 		body: '2:45'
-	// 	},
-	// 	topic: 'allDevices',
-	// 	// token: 'c39MY4pPQ96tVZoSHqHWXF:APA91bHGGN-1_5TmUU34ez1zmoZpA0bJ_B5nVcAztCF6T5XTSP5OExycR5x2MpugUHgA40AHvm619UqFKcAb1sMRH-U8rryLGayGjgDIlcNsmYi4iHARKy9AUAVF8dMnORT2ShMTctF0'
-	// 	// token: 'ftYUwBbyR8udEhZuninBLH:APA91bHvGDFAw4KSoBPVfzlWScGkJOrnA4FevYf_6K6u30Hkp3jUkdgkAFxMoBVt9nbytK8NP9wfo89bTC5p5n_IAah6sH8HCm9O6F8gk9jMfeneHF2Ht0fJ4GNPE0Yz9aVx_rpynt-k'
-	// };
-	//
-	// // Send a message to the device corresponding to the provided
-	// // registration token.
-	// admin.messaging().send(message)
-	// 	.then((response) => {
-	// 		// Response is a message ID string.
-	// 		console.log('Successfully sent message:', response);
-	// 	})
-	// 	.catch((error) => {
-	// 		console.log('Error sending message:', error);
-	// 	});
 }
 
 
