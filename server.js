@@ -28,24 +28,33 @@ const authOptions = {
     json: true
 };
 
-request.post(authOptions, function(error, response, body) {
-    global.SPOTIFY_TOKEN = body.access_token;
+const app = express();
 
-    const app = express();
-
-    app.get('/', function (req, res) {
-        res.send('Hello World!');
+app.use(function (req, res, next) {
+    request.post(authOptions, function(error, response, body) {
+        global.LOG.info('SERVER | Get [spotify] stoken');
+        global.SPOTIFY_TOKEN = body.access_token;
+        next();
     });
+});
 
-    app.get('/releases/:days', releasesDaysRoute);
-    app.get('/releases/:artist/:days', releasesArtistDaysRoute);
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broken!');
+});
 
 
-    // https://www.spotify.com/
-    // https://www.deezer.com/
-    app.get('/find/:group/:album', findGroupAlbumRoute);
+app.get('/', function (req, res) {
+    res.send('Hello World!');
+});
+app.get('/releases/:days', releasesDaysRoute);
+app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 
-    app.listen(process.env.PORT || 3000, function() {
-        global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3000}!`);
-    });
+
+// https://www.spotify.com/
+// https://www.deezer.com/
+app.get('/find/:group/:album', findGroupAlbumRoute);
+
+app.listen(process.env.PORT || 3000, function() {
+    global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3000}!`);
 });
