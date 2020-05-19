@@ -15,7 +15,7 @@ const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
 
 
-const authOptions = {
+global.authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
         Authorization:
@@ -31,8 +31,8 @@ const authOptions = {
 const app = express();
 
 app.use(function (req, res, next) {
-    request.post(authOptions, function(error, response, body) {
-        global.LOG.info('SERVER | Get [spotify] stoken');
+    request.post(global.authOptions, function(error, response, body) {
+        global.LOG.info('SERVER | Get [spotify] token');
         global.SPOTIFY_TOKEN = body.access_token;
         next();
     });
