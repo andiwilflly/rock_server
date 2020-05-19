@@ -29,6 +29,7 @@ module.exports = async function(req, res) {
         ...formatNewReleasesUtil({ name: artistName }, await spotifyFindInArtistAlbums(artistName, days))
     };
 
+
     // NEW_RELEASES = {
     //     ...NEW_RELEASES,
     //     ...formatNewReleasesUtil({ name: artistName }, await lastFmFindInArtistAlbums(artistName, days))
