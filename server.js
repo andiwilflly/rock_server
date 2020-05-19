@@ -1,6 +1,5 @@
 const fs = require('fs');
 const request = require('request');
-const firebase = require('firebase');
 const express = require('express');
 // Logger
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
@@ -8,13 +7,12 @@ global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.
 // Parts
 require('./server/cron');
 require('./server/parts/initializeFirebase');
-const spotifyFindInNewReleases = require('./server/parts/newReleases/spotify.findInNewReleases');
-const spotifyFindInArtistAlbums = require('./server/parts/newReleases/spotify.findInArtistAlbums');
 // Utils
 require('./server/utils/extendJs.utils');
-const formatNewReleasesUtil = require('./server/utils/formatNewReleases.util');
 // Routes
-const findGroupAlbumRoute = require('./server/routes/find[group][album].get.route');
+const releasesDaysRoute = require('./server/routes/releases[:days].get.route');
+const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days].get.route');
+const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
 
 
 const authOptions = {
@@ -33,56 +31,21 @@ const authOptions = {
 request.post(authOptions, function(error, response, body) {
     global.SPOTIFY_TOKEN = body.access_token;
 
-    global.LOG.info('Fetched SPOTIFY_TOKEN:', global.SPOTIFY_TOKEN);
-
     const app = express();
 
     app.get('/', function (req, res) {
         res.send('Hello World!');
     });
 
-    app.get('/newReleases/:days', async function (req, res) {
-        let NEW_RELEASES = { /* [albumName]: {} */ };
-
-        const days = req.params.days;
-        global.LOG.info(`/newReleases/:days | enter, [:days ${days}]`);
-
-        const DB = firebase.firestore();
-        const subscriptionsDB = DB.collection("subscriptions");
-        let subscriptions = await subscriptionsDB.get();
-        subscriptions = subscriptions.docs.map(doc => doc.data());
-        global.LOG.info('/newReleases/:days | [subscriptions] loaded: ', subscriptions.length);
-
-        for(const subscription of subscriptions) {
-            global.LOG.info('/newReleases/:days | [subscription] start search new releases...', subscription);
-
-            NEW_RELEASES = {
-                ...NEW_RELEASES,
-                ...formatNewReleasesUtil(subscription, await spotifyFindInNewReleases(subscription.name, days))
-            };
-
-            // We found new release for current artist
-            if(Object.values(NEW_RELEASES).find(release => release.artist === subscription.name)) continue;
-
-            NEW_RELEASES = {
-                ...NEW_RELEASES,
-                ...formatNewReleasesUtil(subscription, await spotifyFindInArtistAlbums(subscription.name, days))
-            };
-        }
-
-        res.send(NEW_RELEASES);
-    });
-
-    app.get('/newReleases/:artistName/:days', function (req, res) {
-        // newReleases(res);
-    });
+    app.get('/releases/:days', releasesDaysRoute);
+    app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 
 
-// https://www.spotify.com/
-// https://www.deezer.com/
+    // https://www.spotify.com/
+    // https://www.deezer.com/
     app.get('/find/:group/:album', findGroupAlbumRoute);
 
     app.listen(process.env.PORT || 3000, function() {
-        global.LOG.info('Example app listening on port 3000!');
+        global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3000}!`);
     });
 });

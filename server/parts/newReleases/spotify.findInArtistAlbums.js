@@ -28,9 +28,9 @@ async function spotifyFindInArtistAlbums(artistName = '', days= 5) {
     const albumsIdChunks = albums.items.map(album => album.id).chunk(20); // Max 20 [ids] per request
 
     for(const albumsId of albumsIdChunks) {
-        global.LOG.info('spotify | findInArtistAlbums INFO: fetching first albumsId chunk:', albumsId);
+        global.LOG.info('spotify | findInArtistAlbums INFO: fetching first albumsId chunk:', albumsId.length);
 
-        const idsQueryString = encodeURIComponent(albums.items.map(album => album.id).join(','));
+        const idsQueryString = encodeURIComponent(albumsId.join(','));
 
         let albumsInfo = await fetch(`https://api.spotify.com/v1/albums?ids=${idsQueryString}`, {
             headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }

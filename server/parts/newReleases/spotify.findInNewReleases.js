@@ -22,8 +22,6 @@ async function spotifyFindInNewReleases(artistName = '', days= 5) {
     newReleases1 = await newReleases1.json();
     newReleases2 = await newReleases2.json();
     const newReleases = [ ...newReleases1.albums.items, ...newReleases2.albums.items ];
-    global.LOG.info('spotify | findInNewReleases FETCHED: newReleases ', newReleases.length);
-
 
     // 3. Try to find artist with [artistId] in these [newReleases]
     newReleases.forEach(album => {
