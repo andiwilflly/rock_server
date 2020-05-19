@@ -10,5 +10,5 @@ module.exports = async function getArtistId(artistName = '', spotifyToken) {
         return null;
     }
 
-    return  artist.artists.items;
+    return artist.artists.items ? artist.artists.items[0].id : null;
 }
