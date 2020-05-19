@@ -44,9 +44,8 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
+app.get('/',(req, res)=> res.send('Hello World!') );
+app.get('/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 
