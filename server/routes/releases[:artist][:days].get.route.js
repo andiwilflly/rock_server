@@ -16,7 +16,7 @@ module.exports = async function(req, res) {
     const days = req.params.days || 5;
     const userId = req.params.uid || null;
 
-    global.LOG.info('/releases/:artist/:days | start search new releases for', artistName);
+    global.LOG.info('/releases/:artist/:days | start search new releases for: ', artistName, days, userId);
 
     NEW_RELEASES = {
         ...NEW_RELEASES,
