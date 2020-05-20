@@ -2,6 +2,7 @@
 const spotifyFindInNewReleases = require('../parts/newReleases/spotify.findInNewReleases');
 const spotifyFindInArtistAlbums = require('../parts/newReleases/spotify.findInArtistAlbums');
 const lastFmFindInArtistAlbums = require('../parts/newReleases/lastfm.findInArtistAlbums');
+const newReleasesCreateNotifications = require('../parts/newReleasesCreateNotifications');
 // Utils
 const formatNewReleasesUtil = require('../utils/formatNewReleases.util');
 
@@ -34,6 +35,8 @@ module.exports = async function(req, res) {
     //     ...NEW_RELEASES,
     //     ...formatNewReleasesUtil({ name: artistName }, await lastFmFindInArtistAlbums(artistName, days))
     // };
+
+    newReleasesCreateNotifications(NEW_RELEASES);
 
     res.send(NEW_RELEASES);
 }
