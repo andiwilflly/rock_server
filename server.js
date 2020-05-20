@@ -16,6 +16,7 @@ const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
 
 
+global.BASE_URL = 'https://newrockbot.herokuapp.com';
 global.authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {

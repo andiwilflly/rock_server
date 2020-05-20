@@ -44,6 +44,7 @@ async function spotifyFindInArtistAlbums(artistName = '', days= 5) {
 
         albumsInfo.forEach(albumInfo => {
             const daysFromNow = daysFromNowUtil(albumInfo.release_date);
+            if(daysFromNow < days) global.LOG.info('spotify | findInArtistAlbums FOUND: new release ', artistName, albumInfo.name, daysFromNow);
             if(daysFromNow < days) NEW_RELEASES[albumInfo.name] = albumInfo;
         });
     }

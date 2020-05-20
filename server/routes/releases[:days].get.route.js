@@ -3,6 +3,7 @@ const firebase = require('firebase');
 const spotifyFindInNewReleases = require('../parts/newReleases/spotify.findInNewReleases');
 const spotifyFindInArtistAlbums = require('../parts/newReleases/spotify.findInArtistAlbums');
 const lastFmFindInArtistAlbums = require('../parts/newReleases/lastfm.findInArtistAlbums');
+const newReleasesCreateNotifications = require('../parts/newReleasesCreateNotifications');
 // Utils
 const formatNewReleasesUtil = require('../utils/formatNewReleases.util');
 
@@ -39,16 +40,18 @@ module.exports = async function(req, res) {
             ...formatNewReleasesUtil(subscription, await spotifyFindInArtistAlbums(subscription.name, days))
         };
 
-        if(Object.values(NEW_RELEASES).find(release => {
-            return release.artist === subscription.name && release.user === subscription.user
-        })) continue;
+        // if(Object.values(NEW_RELEASES).find(release => {
+        //     return release.artist === subscription.name && release.user === subscription.user
+        // })) continue;
 
-        NEW_RELEASES = {
-            ...NEW_RELEASES,
-            ...formatNewReleasesUtil(subscription, await lastFmFindInArtistAlbums(subscription.name, days))
-        };
-
+        // NEW_RELEASES = {
+        //     ...NEW_RELEASES,
+        //     ...formatNewReleasesUtil(subscription, await lastFmFindInArtistAlbums(subscription.name, days))
+        // };
     }
+
+    // Start process in sync way because we need fast response from server
+    newReleasesCreateNotifications(NEW_RELEASES);
 
     res.send(NEW_RELEASES);
 }
