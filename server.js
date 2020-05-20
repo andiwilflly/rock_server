@@ -72,6 +72,7 @@ app.get('/',(req, res)=> {
 app.get('/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
+app.get('/releases/:artist/:days/:uid', releasesArtistDaysRoute);
 
 
 // https://www.spotify.com/

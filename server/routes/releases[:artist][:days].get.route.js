@@ -14,12 +14,13 @@ module.exports = async function(req, res) {
 
     const artistName = req.params.artist;
     const days = req.params.days || 5;
+    const userId = req.params.uid || null;
 
     global.LOG.info('/releases/:artist/:days | start search new releases for', artistName);
 
     NEW_RELEASES = {
         ...NEW_RELEASES,
-        ...formatNewReleasesUtil({ name: artistName }, await spotifyFindInNewReleases(artistName, days))
+        ...formatNewReleasesUtil({ name: artistName, user: userId }, await spotifyFindInNewReleases(artistName, days))
     };
 
     // We found new release for current artist
@@ -27,7 +28,7 @@ module.exports = async function(req, res) {
 
     NEW_RELEASES = {
         ...NEW_RELEASES,
-        ...formatNewReleasesUtil({ name: artistName }, await spotifyFindInArtistAlbums(artistName, days))
+        ...formatNewReleasesUtil({ name: artistName, user: userId }, await spotifyFindInArtistAlbums(artistName, days))
     };
 
 
@@ -36,7 +37,7 @@ module.exports = async function(req, res) {
     //     ...formatNewReleasesUtil({ name: artistName }, await lastFmFindInArtistAlbums(artistName, days))
     // };
 
-    newReleasesCreateNotifications(NEW_RELEASES);
+    if(userId) newReleasesCreateNotifications(NEW_RELEASES); // Called with userId - need to update [notifications] for this user
 
     res.send(NEW_RELEASES);
 }
