@@ -11,27 +11,27 @@ module.exports = async function(NEW_RELEASES = {}) {
 
     for(const newRelease of Object.values(NEW_RELEASES)) {
 
-        let apple = await fetch(`${global.BASE_URL}/find/${newRelease.artist}/${newRelease.name}?q=apple`);
+        let apple = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=apple`);
         apple = await apple.json();
         global.LOG.info('SENDER | RECEIVE: fetching:apple...', apple[0]);
 
-        let youtube = await fetch(`${global.BASE_URL}/find/${newRelease.artist}/${newRelease.name}?q=youtube`);
+        let youtube = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=youtube`);
         youtube = await youtube.json();
         global.LOG.info('SENDER | RECEIVE: fetching:youtube...', youtube[0]);
 
-        let lastfm = await fetch(`${global.BASE_URL}/find/${newRelease.artist}/${newRelease.name}?q=lastfm`);
+        let lastfm = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=lastfm`);
         lastfm = await lastfm.json();
         global.LOG.info('SENDER | RECEIVE: fetching:lastfm...', lastfm[0]);
 
-        let google = await fetch(`${global.BASE_URL}/find/${newRelease.artist}/${newRelease.name}?q=google`);
+        let google = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=google`);
         google = await google.json();
         global.LOG.info('SENDER | RECEIVE: fetching:google...', google[0]);
 
-        let soundcloud = await fetch(`${global.BASE_URL}/find/${newRelease.artist}/${newRelease.name}?q=soundcloud`);
+        let soundcloud = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=soundcloud`);
         soundcloud = await soundcloud.json();
         global.LOG.info('SENDER | RECEIVE: fetching:soundcloud...', soundcloud[0]);
 
-        let yandex = await fetch(`${global.BASE_URL}/find/${newRelease.artist}/${newRelease.name}?q=yandex`);
+        let yandex = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=yandex`);
         yandex = await yandex.json();
         global.LOG.info('SENDER | RECEIVE: fetching:yandex...', yandex[0]);
 
