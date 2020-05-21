@@ -8,6 +8,7 @@ global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.
 // Parts
 require('./server/cron');
 require('./server/parts/initializeFirebase');
+const searchAlbumYouTube = require('./server/parts/youtube/searchAlbum.youtube.api');
 // Utils
 require('./server/utils/extendJs.utils');
 // Routes
@@ -17,6 +18,8 @@ const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.ro
 
 
 global.BASE_URL = 'https://newrockbot.herokuapp.com';
+global.YOUTUBE_API = 'AIzaSyDwtT9D89yM6-MOo7AkYX3D2Zz4r0Hr-bI';
+
 global.authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -47,7 +50,6 @@ app.use(function(err, req, res, next) {
 
 
 app.get('/',(req, res)=> {
-
     const message = {
         notification: {
             title: 'New release!',
@@ -69,7 +71,13 @@ app.get('/',(req, res)=> {
             res.send('Not Hello World!');
         });
 } );
-app.get('/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
+
+app.get('/test', async (req, res)=> {
+    await searchAlbumYouTube();
+    res.send("ok");
+});
+
+app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 app.get('/releases/:artist/:days/:uid', releasesArtistDaysRoute);
