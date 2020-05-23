@@ -13,17 +13,17 @@ async function parsePage(browser, group, album) {
 
         if(!isFound) {
             return {
-                source: 'https://www.last.fm',
+                source: 'lastfm',
                 error: `No such album in last fm: ${group} - ${album}`
             }
         }
 
         return {
-            source: 'https://www.last.fm',
+            source: 'lastfm',
             link: `https://www.last.fm/music/${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`
         };
     } catch(e) {
-        return { source: 'https://www.last.fm/', error: e.toString() };
+        return { source: 'lastfm', error: e.toString() };
     }
 }
 

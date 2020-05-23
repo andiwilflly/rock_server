@@ -51,8 +51,11 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
         !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
-    ]).then((results)=> {
+    ]).then((results,i)=> {
         browser.close();
-        res.send(results.filter(Boolean));
+        res.send(results.filter(Boolean).reduce((res, resource)=> {
+            res[resource.source] = resource;
+            return res;
+        }, {}));
     })
 }

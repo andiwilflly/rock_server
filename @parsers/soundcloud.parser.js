@@ -16,7 +16,7 @@ async function parsePage(browser, group, album) {
                 .find($link => $link.innerText.toLowerCase().includes(_group));
             return $groupLink ? $groupLink.getAttribute('href') : null
         }, group);
-        if(!groupLink) return { source: 'https://soundcloud.com', error: `Can't find group ${group}` };
+        if(!groupLink) return { source: 'soundcloud', error: `Can't find group ${group}` };
 
 
         await page.goto(`https://soundcloud.com${groupLink}`, {
@@ -30,14 +30,14 @@ async function parsePage(browser, group, album) {
                 .find($link => $link.innerText.toLowerCase().includes(_album));
             return $albumLink ? $albumLink.getAttribute('href') : null;
         }, album);
-        if(!albumLink) return { source: 'https://soundcloud.com', error: `Can't find album ${album}` };
+        if(!albumLink) return { source: 'soundcloud', error: `Can't find album ${album}` };
 
         return {
-            source: 'https://soundcloud.com',
+            source: 'soundcloud',
             link: `https://soundcloud.com${albumLink}`
         };
     } catch(e) {
-        return { source: 'https://soundcloud.com', error: e.toString() };
+        return { source: 'soundcloud', error: e.toString() };
     }
 }
 

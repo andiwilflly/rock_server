@@ -19,7 +19,7 @@ async function parsePage(browser, group, album, originalGroupName) {
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, originalGroupName);
-        if(!artistPageLink) return { source: 'https://music.youtube.com', error: `Can't find artistPageLink` };
+        if(!artistPageLink) return { source: 'youtube', error: `Can't find artistPageLink` };
 
 
         // Artist page
@@ -49,16 +49,16 @@ async function parsePage(browser, group, album, originalGroupName) {
             return $albumPageLink ? $albumPageLink.querySelector('a').getAttribute('href') : null;
         }, album);
 
-        if(!albumPageLink) return { source: 'https://music.youtube.com', error: `Can't find albumPageLink` };
+        if(!albumPageLink) return { source: 'youtube', error: `Can't find albumPageLink` };
 
         console.log(`✨ YOUTOBE PARSER | albums page link received... ${albumPageLink}`);
 
         return {
-            source: 'https://music.youtube.com',
+            source: 'youtubem',
             link: `https://music.youtube.com/${albumPageLink}`
         };
     } catch(e) {
-        return { source: 'https://music.youtube.com', error: e.toString() };
+        return { source: 'youtube', error: e.toString() };
     }
 }
 

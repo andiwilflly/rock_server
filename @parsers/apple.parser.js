@@ -65,16 +65,16 @@ async function parsePage(browser, group, album) {
             }
         }
 
-        if(!albumPageLink) return { source: 'https://music.apple.com', error: `Can't find album: ${album}` };
+        if(!albumPageLink) return { source: 'apple', error: `Can't find album: ${album}` };
 
         console.log(`✨ APPLE PARSER | albums page link received... ${albumPageLink}`);
 
         return {
-            source: 'https://music.apple.com',
+            source: 'apple',
             link: `${albumPageLink}`.replace('beta.', '')
         };
     } catch(e) {
-        return { source: 'https://music.apple.com', error: e.toString() };
+        return { source: 'apple', error: e.toString() };
     }
 }
 

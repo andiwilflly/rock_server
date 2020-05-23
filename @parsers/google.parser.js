@@ -17,7 +17,7 @@ async function parsePage(browser, group, album) {
 
             return $albumsShowMoreBtn ? $albumsShowMoreBtn.getAttribute('href') : null;
         });
-        if(!albumsPageLink) return { source: 'https://play.google.com', error: `Can't open albums page` };
+        if(!albumsPageLink) return { source: 'google', error: `Can't open albums page` };
         console.log(`✨ GOOGLE PARSER | albums page link received... ${albumsPageLink}`);
 
         // Albums page
@@ -33,7 +33,7 @@ async function parsePage(browser, group, album) {
 
             return $albumLink ? $albumLink.getAttribute('href') : null;
         }, album);
-        if(!albumLink) return { source: 'https://play.google.com', error: `Can't find album ${album}` };
+        if(!albumLink) return { source: 'google', error: `Can't find album ${album}` };
         console.log(`✨ GOOGLE PARSER | album link received... ${albumLink}`);
 
 
@@ -46,12 +46,12 @@ async function parsePage(browser, group, album) {
         const copyright = await page.evaluate(()=> document.querySelectorAll('.ZVWMWc .UAO9ie')[3].innerText);
 
         return {
-            source: 'https://play.google.com',
+            source: 'google',
             link: `https://play.google.com${albumLink}`,
             copyright
         };
     } catch(e) {
-        return { source: 'https://play.google.com', error: e.toString() };
+        return { source: 'google', error: e.toString() };
     }
 }
 

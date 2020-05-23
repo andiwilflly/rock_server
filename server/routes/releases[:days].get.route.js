@@ -23,11 +23,11 @@ module.exports = async function(req, res) {
     global.LOG.info('/releases/:days | [subscriptions] loaded: ', subscriptions.length);
 
     for(const subscription of subscriptions) {
-        global.LOG.info('/releases/:days | [subscription] start search new releases...', subscription);
+        //global.LOG.info('/releases/:days | [subscription] start search new releases...', subscription);
 
         NEW_RELEASES = {
             ...NEW_RELEASES,
-            ...formatNewReleasesUtil(subscription, await spotifyFindInNewReleases(subscription.name, days))
+            ...formatNewReleasesUtil(subscription, await spotifyFindInArtistAlbums(subscription.name, days))
         };
 
         // We found new release for current artist
@@ -37,7 +37,7 @@ module.exports = async function(req, res) {
 
         NEW_RELEASES = {
             ...NEW_RELEASES,
-            ...formatNewReleasesUtil(subscription, await spotifyFindInArtistAlbums(subscription.name, days))
+            ...formatNewReleasesUtil(subscription, await spotifyFindInNewReleases(subscription.name, days))
         };
 
         // if(Object.values(NEW_RELEASES).find(release => {
