@@ -53,13 +53,13 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
         !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
     ]).then((results,i)=> {
-        browser.close();
+        // browser.close();
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;
             return res;
         }, {}));
     }).finally((e)=> {
         console.log('=== FINALLY! ===')
-        browser.close();
+        //browser.close();
     });
 }
