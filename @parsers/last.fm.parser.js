@@ -1,4 +1,4 @@
-async function start(browser, artistName, albumName) {
+async function start(artistName, albumName) {
 
     let albums = await fetch(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${albumName}&api_key=${'8ecb1efa682d2b9fb834f9e757e4fc0b'}&format=json`);
     albums = await albums.json();

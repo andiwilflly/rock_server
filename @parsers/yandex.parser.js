@@ -2,7 +2,7 @@ const YandexMusicApi = require('yandex-music-api');
 const api = new YandexMusicApi();
 
 
-async function start(browser, artistName, albumName) {
+async function start(artistName, albumName) {
     console.log('✨ YANDEX PARSER:START...');
 
     await api.init({username: 'andiwillfly', password: 'Ward121314'});

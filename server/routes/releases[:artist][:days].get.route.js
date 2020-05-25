@@ -18,10 +18,10 @@ module.exports = async function(req, res) {
 
     global.LOG.info('/releases/:artist/:days | start search new releases for: ', artistName, days, userId);
 
-    NEW_RELEASES = {
-        ...NEW_RELEASES,
-        ...formatNewReleasesUtil({ name: artistName, user: userId }, await spotifyFindInNewReleases(artistName, days))
-    };
+    // NEW_RELEASES = {
+    //     ...NEW_RELEASES,
+    //     ...formatNewReleasesUtil({ name: artistName, user: userId }, await spotifyFindInNewReleases(artistName, days))
+    // };
 
     // We found new release for current artist
     // if(Object.values(NEW_RELEASES).find(release => release.artist === artistName)) return res.send(NEW_RELEASES);
