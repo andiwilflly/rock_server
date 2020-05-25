@@ -58,7 +58,7 @@ async function parsePage(browser, group, album) {
 async function start(browser, artistName, albumName) {
     console.log('✨ SPOTIFY PARSER:START...');
 
-    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=album:${albumName} artist:${artistName}&type=album&limit=1`, {
+    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=album:${encodeURIComponent(albumName)} artist:${encodeURIComponent(artistName)}&type=album&limit=1`, {
         headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
     });
     matchedAlbum = await matchedAlbum.json();
