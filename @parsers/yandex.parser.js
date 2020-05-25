@@ -1,72 +1,31 @@
-async function parsePage(browser, group, album) {
-    try {
-        const page = await browser.newPage();
-
-        await page.goto(`https://music.yandex.ua/search?text=${group}`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(1000);
-
-        console.log(`✨ YANDEX PARSER | search groups page loaded...`);
-
-        const artistLink = await page.evaluate((_group)=> {
-            const $artistLink = [ ...document.querySelectorAll('.serp-snippet__artists > .artist .artist__name a') ]
-                .find($artist => $artist.innerText.toLowerCase().includes(_group));
-
-            return $artistLink ? $artistLink.getAttribute('href') : null;
-        }, group);
-
-        if(!artistLink) return { source: 'yandex', error: `No such group: ${group}` };
-
-        console.log(`✨ YANDEX PARSER | find artistLink: https://music.yandex.ua${artistLink}...`);
-
-        await page.goto(`https://music.yandex.ua${artistLink}/albums`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(1000);
+const YandexMusicApi = require('yandex-music-api');
+const api = new YandexMusicApi();
 
 
-        const albumLink = await page.evaluate((_album)=> {
-            const $album = [...document.querySelector('.page-artist__albums').querySelectorAll('.album')]
-                .find($artist => $artist.querySelector('.album__title.typo-main').innerText.toLowerCase().includes(_album));
-
-            return $album ? $album.querySelector('a').getAttribute('href') : null;
-        }, album)
-
-        if(!albumLink) return { source: 'yandex', error: `No such album: ${album}` };
-
-        console.log('✨ YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
-
-
-        // Album page
-        await page.goto(`https://music.yandex.ua${albumLink}`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(1000);
-        await page.$eval('.entity-cover__image', ($el)=> $el.click());
-
-        const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
-
-        return {
-            source: 'yandex',
-            link: `https://music.yandex.ua${albumLink}`,
-            albumImg: albumImg.replace('//', 'https://')
-        };
-
-    } catch(e) {
-        return { source: 'yandex', error: e.toString() };
-    }
-}
-
-
-async function start(browser, group, album) {
+async function start(browser, artistName, albumName) {
     console.log('✨ YANDEX PARSER:START...');
 
-    const response = await parsePage(browser, group, album);
-    browser.close();
+    await api.init({username: 'andiwillfly', password: 'Ward121314'});
 
-    console.log('✨ YANDEX PARSER:END', response);
-    return response;
+    let matchedAlbum = await api.search(`${artistName} - ${albumName}`, { type: 'album' });
+    matchedAlbum = matchedAlbum.albums.results[0];
+
+    if(!matchedAlbum) return {
+        error: `Album [${artistName} - ${albumName}] not found`,
+        source: 'yandex'
+    }
+
+    console.log('✨ YANDEX PARSER:END', `${artistName} - ${albumName}`);
+    return {
+        source: 'yandex',
+        albumName: matchedAlbum.title,
+        artistName: matchedAlbum.artists[0].name,
+        artistImage: `https://${matchedAlbum.artists[0].cover.uri.replace('%%', 'm1000x1000')}`,
+        link: `https://music.yandex.ua/album/${matchedAlbum.id}`,
+        trackCount: matchedAlbum.trackCount,
+        genre: matchedAlbum.genre,
+        image: `https://${matchedAlbum.coverUri.replace('%%', 'm1000x1000')}`
+    };
 }
 
 module.exports = start;

@@ -25,6 +25,7 @@
     "puppeteer-extra-plugin-anonymize-ua": "^2.2.8",
     "puppeteer-extra-plugin-stealth": "^2.4.9",
     "request": "^2.88.2",
-    "simple-node-logger": "^18.12.24"
+    "simple-node-logger": "^18.12.24",
+    "yandex-music-api": "0.0.3"
   }
 }
