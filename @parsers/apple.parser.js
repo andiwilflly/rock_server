@@ -59,7 +59,7 @@ async function parsePage(browser, group, album) {
                 console.log(`✨ APPLE PARSER | ${group} page loaded...`);
 
                 albumPageLink = await page.evaluate((_album)=> {
-                    const $albumPageLink = [...document.querySelectorAll('.l-row a')].find(x => x.innerText.toLowerCase().includes(_album))
+                    const $albumPageLink = [...document.querySelectorAll('.lockup__lines a')].find(x => x.innerText.toLowerCase().includes(_album))
                     return $albumPageLink ? $albumPageLink.getAttribute('href') : null
                 }, album);
             }
