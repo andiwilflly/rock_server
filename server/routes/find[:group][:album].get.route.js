@@ -12,6 +12,7 @@ const appleParser = require('../../@parsers/apple.parser');
 const youTubeParser = require('../../@parsers/youtube.parser');
 const soundCloudParser = require('../../@parsers/soundcloud.parser');
 const lastFmParser = require('../../@parsers/last.fm.parser');
+const spotifyParser = require('../../@parsers/spotify.pareser');
 
 
 // When build error
@@ -44,8 +45,8 @@ module.exports = async function (req, res) {
 
     console.log(resources);
     Promise.all([
-        // !resources.length || resources.includes('spotify') ? spotifyParser(browser, group, album) : null,
-        !resources.length || resources.includes('lastfm') ? lastFmParser(browser, group, album) : null,
+        !resources.length || resources.includes('spotify') ? spotifyParser(browser, group, album) : null,
+        !resources.length || resources.includes('lastfm') ? lastFmParser(browser, group, req.params.album) : null,
         !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,

@@ -1,41 +1,27 @@
-async function parsePage(browser, group, album) {
-    try {
-        const page = await browser.newPage();
-        // https://music.apple.com/us/search?searchIn=am&term=Asking%20alexandria%20-%20down%20to%20hell
-        await page.goto(`https://www.last.fm/music/${`${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`}`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(1000);
-        console.log(`✨ LAST.FM PARSER | page loaded...`);
+async function start(browser, artistName, albumName) {
 
-        let isFound = await page.evaluate(()=> document.querySelector('.header-new-title').innerText);
-        isFound = isFound.toLowerCase().includes(album);
+    let albums = await fetch(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${albumName}&api_key=${'8ecb1efa682d2b9fb834f9e757e4fc0b'}&format=json`);
+    albums = await albums.json();
 
-        if(!isFound) {
-            return {
-                source: 'lastfm',
-                error: `No such album in last fm: ${group} - ${album}`
-            }
-        }
-
-        return {
-            source: 'lastfm',
-            link: `https://www.last.fm/music/${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`
-        };
-    } catch(e) {
-        return { source: 'lastfm', error: e.toString() };
-    }
-}
-
-
-// https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-async function start(browser, group, album) {
     console.log('✨ LAST.FM PARSER:START...');
 
-    const response = await parsePage(browser, group, album);
+    const matchedAlbum = albums.results.albummatches.album.find(album => {
 
-    console.log('✨ LAST.FM PARSER:END', response);
-    return response;
+        return album.name.toLowerCase() === albumName.toLowerCase() &&
+               album.artist.toLowerCase() === artistName.toLowerCase();
+    });
+
+    if(!matchedAlbum) return {
+        error: `Album [${artistName} - ${albumName}] not found`,
+        source: 'lastfm'
+    }
+
+    console.log('✨ LAST.FM PARSER:END');
+    return {
+        link: matchedAlbum.url,
+        image: matchedAlbum.image[matchedAlbum.image.length-1]['#text'],
+        source: 'lastfm'
+    };
 }
 
 module.exports = start;

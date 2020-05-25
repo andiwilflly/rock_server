@@ -55,13 +55,29 @@ async function parsePage(browser, group, album) {
 }
 
 
-async function start(browser, group, album) {
+async function start(browser, artistName, albumName) {
     console.log('✨ SPOTIFY PARSER:START...');
 
-    const response = await parsePage(browser, group, album);
+    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=album:${albumName} artist:${artistName}&type=album`, {
+        headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
+    });
+    matchedAlbum = await matchedAlbum.json();
 
-    console.log('✨ SPOTIFY PARSER:END', response);
-    return response;
+    matchedAlbum = matchedAlbum.albums.items[0];
+
+    console.log('✨ SPOTIFY PARSER:END');
+    return {
+        link: matchedAlbum.external_urls.spotify,
+        name: matchedAlbum.name,
+        artistName: matchedAlbum.artists[0].name,
+        artistLink: matchedAlbum.artists[0].external_urls.spotify,
+        albumId: matchedAlbum.id,
+        image: matchedAlbum.images[0].url,
+        releaseDate: matchedAlbum.release_date,
+        totalTracks: matchedAlbum.total_tracks,
+        type: matchedAlbum.type,
+        source: 'spotify',
+    };
 }
 
 module.exports = start;

@@ -17,6 +17,7 @@ const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
 
 
+global.SPOTIFY_TOKEN = null;
 global.BASE_URL = 'https://newrockbot.herokuapp.com';
 global.YOUTUBE_API = 'AIzaSyDwtT9D89yM6-MOo7AkYX3D2Zz4r0Hr-bI';
 

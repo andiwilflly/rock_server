@@ -3,7 +3,7 @@
 module.exports = async function searchAlbum(artist, album) {
     global.LOG.info('YOUTUBE API | FETCHING: album');
 
-    let response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(`${artist} - ${album}`)}&type=album&key=${global.YOUTUBE_API}`);
+    let response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(`${artist} - ${album}`)}&type=playlist&key=${global.YOUTUBE_API}`);
     response = await response.json();
 
     if(response.error || !response.items.length) {
@@ -14,10 +14,9 @@ module.exports = async function searchAlbum(artist, album) {
     global.LOG.info('YOUTUBE API | SUCCESS: results -> ', response.items.length);
 
     return {
-        link: `https://music.youtube.com/channel/${response.items[0].snippet.channelId}`,
-        videoLink: `https://www.youtube.com/watch?v=${response.items[0].id.videoId}`,
+        link: `https://music.youtube.com/playlist?list=${response.items[0].id.playlistId}`,
         description: response.items[0].snippet.description,
         icon: response.items[0].snippet.thumbnails['high'].url,
-        channelTitle: response.items[0].snippet.channelTitle
+        publishTime: response.items[0].snippet.publishTime
     };
 }
