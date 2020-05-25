@@ -7,7 +7,7 @@ async function start(artistName, albumName) {
 
     await api.init({username: 'andiwillfly', password: 'Ward121314'});
 
-    let matchedAlbum = await api.search(encodeURIComponent(`${artistName} - ${albumName}`));
+    let matchedAlbum = await api.search(`${encodeURIComponent(artistName)} - ${encodeURIComponent(albumName)}`);
 
     matchedAlbum = matchedAlbum.best;
 
