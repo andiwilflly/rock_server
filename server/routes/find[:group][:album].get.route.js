@@ -58,5 +58,8 @@ module.exports = async function (req, res) {
             res[resource.source] = resource;
             return res;
         }, {}));
-    }).catch((e)=> browser.close());
+    }).finally((e)=> {
+        console.log('=== FINALLY! ===')
+        browser.close();
+    });
 }
