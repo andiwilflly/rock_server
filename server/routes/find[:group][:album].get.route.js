@@ -55,7 +55,7 @@ module.exports = async function (req, res) {
     Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
         !resources.length || resources.includes('lastfm') ? lastFmParser(group, req.params.album) : null,
-        !resources.length || resources.includes('yandex') ? yandexParser(group, album) : null,
+        !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,

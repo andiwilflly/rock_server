@@ -48,7 +48,7 @@ async function parsePage(browser, group, album) {
         const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
 
         return {
-            source: 'https://music.yandex.ua',
+            source: 'yandex',
             link: `https://music.yandex.ua${albumLink}`,
             albumImg: albumImg.replace('//', 'https://')
         };
@@ -63,7 +63,6 @@ async function start(browser, group, album) {
     console.log('✨ YANDEX PARSER:START...');
 
     const response = await parsePage(browser, group, album);
-    browser.close();
 
     console.log('✨ YANDEX PARSER:END', response);
     return response;
