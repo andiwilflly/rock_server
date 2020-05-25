@@ -56,14 +56,14 @@ module.exports = async function(NEW_RELEASES = {}) {
                 }
             })
             .then(function() {
-                console.log("Document successfully written!");
+                console.log("Document successfully written! TOPIC: ", newRelease.user);
 
                 const message = {
                     notification: {
                         title: 'New release!',
                         body: `${newRelease.artist} - ${newRelease.name}`
                     },
-                    topic: 'allDevices'
+                    topic: newRelease.user
                 };
 
 
