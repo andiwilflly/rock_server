@@ -26,6 +26,7 @@
     "puppeteer-extra-plugin-stealth": "^2.4.9",
     "request": "^2.88.2",
     "simple-node-logger": "^18.12.24",
+    "soundcloud.ts": "^0.2.3",
     "yandex-music-api": "0.0.3"
   }
 }

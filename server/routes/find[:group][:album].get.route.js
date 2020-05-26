@@ -49,9 +49,6 @@ module.exports = async function (req, res) {
 
     console.log(resources);
 
-    const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    console.log(`===> MEMORY USAGE start: ${Math.round(used * 100) / 100} MB`);
-
     Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
         !resources.length || resources.includes('lastfm') ? lastFmParser(group, req.params.album) : null,
@@ -60,12 +57,9 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
         !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
-    ]).then((results,i)=> {
+    ]).then((results)=> {
         browser.close();
         browser = null;
-
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`===> MEMORY USAGE end: ${Math.round(used * 100) / 100} MB`);
 
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;

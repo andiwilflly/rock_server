@@ -65,6 +65,11 @@ async function start(artistName, albumName) {
 
     matchedAlbum = matchedAlbum.albums.items[0];
 
+    if(!matchedAlbum) return {
+        error: `Album [${artistName} - ${albumName}] not found`,
+        source: 'spotify'
+    }
+
     console.log('✨ SPOTIFY PARSER:END');
     return {
         link: matchedAlbum.external_urls.spotify,

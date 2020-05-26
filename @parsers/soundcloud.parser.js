@@ -1,40 +1,27 @@
-// https://soundcloud.com/search/people?q=Wildways
+const Soundcloud = require("soundcloud.ts").default;
 
-async function parsePage(browser, group, album) {
+
+async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
 
 
-        await page.goto(`https://soundcloud.com/search/people?q=${encodeURIComponent(group)}`, {
+        await page.goto(`https://soundcloud.com/search/sounds?q=${encodeURIComponent(`${group}-${song}`)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(100);
         console.log(`✨ SOUNDCLOUD PARSER | page loaded...`);
 
-        const groupLink = await page.evaluate((_group)=> {
-            const $groupLink = [...document.querySelectorAll('.searchList__item a')]
-                .find($link => $link.innerText.toLowerCase().includes(_group));
-            return $groupLink ? $groupLink.getAttribute('href') : null
-        }, group);
-        if(!groupLink) return { source: 'soundcloud', error: `Can't find group ${group}` };
-
-
-        await page.goto(`https://soundcloud.com${groupLink}`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(100);
-        console.log(`✨ GOOGLE PARSER | '${group}' page loaded...`);
-
-        const albumLink = await page.evaluate((_album)=> {
-            const $albumLink = [...document.querySelectorAll('.soundList__item a')]
-                .find($link => $link.innerText.toLowerCase().includes(_album));
-            return $albumLink ? $albumLink.getAttribute('href') : null;
-        }, album);
-        if(!albumLink) return { source: 'soundcloud', error: `Can't find album ${album}` };
+        const songLink = await page.evaluate((_song)=> {
+            const $songLink = [...document.querySelectorAll('.searchList__item a')]
+                .find($link => $link.innerText.toLowerCase().includes(_song));
+            return $songLink ? $songLink.getAttribute('href') : null
+        }, song);
+        if(!songLink) return { source: 'soundcloud', error: `Can't find song ${song}` };
 
         return {
             source: 'soundcloud',
-            link: `https://soundcloud.com${albumLink}`
+            link: `https://soundcloud.com${songLink}`
         };
     } catch(e) {
         return { source: 'soundcloud', error: e.toString() };
@@ -42,13 +29,39 @@ async function parsePage(browser, group, album) {
 }
 
 
-async function start(browser, group, album) {
+async function start(browser, artistName, songName) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
-    const response = await parsePage(browser, group, album);
+    const soundcloud = new Soundcloud();
+    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${artistName} - ${songName}`)}`);
 
-    console.log('✨ SOUNDCLOUD PARSER:END', response);
-    return response;
+    matchedSong = matchedSong[0];
+
+    if(
+        !matchedSong ||
+        !matchedSong.title.toLowerCase().includes(songName.toLowerCase())
+    ) {
+        return await parsePage(browser, artistName, songName);
+    }
+
+    console.log('✨ SOUNDCLOUD PARSER:END');
+    return {
+        authorImage: (matchedSong.user.visuals && matchedSong.user.visuals[0]) ?
+            matchedSong.user.visuals.visuals[0].visual_url
+            :
+            matchedSong.user.avatar_url,
+        authorDescription: matchedSong.user.description,
+        title: matchedSong.title,
+        link: matchedSong.permalink_url,
+        description: matchedSong.description,
+        tags: matchedSong.tag_list.split(' ').filter(Boolean),
+        genre: matchedSong.genre,
+        type: matchedSong.kind,
+        image: matchedSong.artwork_url,
+        createdAt: matchedSong.created_at,
+        releaseDate: matchedSong.release_date || 'Unknown',
+        source: 'soundcloud'
+    };
 }
 
 module.exports = start;
