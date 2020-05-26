@@ -3,7 +3,7 @@
 module.exports = async function searchAlbum(artist, album) {
     global.LOG.info('YOUTUBE API | FETCHING: album');
 
-    let response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(`${artist}|${album}`)}&type=channel&key=${global.YOUTUBE_API}`);
+    let response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(`${artist} ${album}`)}&type=playlist&key=${global.YOUTUBE_API}&maxResults=1`);
     response = await response.json();
 
     if(response.error || !response.items.length) {
