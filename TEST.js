@@ -1,10 +1,8 @@
-var YandexMusicApi = require('yandex-music-api');
+const fs = require('fs');
+const { getChart } = require('billboard-top-100');
 
-var api = new YandexMusicApi();
-
-api.init({username: 'andiwillfly', password: 'Ward121314'}).then(async function(auth) {
-
-    const x = await api.search('One Desire - Midnight Empire');
-
-    console.log(auth, x);
-})
+getChart((err, chart) => {
+    if (err) console.log(err);
+    console.log(chart);
+    fs.writeFileSync('./CHART.json', JSON.stringify(chart));
+});
