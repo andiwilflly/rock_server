@@ -54,10 +54,10 @@ app.use(function(err, req, res, next) {
 app.get('/',(req, res)=> {
     const message = {
         notification: {
-            title: 'New release!!',
+            title: 'New release!',
             body: '${newRelease.artist} - ${newRelease.name}'
         },
-        topic: 'allDevices' // req.query.topic ||
+        topic: 'JKooKnosrveuLhmbnpdDVAUk6Cp1' // 'allDevices'
     };
 
     // Send a message to the device corresponding to the provided
@@ -66,11 +66,11 @@ app.get('/',(req, res)=> {
         .then((response) => {
             // Response is a message ID string.
             console.log('Successfully sent message:', response);
-            res.send('Hello World!' + req.query.topic);
+            res.send('Hello World!');
         })
         .catch((error) => {
             console.log('Error sending message:', error);
-            res.send('Not Hello World!' + req.query.topic);
+            res.send('Not Hello World!');
         });
 } );
 

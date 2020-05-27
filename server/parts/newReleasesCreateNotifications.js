@@ -20,7 +20,7 @@ module.exports = async function(NEW_RELEASES = {}) {
         // global.LOG.info('SENDER | RECEIVE: fetching:apple...', apple[0]);
 
         let youtube = await searchAlbumYouTube(newRelease.artist, newRelease.name);
-        let lastFm = await lastFmParser(newRelease.artist, newRelease.name);
+        let lastfm = await lastFmParser(newRelease.artist, newRelease.name);
         let yandex = await yandexParser(newRelease.artist, newRelease.name);
 
         // let lastfm = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=lastfm`);
@@ -47,7 +47,7 @@ module.exports = async function(NEW_RELEASES = {}) {
                     spotify: newRelease.spotifyLink,
                     // apple: apple[0].link || '',
                     youtube,
-                    lastFm,
+                    lastfm,
                     yandex,
                     // lastfm: lastfm[0].link || '',
                     // google: google[0].link || '',

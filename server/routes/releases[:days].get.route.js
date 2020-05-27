@@ -8,6 +8,9 @@ const newReleasesCreateNotifications = require('../parts/newReleasesCreateNotifi
 const formatNewReleasesUtil = require('../utils/formatNewReleases.util');
 
 
+const sleep = (time = 1000)=> new Promise((resolve)=> setTimeout(resolve, time));
+
+
 module.exports = async function(req, res) {
     global.LOG.info('/releases/:days');
 
@@ -23,22 +26,22 @@ module.exports = async function(req, res) {
     global.LOG.info('/releases/:days | [subscriptions] loaded: ', subscriptions.length);
 
     for(const subscription of subscriptions) {
-        //global.LOG.info('/releases/:days | [subscription] start search new releases...', subscription);
-
+        await sleep(500);
+        const releases = await spotifyFindInArtistAlbums(subscription.name, days);
         NEW_RELEASES = {
             ...NEW_RELEASES,
-            ...formatNewReleasesUtil(subscription, await spotifyFindInArtistAlbums(subscription.name, days))
+            ...formatNewReleasesUtil(subscription, releases)
         };
 
         // We found new release for current artist
-        if(Object.values(NEW_RELEASES).find(release => {
-            return release.artist === subscription.name && release.user === subscription.user
-        })) continue;
+        // if(Object.values(NEW_RELEASES).find(release => {
+        //     return release.artist === subscription.name && release.user === subscription.user
+        // })) continue;
 
-        NEW_RELEASES = {
-            ...NEW_RELEASES,
-            ...formatNewReleasesUtil(subscription, await spotifyFindInNewReleases(subscription.name, days))
-        };
+        // NEW_RELEASES = {
+        //     ...NEW_RELEASES,
+        //     ...formatNewReleasesUtil(subscription, await spotifyFindInNewReleases(subscription.name, days))
+        // };
 
         // if(Object.values(NEW_RELEASES).find(release => {
         //     return release.artist === subscription.name && release.user === subscription.user
