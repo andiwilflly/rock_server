@@ -44,7 +44,9 @@ module.exports = async function(NEW_RELEASES = {}) {
             .set({
                 ...newRelease,
                 links: {
-                    spotify: newRelease.spotifyLink,
+                    spotify: {
+                        link: newRelease.spotifyLink
+                    },
                     // apple: apple[0].link || '',
                     youtube,
                     lastfm,
