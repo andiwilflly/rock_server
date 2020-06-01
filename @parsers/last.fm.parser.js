@@ -1,19 +1,10 @@
 const Fuse = require('fuse.js');
 
 const options = {
-    // isCaseSensitive: false,
     includeScore: true,
     shouldSort: true,
-    // includeMatches: true,
-    // findAllMatches: false,
-    // minMatchCharLength: 1,
-    // location: 0,
-   threshold: 0.4,
-    // distance: 100,
-    // useExtendedSearch: false,
-    keys: [
-        "artist"
-    ]
+    threshold: 0.4,
+    keys: ["artist"]
 };
 
 async function start(artistName, albumName) {
@@ -24,8 +15,21 @@ async function start(artistName, albumName) {
 
     const fuse = new Fuse(albums.results.albummatches.album, options);
 
+    let matchedAlbum = fuse.search(artistName)[0];
+
+    if(!matchedAlbum) return {
+        error: `Error ${artistName} - ${albumName} (not found)`,
+        source: 'lastfm'
+    }
+
+    matchedAlbum = matchedAlbum.item;
+
     console.log('✨ LAST.FM PARSER:END');
-    return fuse.search(artistName);
+    return {
+        link: matchedAlbum.url,
+        image: matchedAlbum.image[matchedAlbum.image.length-1]['#text'],
+        source: 'lastfm'
+    };
 }
 
 module.exports = start;

@@ -17,6 +17,7 @@ const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.ro
 // Parser
 const spotifyParser = require('./@parsers/spotify.pareser');
 const lastFmParser = require('./@parsers/last.fm.parser');
+const soundCloudParser = require('./@parsers/soundcloud.parser');
 
 
 global.SPOTIFY_TOKEN = null;
@@ -94,6 +95,7 @@ app.get('/find/:group/:album', findGroupAlbumRoute);
 
 app.get('/spotify/:query', async(req, res)=> res.send(JSON.stringify(await spotifyParser(req.params.query))));
 app.get('/lastfm/:group/:album', async(req, res)=> res.send(JSON.stringify(await lastFmParser(req.params.group, req.params.album))));
+app.get('/soundcloud/:query', async(req, res)=> res.send(JSON.stringify(await soundCloudParser(req.params.query))));
 
 
 app.listen(process.env.PORT || 3000, function() {

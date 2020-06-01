@@ -29,19 +29,21 @@ async function parsePage(browser, group, song) {
 }
 
 
-async function start(browser, artistName, songName) {
+async function start(group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
     const soundcloud = new Soundcloud();
-    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${artistName} - ${songName}`)}`);
+    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${group} - ${album}`)}`);
 
     matchedSong = matchedSong[0];
 
     if(
-        !matchedSong ||
-        !matchedSong.title.toLowerCase().includes(songName.toLowerCase())
+        !matchedSong
     ) {
-        return await parsePage(browser, artistName, songName);
+        return {
+            error: `Not found (${group} - ${album})`,
+            source: 'soundcloud'
+        }
     }
 
     console.log('✨ SOUNDCLOUD PARSER:END');

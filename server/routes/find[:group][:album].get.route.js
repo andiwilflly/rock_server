@@ -43,23 +43,23 @@ module.exports = async function (req, res) {
     }
 
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
-    await setupBrowser();
-    const group = req.params.group.toLowerCase();
-    const album = req.params.album.toLowerCase();
+    // await setupBrowser();
+    // const group = req.params.group.toLowerCase();
+    // const album = req.params.album.toLowerCase();
 
     console.log(resources);
 
     Promise.all([
-        !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
-        !resources.length || resources.includes('lastfm') ? lastFmParser(group, req.params.album) : null,
-        !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
-        !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
-        !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
-        !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
-        !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
+        !resources.length || resources.includes('spotify') ? spotifyParser(req.params.group, req.params.album) : null,
+        !resources.length || resources.includes('lastfm') ? lastFmParser(req.params.group, req.params.album) : null,
+        !resources.length || resources.includes('soundcloud') ? soundCloudParser(req.params.group, req.params.album) : null,
+        // !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
+        // !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
+        // !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
+        // !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
     ]).then((results)=> {
-        browser.close();
-        browser = null;
+        // browser.close();
+        // browser = null;
 
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;
