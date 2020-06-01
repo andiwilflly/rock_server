@@ -16,6 +16,7 @@ const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
 // Parser
 const spotifyParser = require('./@parsers/spotify.pareser');
+const lastFmParser = require('./@parsers/last.fm.parser');
 
 
 global.SPOTIFY_TOKEN = null;
@@ -91,11 +92,8 @@ app.get('/releases/:artist/:days/:uid', releasesArtistDaysRoute);
 app.get('/find/:group/:album', findGroupAlbumRoute);
 
 
-app.get('/spotify/:query', async(req, res)=> {
-    console.log('=>', req.params.query);
-
-    res.send(JSON.stringify(await spotifyParser(req.params.query)));
-});
+app.get('/spotify/:query', async(req, res)=> res.send(JSON.stringify(await spotifyParser(req.params.query))));
+app.get('/lastfm/:group/:album', async(req, res)=> res.send(JSON.stringify(await lastFmParser(req.params.group, req.params.album))));
 
 
 app.listen(process.env.PORT || 3000, function() {

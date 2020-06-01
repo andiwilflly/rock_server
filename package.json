@@ -17,6 +17,7 @@
     "firebase": "^7.14.3",
     "firebase-admin": "^8.12.1",
     "fs": "^0.0.1-security",
+    "fuse.js": "^6.0.0",
     "google-auth-library": "^6.0.0",
     "googleapis": "^51.0.0",
     "node-cron": "^2.0.3",
