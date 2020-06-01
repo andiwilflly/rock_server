@@ -55,10 +55,10 @@ async function parsePage(browser, group, album) {
 }
 
 
-async function start(artistName, albumName) {
+async function start(query) {
     console.log('✨ SPOTIFY PARSER:START...');
 
-    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${albumName}-${artistName}`)}&type=album,track&limit=1`, {
+    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${query}`)}&type=album,track&limit=1`, {
         headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
     });
     matchedAlbum = await matchedAlbum.json();
@@ -66,7 +66,7 @@ async function start(artistName, albumName) {
     matchedAlbum = (matchedAlbum.albums.items[0] || matchedAlbum.tracks.items[0]);
 
     if(!matchedAlbum) return {
-        error: `Album [${artistName} - ${albumName}] not found`,
+        error: `Album [${query}] not found`,
         source: 'spotify'
     }
 

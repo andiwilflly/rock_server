@@ -14,6 +14,8 @@ require('./server/utils/extendJs.utils');
 const releasesDaysRoute = require('./server/routes/releases[:days].get.route');
 const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days].get.route');
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
+// Parser
+const spotifyParser = require('./@parsers/spotify.pareser');
 
 
 global.SPOTIFY_TOKEN = null;
@@ -33,16 +35,24 @@ global.authOptions = {
     json: true
 };
 
-
+let spotifyTokenLifetime = 0;
 
 const app = express();
 
 app.use(function (req, res, next) {
-    request.post(global.authOptions, function(error, response, body) {
-        global.LOG.info('SERVER | Get [spotify] token');
-        global.SPOTIFY_TOKEN = body.access_token;
+
+    // 1hr lifetime
+    if(Date.now() - spotifyTokenLifetime > 3500000) {
+        request.post(global.authOptions, function(error, response, body) {
+            spotifyTokenLifetime = Date.now();
+            global.LOG.info('SERVER | Get [spotify] token');
+            global.SPOTIFY_TOKEN = body.access_token;
+            next();
+        });
+    } else {
+        global.LOG.info('SERVER | Get cached [spotify] token: ' + ((Date.now() - spotifyTokenLifetime) / 1000 / 60 / 24).toFixed(3) + ' hr');
         next();
-    });
+    }
 });
 
 app.use(function(err, req, res, next) {
@@ -78,9 +88,15 @@ app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN })
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 app.get('/releases/:artist/:days/:uid', releasesArtistDaysRoute);
-
-
 app.get('/find/:group/:album', findGroupAlbumRoute);
+
+
+app.get('/spotify/:query', async(req, res)=> {
+    console.log('=>', req.params.query);
+
+    res.send(JSON.stringify(await spotifyParser(req.params.query)));
+});
+
 
 app.listen(process.env.PORT || 3000, function() {
     global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3000}!`);
