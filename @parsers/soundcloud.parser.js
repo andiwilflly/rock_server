@@ -5,8 +5,7 @@ async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
 
-
-        await page.goto(`https://soundcloud.com/search/sounds?q=${encodeURIComponent(`${group}-${song}`)}`, {
+        await page.goto(`https://soundcloud.com/search/sounds?q=${encodeURIComponent(`${song}`)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(100);
