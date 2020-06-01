@@ -2,7 +2,7 @@ const searchAlbum = require('../server/parts/youtube/searchAlbum.youtube.api');
 
 
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-async function start(browser, artistName, albumName) {
+async function start(artistName, albumName) {
     console.log('✨ YOUTOBE PARSER:START...');
 
     const matchedAlbum = await searchAlbum(artistName, albumName);

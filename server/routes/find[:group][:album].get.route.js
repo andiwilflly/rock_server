@@ -56,7 +56,7 @@ module.exports = async function (req, res) {
         // !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         // !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         // !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
-        // !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
+        !resources.length || resources.includes('youtube') ? youTubeParser(req.params.group, req.params.album) : null,
     ]).then((results)=> {
         // browser.close();
         // browser = null;

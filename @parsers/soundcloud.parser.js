@@ -33,7 +33,8 @@ async function start(group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
     const soundcloud = new Soundcloud();
-    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${group} - ${album}`)}`);
+    // playlist
+    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${album}`)}`);
 
     matchedSong = matchedSong[0];
 

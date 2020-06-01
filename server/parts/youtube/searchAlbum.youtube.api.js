@@ -1,26 +1,46 @@
-// https://www.googleapis.com/youtube/v3/search?part=snippet&q=Natural Spirit - Під серпом часу&type=album&key=AIzaSyDwtT9D89yM6-MOo7AkYX3D2Zz4r0Hr-bI
+const Fuse = require('fuse.js');
+
+const options = {
+    includeScore: true,
+    shouldSort: true,
+    threshold: 0.4,
+    keys: ["snippet.title"]
+};
+
 
 module.exports = async function searchAlbum(artist, album) {
     global.LOG.info('YOUTUBE API | FETCHING: album');
 
-    let response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(`${artist} ${album}`)}&type=playlist,video&key=${global.YOUTUBE_API}&maxResults=1`);
-    response = await response.json();
+    let channels = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(`${artist}`)}&type=channel&key=${global.YOUTUBE_API}&maxResults=1`);
+    channels = await channels.json();
 
-    if(response.error || !response.items.length) {
-        global.LOG.error('YOUTUBE API | searchAlbum ERROR: ', response.error.message);
+    if(channels.error || !channels.items.length) {
+        global.LOG.error('YOUTUBE API | searchChannel ERROR: ', channels.error.message);
         return '';
     }
 
-    global.LOG.info('YOUTUBE API | SUCCESS: results -> ', response.items.length);
+    // global.LOG.info('YOUTUBE API | SUCCESS: results -> ', channels.items.length);
 
+    let playlists = await fetch(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=${channels.items[0].id.channelId}&key=${global.YOUTUBE_API}`);
+    playlists = await playlists.json();
+
+    const fuse = new Fuse(playlists.items, options);
+    let matchedAlbum = fuse.search(album)[0];
+
+    if(!matchedAlbum) {
+        global.LOG.error('YOUTUBE API | searchAlbum ERROR: ' + album);
+        return '';
+    }
+
+    let image = '[not found]';
+    try {
+        image = matchedAlbum.item.snippet.thumbnails['maxres'].url
+    } catch {}
     return {
-        id: response.items[0].id,
-        link: response.items[0].id.playlistId ?
-            `https://music.youtube.com/playlist?list=${response.items[0].id.playlistId}`
-            :
-            `https://music.youtube.com/watch?v=${response.items[0].id.videoId}`,
-        description: response.items[0].snippet.description,
-        icon: response.items[0].snippet.thumbnails['high'].url,
-        publishTime: response.items[0].snippet.publishTime,
+        link: `https://music.youtube.com/playlist?list=${matchedAlbum.item.id}`,
+        image,
+        title: matchedAlbum.item.snippet.title,
+        createdAt: matchedAlbum.item.snippet.publishedAt,
+        description: matchedAlbum.item.snippet.description
     };
 }
