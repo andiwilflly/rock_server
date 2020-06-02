@@ -43,27 +43,31 @@ module.exports = async function (req, res) {
     }
 
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
-    // await setupBrowser();
-    // const group = req.params.group.toLowerCase();
-    // const album = req.params.album.toLowerCase();
+
+    if(resources.includes('yandex') || resources.includes('google') || resources.includes('apple')) await setupBrowser();
+    if(!resources.length) await setupBrowser();
+
+    const group = req.params.group.toLowerCase();
+    const album = req.params.album.toLowerCase();
 
     console.log(resources);
 
-    Promise.all([
+    await Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(req.params.group, req.params.album) : null,
         !resources.length || resources.includes('lastfm') ? lastFmParser(req.params.group, req.params.album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(req.params.group, req.params.album) : null,
-       // !resources.length || resources.includes('yandex') ? yandexParser(req.params.group, req.params.album) : null,
-        // !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
-        // !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
         !resources.length || resources.includes('youtube') ? youTubeParser(req.params.group, req.params.album) : null,
-    ]).then((results)=> {
-        // browser.close();
-        // browser = null;
 
+        !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
+        !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
+        !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
+    ]).then((results)=> {
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;
             return res;
         }, {}));
     });
+
+    if(browser) browser.close();
+    browser = null;
 }

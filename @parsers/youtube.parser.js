@@ -5,7 +5,7 @@ const searchAlbum = require('../server/parts/youtube/searchAlbum.youtube.api');
 async function start(artistName, albumName) {
     console.log('✨ YOUTOBE PARSER:START...');
 
-    const matchedAlbum = await searchAlbum(artistName, albumName);
+    const matchedAlbum = await searchAlbum(artistName, albumName).catch(e => console.log(e));
 
     if(!matchedAlbum) return {
         error: `Album [${artistName} - ${albumName}] not found`,

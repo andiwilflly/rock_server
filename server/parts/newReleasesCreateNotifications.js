@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 const request = require('request');
 const firebase = require('firebase');
 // Utils
-// const setupBrowser = require('../utils/setupBrowser.utils');
+const setupBrowser = require('../utils/setupBrowser.utils');
 // Parts
 const searchAlbumYouTube = require('./youtube/searchAlbum.youtube.api');
 const lastFmParser = require('../../@parsers/last.fm.parser');
@@ -18,7 +18,7 @@ module.exports = async function(NEW_RELEASES = {}) {
 
     global.LOG.info('SENDER | RECEIVE: releases ', Object.keys(NEW_RELEASES));
 
-    // const browser = await setupBrowser();
+    const browser = await setupBrowser();
 
     for(const newRelease of Object.values(NEW_RELEASES)) {
 
