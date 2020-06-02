@@ -14,13 +14,16 @@ const setupBrowser = require('../utils/setupBrowser.utils');
 // heroku builds:cancel
 
 let browser = null;
+let isRequestRunning = false;
 
 
 module.exports = async function (req, res) {
-    if(browser) {
+    if(browser && !isRequestRunning) {
         console.log('=== CLOSING BROWSER BEFORE START ===');
         await browser.close();
     }
+
+    isRequestRunning = true;
 
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
 
@@ -30,7 +33,7 @@ module.exports = async function (req, res) {
     const group = req.params.group.toLowerCase();
     const album = req.params.album.toLowerCase();
 
-    console.log(resources);
+    console.log(resources, "isRequestRunning: =->>", isRequestRunning);
 
     await Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(req.params.group, req.params.album) : null,
@@ -42,12 +45,13 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
     ]).then((results)=> {
+        isRequestRunning = false;
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;
             return res;
         }, {}));
     });
 
-    if(browser) browser.close();
+    if(browser && !isRequestRunning) browser.close();
     browser = null;
 }
