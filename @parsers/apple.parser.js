@@ -1,6 +1,10 @@
+const setupPage = require('../server/utils/setupPage.utils');
+
+
 async function parsePage(browser, group, album) {
     try {
-        const page = await browser.newPage();
+        const page = await setupPage(browser);
+
         // https://music.apple.com/us/search?searchIn=am&term=Asking%20alexandria%20-%20down%20to%20hell
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group} - ${album}`)}`, {
             waitUntil: 'networkidle2'

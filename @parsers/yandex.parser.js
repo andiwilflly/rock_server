@@ -1,6 +1,9 @@
+const setupPage = require('../server/utils/setupPage.utils');
+
+
 async function parsePage(browser, group, album) {
     try {
-        const page = await browser.newPage();
+        const page = await setupPage(browser);
 
         await page.goto(`https://music.yandex.ua/search?text=${group}`, {
             waitUntil: 'networkidle2'

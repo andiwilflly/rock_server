@@ -1,7 +1,9 @@
+const setupPage = require('../server/utils/setupPage.utils');
+
+
 async function parsePage(browser, group, album) {
     try {
-        const page = await browser.newPage();
-
+        const page = await setupPage(browser);
 
         await page.goto(`https://play.google.com/store/search?q=${group.split(' ').join('+')}&c=music`, {
             waitUntil: 'networkidle2'
