@@ -1,11 +1,3 @@
-const puppeteer = require('puppeteer-extra');
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-puppeteer.use(StealthPlugin());
-puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')());
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
-puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
-
-
 const yandexParser = require('../../@parsers/yandex.parser');
 const googleParser = require('../../@parsers/google.parser');
 const appleParser = require('../../@parsers/apple.parser');
@@ -13,6 +5,8 @@ const youTubeParser = require('../../@parsers/youtube.parser');
 const soundCloudParser = require('../../@parsers/soundcloud.parser');
 const lastFmParser = require('../../@parsers/last.fm.parser');
 const spotifyParser = require('../../@parsers/spotify.pareser');
+// Utils
+const setupBrowser = require('../utils/setupBrowser.utils');
 
 
 // When build error
@@ -20,20 +14,6 @@ const spotifyParser = require('../../@parsers/spotify.pareser');
 // heroku builds:cancel
 
 let browser = null;
-async function setupBrowser() {
-    browser = await puppeteer.launch({
-        headless: true,
-        ignoreDefaultArgs: ["--mute-audio", "--hide-scrollbars"],
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--disable-gpu',
-            '--window-size=1920x1080',
-        ]
-    });
-}
 
 
 module.exports = async function (req, res) {
