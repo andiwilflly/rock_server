@@ -14,26 +14,15 @@ const setupBrowser = require('../utils/setupBrowser.utils');
 // heroku builds:cancel
 
 let browser = null;
-let isRequestRunning = false;
-
 
 module.exports = async function (req, res) {
-    if(browser && !isRequestRunning) {
-        console.log('=== CLOSING BROWSER BEFORE START ===');
-        await browser.close();
-    }
-
-    isRequestRunning = true;
-
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
 
-    if(resources.includes('yandex') || resources.includes('google') || resources.includes('apple')) browser = await setupBrowser();
-    if(!resources.length) browser = await setupBrowser();
+    if(!browser && (resources.includes('yandex') || resources.includes('google') || resources.includes('apple'))) browser = await setupBrowser();
+    if(!browser && !resources.length) browser = await setupBrowser();
 
     const group = req.params.group.toLowerCase();
     const album = req.params.album.toLowerCase();
-
-    console.log(resources, "isRequestRunning: =->>", isRequestRunning);
 
     await Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(req.params.group, req.params.album) : null,
@@ -44,14 +33,17 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
-    ]).then((results)=> {
-        isRequestRunning = false;
+    ]).then(async (results)=> {
+        const pages = await browser.pages();
+        console.log('BROWSER PAGES | ', pages.map(page => page.url()));
+        pages.forEach(page => page.close());
+
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;
             return res;
         }, {}));
     });
 
-    if(browser && !isRequestRunning) browser.close();
-    browser = null;
-}
+    //if(browser) browser.close();
+    //browser = null;
+};
