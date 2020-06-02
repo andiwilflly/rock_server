@@ -36,9 +36,9 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
     ]).then(async (results)=> {
-        // const pages = await browser.pages();
-        // console.log('BROWSER PAGES | ', pages.map(page => page.url()));
-        // pages.forEach(page => page.close());
+        const pages = await browser.pages();
+        console.log('BROWSER PAGES | ', pages.map(page => page.url()));
+        pages.forEach(page => page.close());
 
         res.send(results.filter(Boolean).reduce((res, resource)=> {
             res[resource.source] = resource;
