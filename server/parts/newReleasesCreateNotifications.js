@@ -3,14 +3,14 @@ const admin = require("firebase-admin");
 const request = require('request');
 const firebase = require('firebase');
 // Utils
-const setupBrowser = require('../utils/setupBrowser.utils');
+// const setupBrowser = require('../utils/setupBrowser.utils');
 // Parts
 const searchAlbumYouTube = require('./youtube/searchAlbum.youtube.api');
 const lastFmParser = require('../../@parsers/last.fm.parser');
-const yandexParser = require('../../@parsers/yandex.parser');
+// const yandexParser = require('../../@parsers/yandex.parser');
 const soundcloudParser = require('../../@parsers/soundcloud.parser');
-const googleParser = require('../../@parsers/google.parser');
-const appleParser = require('../../@parsers/apple.parser');
+// const googleParser = require('../../@parsers/google.parser');
+// const appleParser = require('../../@parsers/apple.parser');
 
 
 module.exports = async function(NEW_RELEASES = {}) {
@@ -18,7 +18,7 @@ module.exports = async function(NEW_RELEASES = {}) {
 
     global.LOG.info('SENDER | RECEIVE: releases ', Object.keys(NEW_RELEASES));
 
-    const browser = await setupBrowser();
+    // const browser = await setupBrowser();
 
     for(const newRelease of Object.values(NEW_RELEASES)) {
 
@@ -29,7 +29,7 @@ module.exports = async function(NEW_RELEASES = {}) {
         let youtube = await searchAlbumYouTube(newRelease.artist, newRelease.name);
         let lastfm = await lastFmParser(newRelease.artist, newRelease.name);
        // let yandex = await yandexParser(browser, newRelease.artist, newRelease.name);
-        //let soundcloud = await soundcloudParser(browser, newRelease.artist, newRelease.name);
+        let soundcloud = await soundcloudParser(newRelease.artist, newRelease.name);
         //let google = await googleParser(browser, newRelease.artist, newRelease.name);
         //let apple = await appleParser(browser, newRelease.artist, newRelease.name);
 
@@ -63,7 +63,7 @@ module.exports = async function(NEW_RELEASES = {}) {
                     youtube,
                     lastfm,
                     //yandex,
-                   // soundcloud,
+                   soundcloud,
                    // google,
                    // apple
 
