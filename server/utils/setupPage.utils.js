@@ -1,21 +1,30 @@
-module.export = async function(browser) {
-    const page = await browser.newPage();
-    const block_ressources = ['image', 'stylesheet', 'media', 'font', 'texttrack', 'object', 'beacon', 'csp_report', 'imageset'];
-    await page.setRequestInterception(true);
-    page.on('request', request => {
-        if (
-            block_ressources.indexOf(request.resourceType) > 0
-            // Be careful with above
-            || request.url().includes('.jpg')
-            || request.url().includes('.jpeg')
-            || request.url().includes('.png')
-            || request.url().includes('.gif')
-            || request.url().includes('.css')
-        )
-            request.abort();
-        else
-            request.continue();
+module.exports = async function(cluster) {
+    let newPage = null;
+
+    await cluster.task(async ({ page, data: url }) => {
+        page = await browser.newPage();
+        const block_ressources = ['image', 'stylesheet', 'media', 'font', 'texttrack', 'object', 'beacon', 'csp_report', 'imageset'];
+        await page.setRequestInterception(true);
+        page.on('request', request => {
+            if (
+                block_ressources.indexOf(request.resourceType) > 0
+                // Be careful with above
+                || request.url().includes('.jpg')
+                || request.url().includes('.jpeg')
+                || request.url().includes('.png')
+                || request.url().includes('.gif')
+                || request.url().includes('.css')
+            )
+                request.abort();
+            else
+                request.continue();
+        });
+
+        console.log('pagepage!', page);
+        newPage = page;
     });
 
-    return page;
+    console.log(newPage, 42);
+
+    return newPage;
 }
