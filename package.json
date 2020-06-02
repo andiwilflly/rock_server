@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "deploy": "git add . && git commit -m 'her' && git push heroku master",
-    "start": "node server.js"
+    "start": "pm2 stop server.js && pm2 start server.js && pm2 monit"
   },
   "keywords": [],
   "author": "",
