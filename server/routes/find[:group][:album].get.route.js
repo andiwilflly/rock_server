@@ -24,8 +24,8 @@ module.exports = async function (req, res) {
 
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
 
-    if(resources.includes('yandex') || resources.includes('google') || resources.includes('apple')) await setupBrowser();
-    if(!resources.length) await setupBrowser();
+    if(resources.includes('yandex') || resources.includes('google') || resources.includes('apple')) browser = await setupBrowser();
+    if(!resources.length) browser = await setupBrowser();
 
     const group = req.params.group.toLowerCase();
     const album = req.params.album.toLowerCase();
