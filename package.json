@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "deploy": "git add . && git commit -m 'her' && git push heroku master",
-    "start": "git pull && nodemon server.js",
+    "start": "git pull && pm2 stop server.js && pm2 start server.js && pm2 monit",
     "ssh": "ssh -i digitaalocean_ssh root@167.71.12.148"
   },
   "keywords": [],
