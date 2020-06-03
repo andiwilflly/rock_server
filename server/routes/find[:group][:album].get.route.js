@@ -29,9 +29,9 @@ module.exports = async function (req, res) {
 
     await Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
-        !resources.length || resources.includes('lastfm') ? lastFmParser(group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(group, album) : null,
 
+        !resources.length || resources.includes('lastfm') ? lastFmParser(browser, group, album) : null,
         !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
         !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
