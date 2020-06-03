@@ -93,19 +93,6 @@ app.get('/', async (req, res)=> {
         });
 } );
 
-// app.get('/db', async (req, res)=> {
-//     const client = await connectMongoDB();
-//     const db = await client.db('instaGQL-database');
-//
-//     let parserCollection = await db.collection('parser');
-//     if(!parserCollection) await db.createCollection('parser');
-//     parserCollection = await db.collection('parser');
-//
-//     await parserCollection.insertOne({ hello: 42 });
-//
-//     console.log(`🌼 MONGO DB | SUCCESS: get collection [parser]`);
-//     res.send('ok');
-// });
 app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);

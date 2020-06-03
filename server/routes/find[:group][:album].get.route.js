@@ -44,13 +44,13 @@ module.exports = async function (req, res) {
 
         for(const resource of results) {
             if(resource.link) {
-                const prevResource = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `${resource.source}.${group}.${album}` });
+                const prevResource = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `${resource.source} | ${group} | ${album}` });
                 if(!prevResource) {
                     global.MONGO_COLLECTION_PARSER.insertOne({
                         ...resource,
-                        _id: `${resource.source}.${group}.${album}`
+                        _id: `${resource.source} | ${group} | ${album}`
                     });
-                    console.log(`🌼 MONGO DB | SAVED: [${resource.source}.${group}.${album}]`);
+                    console.log(`🌼 MONGO DB | SAVED: [${resource.source} | ${group} | ${album}]`);
                 }
             }
         }

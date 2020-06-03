@@ -65,7 +65,7 @@ async function start(browser, group, album) {
     console.log('✨ GOOGLE PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `google.${group}.${album}` });
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `google | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | GOOGLE PARSER: return prev result...');
     if(prevResult) return prevResult;
 

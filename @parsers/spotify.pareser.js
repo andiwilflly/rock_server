@@ -60,7 +60,7 @@ async function start(group, album) {
     console.log('✨ SPOTIFY PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `spotify.${group}.${album}` });
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `spotify | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | SPOTIFY PARSER: return prev result...');
     if(prevResult) return prevResult;
 

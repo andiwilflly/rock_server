@@ -96,7 +96,7 @@ async function start(browser, group, album, originalGroupName) {
     console.log('✨ YOUTUBE PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube.${group}.${album}` });
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | YOUTUBE PARSER: return prev result...');
     if(prevResult) return prevResult;
 

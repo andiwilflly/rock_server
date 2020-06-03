@@ -38,7 +38,7 @@ async function start(browser, group, album) {
     console.log('✨ LAST.FM PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `lastfm.${group}.${album}` });
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `lastfm | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | LAST.FM PARSER: return prev result...');
     if(prevResult) return prevResult;
 

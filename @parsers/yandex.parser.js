@@ -69,7 +69,7 @@ async function start(browser, group, album) {
     console.log('✨ YANDEX PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `yandex.${group}.${album}` });
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `yandex | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | YANDEX PARSER: return prev result...');
     if(prevResult) return prevResult;
 
