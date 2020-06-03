@@ -1,4 +1,5 @@
 const Soundcloud = require("soundcloud.ts").default;
+const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 async function parsePage(browser, group, song) {
@@ -30,6 +31,11 @@ async function parsePage(browser, group, song) {
 
 async function start(group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
+
+    // Cache
+    if(parserStore.get(`soundcloud.${group}.${album}`)) console.log('🆘 SOUNDCLOUD PARSER: RETURN CACHE...');
+    if(parserStore.get(`soundcloud.${group}.${album}`)) return parserStore.get(`soundcloud.${group}.${album}`);
+
 
     const soundcloud = new Soundcloud();
     // playlist

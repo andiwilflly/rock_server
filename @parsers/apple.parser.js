@@ -1,4 +1,5 @@
 const setupPage = require('../server/utils/setupPage.utils');
+const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 async function parsePage(browser, group, album) {
@@ -86,6 +87,10 @@ async function parsePage(browser, group, album) {
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(browser, group, album) {
     console.log('✨ APPLE PARSER:START...');
+
+    // Cache
+    if(parserStore.get(`apple.${group}.${album}`)) console.log('🆘 APPLE PARSER: RETURN CACHE...');
+    if(parserStore.get(`apple.${group}.${album}`)) return parserStore.get(`apple.${group}.${album}`);
 
     const response = await parsePage(browser, group, album);
 

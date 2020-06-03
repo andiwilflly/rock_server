@@ -7,10 +7,10 @@ const setupBrowser = require('../utils/setupBrowser.utils');
 // Parts
 const searchAlbumYouTube = require('./youtube/searchAlbum.youtube.api');
 const lastFmParser = require('../../@parsers/last.fm.parser');
-// const yandexParser = require('../../@parsers/yandex.parser');
+const yandexParser = require('../../@parsers/yandex.parser');
 const soundcloudParser = require('../../@parsers/soundcloud.parser');
-// const googleParser = require('../../@parsers/google.parser');
-// const appleParser = require('../../@parsers/apple.parser');
+const googleParser = require('../../@parsers/google.parser');
+const appleParser = require('../../@parsers/apple.parser');
 
 
 module.exports = async function(NEW_RELEASES = {}) {
@@ -28,10 +28,10 @@ module.exports = async function(NEW_RELEASES = {}) {
 
         let youtube = await searchAlbumYouTube(newRelease.artist, newRelease.name);
         let lastfm = await lastFmParser(newRelease.artist, newRelease.name);
-       // let yandex = await yandexParser(browser, newRelease.artist, newRelease.name);
+        let yandex = await yandexParser(browser, newRelease.artist, newRelease.name);
         let soundcloud = await soundcloudParser(newRelease.artist, newRelease.name);
-        //let google = await googleParser(browser, newRelease.artist, newRelease.name);
-        //let apple = await appleParser(browser, newRelease.artist, newRelease.name);
+        let google = await googleParser(browser, newRelease.artist, newRelease.name);
+        let apple = await appleParser(browser, newRelease.artist, newRelease.name);
 
         browser.close();
 
@@ -62,10 +62,10 @@ module.exports = async function(NEW_RELEASES = {}) {
                     // apple: apple[0].link || '',
                     youtube,
                     lastfm,
-                    //yandex,
-                   soundcloud,
-                   // google,
-                   // apple
+                    yandex,
+                    soundcloud,
+                    google,
+                    apple
 
                     // lastfm: lastfm[0].link || '',
                     // google: google[0].link || '',

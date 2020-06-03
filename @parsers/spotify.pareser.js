@@ -1,5 +1,8 @@
+const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
+
 const login =  'andiwillfly@gmail.com';
 const pass =  '121314ward';
+
 
 async function parsePage(browser, group, album) {
     try {
@@ -57,6 +60,11 @@ async function parsePage(browser, group, album) {
 
 async function start(group, album) {
     console.log('✨ SPOTIFY PARSER:START...');
+
+    // Cache
+    if(parserStore.get(`spotify.${group}.${album}`)) console.log('🆘 SPOTIFY PARSER: RETURN CACHE...');
+    if(parserStore.get(`spotify.${group}.${album}`)) return parserStore.get(`spotify.${group}.${album}`);
+
 
     let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album,track&limit=1`, {
         headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }

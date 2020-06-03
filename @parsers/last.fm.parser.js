@@ -1,3 +1,4 @@
+const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 const Fuse = require('fuse.js');
 
 const options = {
@@ -8,7 +9,12 @@ const options = {
 };
 
 async function start(artistName, albumName) {
-    console.log('✨ LAST.FM PARSER:START...', albumName, artistName);
+    console.log('✨ LAST.FM PARSER:START...');
+
+    // Cache
+    if(parserStore.get(`lastfm.${artistName}.${albumName}`)) console.log('🆘 LAST.FM PARSER: RETURN CACHE...');
+    if(parserStore.get(`lastfm.${artistName}.${albumName}`)) return parserStore.get(`lastfm.${artistName}.${albumName}`);
+
 
     let albums = await fetch(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${encodeURIComponent(albumName)}&api_key=${'8ecb1efa682d2b9fb834f9e757e4fc0b'}&format=json`);
     albums = await albums.json();

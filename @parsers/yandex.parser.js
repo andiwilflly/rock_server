@@ -1,4 +1,5 @@
 const setupPage = require('../server/utils/setupPage.utils');
+const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 async function parsePage(browser, group, album) {
@@ -53,7 +54,7 @@ async function parsePage(browser, group, album) {
         return {
             source: 'yandex',
             link: `https://music.yandex.ua${albumLink}`,
-            albumImg: albumImg.replace('//', 'https://')
+            image: albumImg.replace('//', 'https://')
         };
 
     } catch(e) {
@@ -64,6 +65,10 @@ async function parsePage(browser, group, album) {
 
 async function start(browser, group, album) {
     console.log('✨ YANDEX PARSER:START...');
+
+    // Cache
+    if(parserStore.get(`yandex.${group}.${album}`)) console.log('🆘 YANDEX PARSER: RETURN CACHE...');
+    if(parserStore.get(`yandex.${group}.${album}`)) return parserStore.get(`yandex.${group}.${album}`);
 
     const response = await parsePage(browser, group, album);
 
