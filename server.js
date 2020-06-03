@@ -38,6 +38,7 @@ global.authOptions = {
 let spotifyTokenLifetime = 0;
 
 const app = express();
+app.use(express.static('public'))
 
 app.use(async function (req, res, next) {
 
@@ -85,13 +86,31 @@ app.get('/', async (req, res)=> {
         .then((response) => {
             // Response is a message ID string.
             console.log('Successfully sent message:', response);
-            res.send('Hello World!');
+            res.sendFile(path.join(__dirname+'/public/index.html'));
+            // res.send('Hello World!');
         })
         .catch((error) => {
             console.log('Error sending message:', error);
-            res.send('Not Hello World!');
+            res.send("Not Hello World!");
         });
 } );
+
+app.get('/stream', function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+    })
+    countdown(res, 10);
+})
+
+function countdown(res, count) {
+    res.write("data: " + count + "\n\n")
+    if (count)
+        setTimeout(() => countdown(res, count-1), 1000)
+    else
+        res.end()
+}
 
 app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
