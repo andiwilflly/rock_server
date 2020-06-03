@@ -1,4 +1,3 @@
-const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 // const searchAlbum = require('../server/parts/youtube/searchAlbum.youtube.api');
@@ -6,7 +5,7 @@ const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserSto
 //
 // // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 // async function start(artistName, albumName) {
-//     console.log('✨ YOUTOBE PARSER:START...');
+//     console.log('✨ YOUTUBE PARSER:START...');
 //
 //     const matchedAlbum = await searchAlbum(artistName, albumName).catch(e => console.log(e));
 //
@@ -15,7 +14,7 @@ const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserSto
 //         source: 'youtube'
 //     }
 //
-//     console.log('✨ YOUTOBE PARSER:END');
+//     console.log('✨ YOUTUBE PARSER:END');
 //     return {
 //         source: 'youtube',
 //         ...matchedAlbum
@@ -32,7 +31,7 @@ async function parsePage(browser, group, album, originalGroupName) {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
-        console.log(`✨ YOUTOBE PARSER | page loaded...`);
+        console.log(`✨ YOUTUBE PARSER | page loaded...`);
 
         const artistPageLink = await page.evaluate((_originalGroupName)=> {
             const $artistPageLink = [...document.querySelectorAll('h2.title')]
@@ -55,7 +54,7 @@ async function parsePage(browser, group, album, originalGroupName) {
         });
         await page.waitFor(100);
 
-        console.log(`✨ YOUTOBE PARSER | artist page loaded...`, `https://music.youtube.com/${artistPageLink}`);
+        console.log(`✨ YOUTUBE PARSER | artist page loaded...`, `https://music.youtube.com/${artistPageLink}`);
 
 
         const albumPageLink = await page.evaluate((_album)=> {
@@ -79,7 +78,7 @@ async function parsePage(browser, group, album, originalGroupName) {
         if(!albumPageLink) await page.close();
         if(!albumPageLink) return { source: 'youtube', error: `Can't find albumPageLink` };
 
-        console.log(`✨ YOUTOBE PARSER | albums page link received... ${albumPageLink}`);
+        console.log(`✨ YOUTUBE PARSER | albums page link received... ${albumPageLink}`);
 
         await page.close();
         return {
@@ -94,15 +93,16 @@ async function parsePage(browser, group, album, originalGroupName) {
 
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(browser, group, album, originalGroupName) {
-    console.log('✨ YOUTOBE PARSER:START...');
+    console.log('✨ YOUTUBE PARSER:START...');
 
     // Cache
-    if(parserStore.get(`youtube.${group}.${album}`)) console.log('🆘 YOUTOBE PARSER: RETURN CACHE...');
-    if(parserStore.get(`youtube.${group}.${album}`)) return parserStore.get(`youtube.${group}.${album}`);
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube.${group}.${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | YOUTUBE PARSER: return prev result...');
+    if(prevResult) return prevResult;
 
     const response = await parsePage(browser, group, album, originalGroupName);
 
-    console.log('✨ YOUTOBE PARSER:END', response);
+    console.log('✨ YOUTUBE PARSER:END', response);
     return response;
 }
 

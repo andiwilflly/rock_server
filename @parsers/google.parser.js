@@ -1,5 +1,4 @@
 const setupPage = require('../server/utils/setupPage.utils');
-const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 async function parsePage(browser, group, album) {
@@ -66,9 +65,9 @@ async function start(browser, group, album) {
     console.log('✨ GOOGLE PARSER:START...');
 
     // Cache
-    if(parserStore.get(`google.${group}.${album}`)) console.log('🆘 GOOGLE PARSER: RETURN CACHE...');
-    if(parserStore.get(`google.${group}.${album}`)) return parserStore.get(`google.${group}.${album}`);
-
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `google.${group}.${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | GOOGLE PARSER: return prev result...');
+    if(prevResult) return prevResult;
 
     const response = await parsePage(browser, group, album);
 

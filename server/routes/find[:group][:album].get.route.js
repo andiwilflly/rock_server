@@ -7,8 +7,6 @@ const lastFmParser = require('../../@parsers/last.fm.parser');
 const spotifyParser = require('../../@parsers/spotify.pareser');
 // Utils
 const setupBrowser = require('../utils/setupBrowser.utils');
-// DB
-const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 // When build error
@@ -42,11 +40,23 @@ module.exports = async function (req, res) {
         //     console.log('BROWSER PAGES | ', pages.map(page => page.url()));
         //     pages.forEach(page => page.close());
         // }
+        results = results.filter(Boolean);
 
-        results = results.filter(Boolean).reduce((res, resource)=> {
+        for(const resource of results) {
+            if(resource.link) {
+                const prevResource = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `${resource.source}.${group}.${album}` });
+                if(!prevResource) {
+                    global.MONGO_COLLECTION_PARSER.insertOne({
+                        ...resource,
+                        _id: `${resource.source}.${group}.${album}`
+                    });
+                    console.log(`🌼 MONGO DB | SAVED: [${resource.source}.${group}.${album}]`);
+                }
+            }
+        }
+
+        results = results.reduce((res, resource)=> {
             res[resource.source] = resource;
-
-            if(resource.link) parserStore.set(`${resource.source}.${group}.${album}`, resource);
             return res;
         }, {});
 

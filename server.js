@@ -2,7 +2,6 @@ const fs = require('fs');
 const admin = require("firebase-admin");
 const request = require('request');
 const express = require('express');
-const { MongoClient } = require('mongodb');
 // Logger
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
@@ -11,6 +10,8 @@ global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.
 require('./server/parts/initializeFirebase');
 // Utils
 require('./server/utils/extendJs.utils');
+// DB
+const connectMongoDB = require('./server/utils/mongoDB/MongoDB.connect');
 // Routes
 const releasesDaysRoute = require('./server/routes/releases[:days].get.route');
 const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days].get.route');
@@ -38,7 +39,15 @@ let spotifyTokenLifetime = 0;
 
 const app = express();
 
-app.use(function (req, res, next) {
+app.use(async function (req, res, next) {
+
+    if(!global.MONGO_CLIENT) {
+        global.MONGO_CLIENT = await connectMongoDB();
+        global.MONGO_DB = await global.MONGO_CLIENT.db('instaGQL-database');
+        let parserCollection = await global.MONGO_DB.collection('parser');
+        if(!parserCollection) await global.MONGO_DB.createCollection('parser');
+        global.MONGO_COLLECTION_PARSER = await global.MONGO_DB.collection('parser');
+    }
 
     // 1hr lifetime
     if(Date.now() - spotifyTokenLifetime > 3500000) {
@@ -60,26 +69,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-const uri = "mongodb+srv://andiwillfly:ward121314@cluster0-etaet.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
-
-
-async function listDatabases(client){
-    const databasesList = await client.db().admin().listDatabases();
-
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-}
-
 app.get('/', async (req, res)=> {
-    try {
-        await client.connect();
-
-        await listDatabases(client);
-
-    } catch (e) {
-        console.error(e);
-    }
 
     const message = {
         notification: {
@@ -103,6 +93,19 @@ app.get('/', async (req, res)=> {
         });
 } );
 
+// app.get('/db', async (req, res)=> {
+//     const client = await connectMongoDB();
+//     const db = await client.db('instaGQL-database');
+//
+//     let parserCollection = await db.collection('parser');
+//     if(!parserCollection) await db.createCollection('parser');
+//     parserCollection = await db.collection('parser');
+//
+//     await parserCollection.insertOne({ hello: 42 });
+//
+//     console.log(`🌼 MONGO DB | SUCCESS: get collection [parser]`);
+//     res.send('ok');
+// });
 app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);

@@ -1,5 +1,4 @@
 const Soundcloud = require("soundcloud.ts").default;
-const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 
 
 async function parsePage(browser, group, song) {
@@ -32,12 +31,10 @@ async function parsePage(browser, group, song) {
 async function start(group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
-
-    console.log(parserStore.get(`soundcloud.${group}.${album}`), 'wtf?', `soundcloud.${group}.${album}`);
     // Cache
-    if(parserStore.get(`soundcloud.${group}.${album}`)) console.log('🆘 SOUNDCLOUD PARSER: RETURN CACHE...');
-    if(parserStore.get(`soundcloud.${group}.${album}`)) return parserStore.get(`soundcloud.${group}.${album}`);
-
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud.${group}.${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
+    if(prevResult) return prevResult;
 
     const soundcloud = new Soundcloud();
     // playlist

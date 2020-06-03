@@ -1,4 +1,3 @@
-const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 // const Fuse = require('fuse.js');
 
 
@@ -39,9 +38,9 @@ async function start(browser, group, album) {
     console.log('✨ LAST.FM PARSER:START...');
 
     // Cache
-    if(parserStore.get(`lastfm.${group}.${album}`)) console.log('🆘 LAST.FM PARSER: RETURN CACHE...');
-    if(parserStore.get(`lastfm.${group}.${album}`)) return parserStore.get(`lastfm.${group}.${album}`);
-
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `lastfm.${group}.${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | LAST.FM PARSER: return prev result...');
+    if(prevResult) return prevResult;
 
     const response = await parsePage(browser, group, album);
 
