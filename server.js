@@ -2,6 +2,7 @@ const fs = require('fs');
 const admin = require("firebase-admin");
 const request = require('request');
 const express = require('express');
+const { MongoClient } = require('mongodb');
 // Logger
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
@@ -14,10 +15,6 @@ require('./server/utils/extendJs.utils');
 const releasesDaysRoute = require('./server/routes/releases[:days].get.route');
 const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days].get.route');
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
-// Parser
-const spotifyParser = require('./@parsers/spotify.pareser');
-const lastFmParser = require('./@parsers/last.fm.parser');
-const soundCloudParser = require('./@parsers/soundcloud.parser');
 
 
 global.SPOTIFY_TOKEN = null;
@@ -63,7 +60,27 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.get('/',(req, res)=> {
+const uri = "mongodb+srv://andiwillfly:ward121314@cluster0-etaet.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+
+
+async function listDatabases(client){
+    const databasesList = await client.db().admin().listDatabases();
+
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+}
+
+app.get('/', async (req, res)=> {
+    try {
+        await client.connect();
+
+        await listDatabases(client);
+
+    } catch (e) {
+        console.error(e);
+    }
+
     const message = {
         notification: {
             title: 'New release!',

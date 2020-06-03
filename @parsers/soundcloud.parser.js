@@ -41,9 +41,9 @@ async function start(group, album) {
 
     const soundcloud = new Soundcloud();
     // playlist
-    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${album}`)}`);
+    let matchedSong = await soundcloud.tracks.scrape(`${encodeURIComponent(`${group}-${album}`)}`);
 
-    matchedSong = matchedSong[0];
+   matchedSong = matchedSong[0];
 
     if(
         !matchedSong

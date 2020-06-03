@@ -1,6 +1,6 @@
-// const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
+const parserStore = require('data-store')({ path: process.cwd() + '/DB/parserStore.json' });
 // const Fuse = require('fuse.js');
-//
+
 
 async function parsePage(browser, group, album) {
     try {
@@ -37,6 +37,11 @@ async function parsePage(browser, group, album) {
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(browser, group, album) {
     console.log('✨ LAST.FM PARSER:START...');
+
+    // Cache
+    if(parserStore.get(`lastfm.${group}.${album}`)) console.log('🆘 LAST.FM PARSER: RETURN CACHE...');
+    if(parserStore.get(`lastfm.${group}.${album}`)) return parserStore.get(`lastfm.${group}.${album}`);
+
 
     const response = await parsePage(browser, group, album);
 

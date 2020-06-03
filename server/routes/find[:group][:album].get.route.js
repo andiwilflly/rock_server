@@ -22,8 +22,8 @@ module.exports = async function (req, res) {
 
     if(!browser) browser = await setupBrowser();
 
-    const group = req.params.group.toLowerCase();
-    const album = req.params.album.toLowerCase();
+    const group = req.params.group.toLowerCase().trim();
+    const album = req.params.album.toLowerCase().trim();
 
     console.time(`TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 
