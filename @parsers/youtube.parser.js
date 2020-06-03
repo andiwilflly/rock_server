@@ -45,6 +45,7 @@ async function parsePage(browser, group, album, originalGroupName) {
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, originalGroupName);
+        if(!artistPageLink) await page.close();
         if(!artistPageLink) return { source: 'youtube', error: `Can't find artistPageLink` };
 
 
@@ -75,10 +76,12 @@ async function parsePage(browser, group, album, originalGroupName) {
             return $albumPageLink ? $albumPageLink.querySelector('a').getAttribute('href') : null;
         }, album);
 
+        if(!albumPageLink) await page.close();
         if(!albumPageLink) return { source: 'youtube', error: `Can't find albumPageLink` };
 
         console.log(`✨ YOUTOBE PARSER | albums page link received... ${albumPageLink}`);
 
+        await page.close();
         return {
             source: 'youtube',
             link: `https://music.youtube.com/${albumPageLink}`

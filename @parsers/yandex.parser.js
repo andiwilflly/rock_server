@@ -20,6 +20,7 @@ async function parsePage(browser, group, album) {
             return $artistLink ? $artistLink.getAttribute('href') : null;
         }, group);
 
+        if(!artistLink) await page.close();
         if(!artistLink) return { source: 'yandex', error: `No such group: ${group}` };
 
         console.log(`✨ YANDEX PARSER | find artistLink: https://music.yandex.ua${artistLink}...`);
@@ -37,6 +38,7 @@ async function parsePage(browser, group, album) {
             return $album ? $album.querySelector('a').getAttribute('href') : null;
         }, album)
 
+        if(!albumLink) await page.close();
         if(!albumLink) return { source: 'yandex', error: `No such album: ${album}` };
 
         console.log('✨ YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
@@ -51,6 +53,7 @@ async function parsePage(browser, group, album) {
 
         const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
 
+        await page.close();
         return {
             source: 'yandex',
             link: `https://music.yandex.ua${albumLink}`,

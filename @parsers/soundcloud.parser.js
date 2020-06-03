@@ -32,6 +32,8 @@ async function parsePage(browser, group, song) {
 async function start(group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
+
+    console.log(parserStore.get(`soundcloud.${group}.${album}`), 'wtf?', `soundcloud.${group}.${album}`);
     // Cache
     if(parserStore.get(`soundcloud.${group}.${album}`)) console.log('🆘 SOUNDCLOUD PARSER: RETURN CACHE...');
     if(parserStore.get(`soundcloud.${group}.${album}`)) return parserStore.get(`soundcloud.${group}.${album}`);

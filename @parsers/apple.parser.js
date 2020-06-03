@@ -22,7 +22,7 @@ async function parsePage(browser, group, album) {
         }, album);
 
 
-        await page.waitFor(2000);
+        await page.waitFor(1000);
         // Find song
         console.log(`✨ APPLE PARSER | trying to find song ${album}...`,);
         if(!albumPageLink) {
@@ -36,12 +36,12 @@ async function parsePage(browser, group, album) {
 
             console.log(`✨ APPLE PARSER | albumPageBtn...`, albumPageBtn);
 
-            if(albumPageBtn) await page.waitFor(4000);
+            if(albumPageBtn) await page.waitFor(1000);
             if(albumPageBtn) albumPageLink = page.url();
             if(albumPageBtn) console.log(`✨ APPLE PARSER | albumPageBtn clicked...`, page.url());
         }
 
-        await page.waitFor(10000);
+        // await page.waitFor(10000);
 
         // Try to search in artist page
         if(!albumPageLink) {
@@ -70,10 +70,12 @@ async function parsePage(browser, group, album) {
             }
         }
 
+        if(!albumPageLink) await page.close();
         if(!albumPageLink) return { source: 'apple', error: `Can't find album: ${album}` };
 
         console.log(`✨ APPLE PARSER | albums page link received... ${albumPageLink}`);
 
+        await page.close();
         return {
             source: 'apple',
             link: `${albumPageLink}`.replace('beta.', '')

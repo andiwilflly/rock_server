@@ -56,6 +56,6 @@ module.exports = async function (req, res) {
     console.timeEnd(`TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 
 
-    if(browser) browser.close();
-    browser = null;
+    // if(browser) browser.close();
+    // browser = null;
 };
