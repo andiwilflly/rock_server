@@ -1,35 +1,102 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!--    &lt;!&ndash; update the version number as needed &ndash;&gt;-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-app.js"></script>-->
+    <!--    &lt;!&ndash; include only the Firebase features as you need &ndash;&gt;-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-auth.js"></script>-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-database.js"></script>-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-messaging.js"></script>-->
+    <!--    <script defer src="/__/firebase/7.14.0/firebase-storage.js"></script>-->
+    <!--    &lt;!&ndash; initialize the SDK after all desired features are loaded &ndash;&gt;-->
+    <!--    <script defer src="/__/firebase/init.js"></script>-->
+
+    <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-functions.js"></script>
+
     <script>
-        if (!!window.EventSource) {
-            var source = new EventSource('/stream')
-
-            source.addEventListener('message', function(e) {
-                document.getElementById('data').innerHTML = e.data
-            }, false)
-
-            source.addEventListener('open', function(e) {
-                document.getElementById('state').innerHTML = "Connected"
-            }, false)
-
-            source.addEventListener('error', function(e) {
-                const id_state = document.getElementById('state')
-                if (e.eventPhase == EventSource.CLOSED)
-                    source.close()
-                if (e.target.readyState == EventSource.CLOSED) {
-                    id_state.innerHTML = "Disconnected"
-                }
-                else if (e.target.readyState == EventSource.CONNECTING) {
-                    id_state.innerHTML = "Connecting..."
-                }
-            }, false)
-        } else {
-            console.log("Your browser doesn't support SSE")
-        }
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDJjTBG3HPioF_WeLURsCUnuWHahxWxAu8",
+            authDomain: "newrockbot.firebaseapp.com",
+            databaseURL: "https://newrockbot.firebaseio.com",
+            projectId: "newrockbot",
+            storageBucket: "newrockbot.appspot.com",
+            messagingSenderId: "189865837490",
+            appId: "1:189865837490:web:8c804a9c56202894af1aab",
+            measurementId: "G-5YETLX51NK"
+        };
+        // Initialize Firebase
+        window.firebase.initializeApp(firebaseConfig);
+        window.firebase.analytics();
     </script>
+
+    <style media="screen">
+        body {
+            background: #ECEFF1;
+            padding: 20px;
+            color: rgba(0, 0, 0, 0.87);
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+        }
+
+    </style>
 </head>
 <body>
-<h1>SSE: <span id="state"></span></h1>
-<h3>Data: <span id="data"></span></h3>
+<div id="message">
+    <h1>New Rock Bot API</h1>
+    <br/>
+    <ul>
+        <li><a target="_blank" href="https://music.youtube.com">https://music.youtube.com</a></li>
+        <li><a target="_blank" href="https://music.yandex.ua/home">https://music.yandex.ua/home</a></li>
+        <li><a target="_blank" href="https://play.google.com/store/music">https://play.google.com/store/music</a></li>
+        <li><a target="_blank" href="https://music.apple.com/us/artist/make-them-suffer/421186855">https://music.apple.com/us/artist/make-them-suffer/421186855</a></li>
+    </ul>
+
+    <h3>Link example:</h3>
+    <p>Asking Alexandria | Down To Hell</p>
+    <i>https://newrockbot.web.app/find?name=Asking%20Alexandria&album=Down%20To%20Hell</i>
+
+    <hr />
+    <pre>
+        Роман Лихацкий, [15.04.20 11:38]
+        кстати в эпл так просто не найдешь, надо искать через бэту
+
+        Роман Лихацкий, [15.04.20 11:39]
+        https://beta.music.apple.com/us/album/like-a-house-on-fire/1500484034
+
+        Роман Лихацкий, [15.04.20 11:39]
+        а ссылка нужна
+        https://music.apple.com/us/album/like-a-house-on-fire/1500484034
+    </pre>
+
+    <div id="stream" />
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+            let app = firebase.app();
+        } catch (e) {
+            console.error(e);
+        }
+    });
+</script>
+
+<script type="text/javascript" src="./index.js"></script>
 </body>
 </html>

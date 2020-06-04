@@ -2,6 +2,7 @@ const fs = require('fs');
 const admin = require("firebase-admin");
 const request = require('request');
 const express = require('express');
+const SSE = require('express-sse');
 // Logger
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
@@ -18,6 +19,7 @@ const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
 
 
+global.SSE = new SSE(['initialize']);
 global.SPOTIFY_TOKEN = null;
 global.BASE_URL = 'https://newrockbot.herokuapp.com';
 global.YOUTUBE_API = 'AIzaSyDwtT9D89yM6-MOo7AkYX3D2Zz4r0Hr-bI';
@@ -95,23 +97,13 @@ app.get('/', async (req, res)=> {
         });
 } );
 
-app.get('/stream', function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
-    })
-    countdown(res, 10);
+app.get('/test', (req, res)=> {
+    global.SSE.send(['content 4242']);
+    global.SSE.send(['content 11111'], 'eventName');
+    res.send('db')
 })
 
-function countdown(res, count) {
-    res.write("data: " + count + "\n\n")
-    if (count)
-        setTimeout(() => countdown(res, count-1), 1000)
-    else
-        res.end()
-}
-
+app.get('/stream', global.SSE.init)
 app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
