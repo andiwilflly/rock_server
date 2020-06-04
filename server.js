@@ -72,9 +72,29 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.get('/', async (req, res)=> {
+app.get('/send', async (req, res)=> {
 
     const message = {
+        notification: {
+            title: 'TEST release!',
+            body: 'TEST'
+        },
+        topic: 'test' // 'allDevices'
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    admin.messaging().send(message)
+        .then((response) => {
+            // Response is a message ID string.
+            console.log('Successfully sent message:', response);
+            // res.send('Hello World!');
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error);
+        });
+
+    const message2 = {
         notification: {
             title: 'New release!',
             body: '${newRelease.artist} - ${newRelease.name}'
@@ -84,23 +104,54 @@ app.get('/', async (req, res)=> {
 
     // Send a message to the device corresponding to the provided
     // registration token.
-    admin.messaging().send(message)
+    admin.messaging().send(message2)
         .then((response) => {
             // Response is a message ID string.
-            console.log('Successfully sent message:', response);
-            res.sendFile(path.join(__dirname+'/public/index.html'));
+            console.log('Successfully sent message2:', response);
+            res.send('sended');
             // res.send('Hello World!');
         })
         .catch((error) => {
-            console.log('Error sending message:', error);
+            console.log('Error sending message2:', error);
             res.send("Not Hello World!");
         });
 } );
 
-app.get('/test', (req, res)=> {
-    global.SSE.send(['content 4242']);
-    global.SSE.send(['content 11111'], 'eventName');
-    res.send('db')
+
+app.get('/fcm/subscribe/:token/:topic', (req, res)=> {
+    admin.messaging().subscribeToTopic([req.params.token], req.params.topic)
+        .then(function(response) {
+            global.SSE.send(['Successfully subscribed to topic' + req.params.topic]);
+            res.send(JSON.stringify({
+                msg: `Subscribed to topic: ${req.params.topic}`,
+                success: true
+            }));
+        })
+        .catch(function(error) {
+            global.SSE.send(['Error subscribing from topic' + req.params.topic]);
+            res.send(JSON.stringify({
+                msg: error,
+                error: true
+            }));
+        });
+})
+
+app.get('/fcm/unsubscribe/:token/:topic', (req, res)=> {
+    admin.messaging().unsubscribeFromTopic([req.params.token], req.params.topic)
+        .then(function(response) {
+            global.SSE.send(['Successfully unsubscribed to topic' + req.params.topic]);
+            res.send(JSON.stringify({
+                msg: `Unsubscribed to topic: ${req.params.topic}`,
+                success: true
+            }));
+        })
+        .catch(function(error) {
+            global.SSE.send(['Error unsubscribing to topic' + req.params.topic]);
+            res.send(JSON.stringify({
+                msg: error,
+                error: true
+            }));
+        });
 })
 
 app.get('/stream', global.SSE.init)
