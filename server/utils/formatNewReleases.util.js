@@ -14,7 +14,8 @@ module.exports = function(subscription, newReleases = {}) {
             id: newRelease.id,
             type: newRelease.type,
             releaseDate: newRelease.release_date,
-            spotifyLink: newRelease.external_urls.spotify
+            spotifyLink: newRelease.external_urls.spotify,
+            subscription
         }
     });
 
