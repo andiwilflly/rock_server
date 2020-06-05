@@ -37,6 +37,8 @@ module.exports = async function(req, res) {
     //     ...formatNewReleasesUtil({ name: artistName }, await lastFmFindInArtistAlbums(artistName, days))
     // };
 
+
+    console.log('||||| ===== ||||| ==== |||| ', userId);
     if(userId) newReleasesCreateNotifications(NEW_RELEASES); // Called with userId - need to update [notifications] for this user
 
     res.send(NEW_RELEASES);
