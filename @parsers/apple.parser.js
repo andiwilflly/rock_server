@@ -75,6 +75,10 @@ async function parsePage(browser, group, album) {
         console.log(`✨ APPLE PARSER | albums page link received... ${albumPageLink}`);
 
         await page.close();
+        if(albumPageLink.includes('search?')) return {
+            source: 'apple',
+            error: `Kakogo leshego opyat na posisk ssilka? ${albumPageLink}`
+        }
         return {
             source: 'apple',
             link: `${albumPageLink}`.replace('beta.', '')
@@ -92,7 +96,7 @@ async function start(browser, group, album) {
     // Cache
     const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `apple | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | APPLE PARSER: return prev result...');
-    if(prevResult) return prevResult;
+    if(prevResult && !prevResult.link.includes('search?')) return prevResult;
 
     const response = await parsePage(browser, group, album);
 
