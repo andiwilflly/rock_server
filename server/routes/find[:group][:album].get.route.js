@@ -23,7 +23,7 @@ module.exports = async function (req, res) {
     const group = req.params.group.toLowerCase().trim();
     const album = req.params.album.toLowerCase().trim();
 
-    console.time(`TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
+    console.time(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 
     await Promise.all([
         !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
@@ -63,7 +63,7 @@ module.exports = async function (req, res) {
         res.send(results);
     });
 
-    console.timeEnd(`TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
+    console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 
 
     // if(browser) browser.close();
