@@ -18,6 +18,11 @@ let browser = null;
 module.exports = async function (req, res) {
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
 
+    if(browser) {
+        res.status(500).send('Another parser in progress...');
+        return;
+    }
+
     if(!browser) browser = await setupBrowser();
 
     const group = req.params.group.toLowerCase().trim();
@@ -66,6 +71,6 @@ module.exports = async function (req, res) {
     console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 
 
-    // if(browser) browser.close();
-    // browser = null;
+    if(browser) browser.close();
+    browser = null;
 };
