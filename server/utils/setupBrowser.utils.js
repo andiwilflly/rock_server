@@ -19,6 +19,10 @@ module.exports = async function setupBrowser() {
             /* TODO : https://peter.sh/experiments/chromium-command-line-switches/
               there is still a whole bunch of stuff to disable
             */
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--single-process', // <- this one doesn't works in Windows
+            '--disable-gpu',
             //'--crash-test', // Causes the browser process to crash on startup, useful to see if we catch that correctly
             // not idea if those 2 aa options are usefull with disable gl thingy
             '--disable-canvas-aa', // Disable antialiasing on 2d canvas

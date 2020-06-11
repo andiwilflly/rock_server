@@ -24,21 +24,21 @@ async function parsePage(browser, group, album) {
         await page.waitFor(1000);
         // Find song
         console.log(`✨ APPLE PARSER | trying to find song ${album}...`,);
-        if(!albumPageLink) {
-            let albumPageBtn = await page.evaluate((_album)=> {
-                const $albumPageBtn = [...document.querySelectorAll('[aria-label="Songs"] .shelf-grid__list-item .song')]
-                    .find($item => $item.innerText.toLowerCase().includes(_album));
-                $albumPageBtn ? $albumPageBtn.click() : null;
-
-                return !!$albumPageBtn;
-            }, album);
-
-            console.log(`✨ APPLE PARSER | albumPageBtn...`, albumPageBtn);
-
-            if(albumPageBtn) await page.waitFor(1000);
-            if(albumPageBtn) albumPageLink = page.url();
-            if(albumPageBtn) console.log(`✨ APPLE PARSER | albumPageBtn clicked...`, page.url());
-        }
+        // if(!albumPageLink) {
+        //     let albumPageBtn = await page.evaluate((_album)=> {
+        //         const $albumPageBtn = [...document.querySelectorAll('[aria-label="Songs"] .shelf-grid__list-item .song')]
+        //             .find($item => $item.innerText.toLowerCase().includes(_album));
+        //         $albumPageBtn ? $albumPageBtn.click() : null;
+        //
+        //         return !!$albumPageBtn;
+        //     }, album);
+        //
+        //     console.log(`✨ APPLE PARSER | albumPageBtn...`, albumPageBtn);
+        //
+        //     if(albumPageBtn) await page.waitFor(1000);
+        //     //if(albumPageBtn) albumPageLink = page.url();
+        //     if(albumPageBtn) console.log(`✨ APPLE PARSER | albumPageBtn clicked...`, page.url());
+        // }
 
         // await page.waitFor(10000);
 
