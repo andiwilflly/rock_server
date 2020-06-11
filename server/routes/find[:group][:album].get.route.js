@@ -65,11 +65,11 @@ module.exports = async function (req, res) {
             return res;
         }, {});
 
-        // if(browser) await browser.close();
-        // browser = null;
-
         res.send(results);
     });
+
+    if(browser) await browser.close();
+    browser = null;
 
     console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 };
