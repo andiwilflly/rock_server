@@ -19,6 +19,7 @@ module.exports = async function setupBrowser() {
             /* TODO : https://peter.sh/experiments/chromium-command-line-switches/
               there is still a whole bunch of stuff to disable
             */
+            '--single-process',
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--single-process', // <- this one doesn't works in Windows
