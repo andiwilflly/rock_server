@@ -11,12 +11,18 @@ async function parsePage(browser, group, song) {
         await page.waitFor(100);
         console.log(`✨ SOUNDCLOUD PARSER | page loaded...`, `https://soundcloud.com/search/sounds?q=${encodeURIComponent(`${group} - ${song}`)}`);
 
-        const songLink = await page.evaluate((_song)=> {
+        const songLink = await page.evaluate((_song, _group)=> {
             const $songLink = [...document.querySelectorAll('.searchList__item a')]
                 .find($link => $link.innerText.toLowerCase().includes(_song));
+
+            const $groupLink = [...document.querySelectorAll('.searchList__item a')]
+                .find($link => $link.innerText.toLowerCase().includes(_group));
+
+            if(!$groupLink) return 0;
             return $songLink ? $songLink.getAttribute('href') : null
-        }, song);
-        if(!songLink) return { source: 'soundcloud', error: `Can't find song ${song}` };
+        }, song, group);
+        if(songLink === 0) return { source: 'soundcloud', error: `Song is found, buy group '${group}' is not` };
+        if(!songLink) return { source: 'soundcloud', error: `Can't find '${group} - ${song}'` };
 
         return {
             source: 'soundcloud',
@@ -32,9 +38,9 @@ async function start(browser, group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
-    if(prevResult) return prevResult;
+    // const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
+    // if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
+    // if(prevResult) return prevResult;
 
     return await parsePage(browser, group, album);
 
