@@ -65,8 +65,8 @@ module.exports = async function (req, res) {
             return res;
         }, {});
 
-        if(browser) await browser.close();
-        browser = null;
+        // if(browser) await browser.close();
+        // browser = null;
 
         res.send(results);
     });
