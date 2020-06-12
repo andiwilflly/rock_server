@@ -1,4 +1,3 @@
-const firebase = require('firebase');
 // Parts
 const spotifyFindInNewReleases = require('../parts/newReleases/spotify.findInNewReleases');
 const spotifyFindInArtistAlbums = require('../parts/newReleases/spotify.findInArtistAlbums');
@@ -19,10 +18,9 @@ module.exports = async function(req, res) {
     const days = req.params.days || 5;
     global.LOG.info(`/releases/:days | enter, [:days ${days}]`);
 
-    const DB = firebase.firestore();
-    const subscriptionsDB = DB.collection("subscriptions");
-    let subscriptions = await subscriptionsDB.get();
-    subscriptions = subscriptions.docs.map(doc => doc.data());
+    const subscriptions = await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray();
+    console.log('APP [subscriptions] loaded...', subscriptions.length);
+
     global.LOG.info('/releases/:days | [subscriptions] loaded: ', subscriptions.length);
 
     for(const subscription of subscriptions) {

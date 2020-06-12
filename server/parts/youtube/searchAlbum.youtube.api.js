@@ -17,7 +17,7 @@ module.exports = async function searchAlbum(artist, album) {
 
     if(channels.error || !channels.items.length) {
         global.LOG.error('YOUTUBE API | searchChannel ERROR: ', channels.error.message);
-        return '';
+        return { error: 'YOUTUBE API | searchChannel ERROR' };
     }
 
     // global.LOG.info('YOUTUBE API | SUCCESS: results -> ', channels.items.length);
@@ -32,7 +32,7 @@ module.exports = async function searchAlbum(artist, album) {
 
     if(!matchedAlbum) {
         global.LOG.error('YOUTUBE API | searchAlbum ERROR: ' + album);
-        return '';
+        return { error: 'YOUTUBE API | searchAlbum ERROR' };
     }
 
     let image = '[not found]';

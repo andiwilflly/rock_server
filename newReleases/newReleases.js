@@ -1,28 +1,23 @@
 const request = require('request');
-const admin = require("firebase-admin");
-const firebase = require('firebase');
 require('firebase/firestore');
 const spotifyFindNewAlbum = require('./spotify.findNewAlbum');
 const lastfmFindNewAlbum = require('./lastfm.findNewAlbum');
+// Utils
+const MongoDBSave = require('../server/utils/mongoDB/MongoDB.save');
 
 
 // Aversions Crown - Born in the Gutter
 async function init(spotifyToken = '', res) {
 	let NEW_RELEASES = {};
 
-	const DB = firebase.firestore();
 	console.log('APP firestore ready...');
-	const subscriptionsDB = DB.collection("subscriptions");
 	console.log('APP [subscriptions] collection ready...');
 
-
-	let subscriptions = await subscriptionsDB.get();
-	subscriptions = subscriptions.docs.map(doc => doc.data());
+	const subscriptions = await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray();
+	console.log('APP [subscriptions] loaded...', subscriptions.length);
 
 	if(!subscriptions.length) return; // TODO
 
-
-	console.log('APP [subscriptions] loaded...');
 
 	// Trying to find spotify [artist] -> [albums] list + spotify [new releases]
 	for(const subscription of subscriptions) {
@@ -39,29 +34,24 @@ async function init(spotifyToken = '', res) {
 
 	// Save to DB
 	for(const newRelease of Object.values(NEW_RELEASES)) {
-		await new Promise(resolve => {
-
-			DB.collection('notifications').doc(newRelease.name).set({
+		try {
+			await MongoDBSave('subscriptions', global[`MONGO_COLLECTION_SUBSCRIPTIONS`], {
+				_id: newRelease.id,
 				artists: newRelease.artists,
 				image: newRelease.images[0].url,
 				name: newRelease.name,
 				artist: newRelease.artist,
-				id: newRelease.id,
 				type: newRelease.type,
 				releaseDate: newRelease.release_date,
 				spotifyLink: newRelease.external_urls.spotify,
 				isActive: true,
-				user: newRelease.user
-			})
-				.then(function() {
-					console.log("Document successfully written!");
-					resolve();
-				})
-				.catch(function(error) {
-					console.error("Error writing document: ", error);
-					resolve()
-				});
-		})
+				user: newRelease.user,
+				uid: newRelease.uid
+			});
+			console.log("Document successfully written!");
+		} catch(e) {
+			console.error("Error writing document: " + e);
+		}
 	}
 
 

@@ -5,7 +5,6 @@ module.exports = function(subscription, newReleases = {}) {
         newReleases[newRelease.name] = {
             isActive: true,
             artist: subscription.name,
-            user: subscription.user,
             createdAt: (new Date()).getTime(),
 
             artists: newRelease.artists,
