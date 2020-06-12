@@ -22,6 +22,7 @@ const FCMSubscribe = require('./server/routes/FCM/fcm.subscribe[:token][:topic]r
 const FCMUnsubscribe = require('./server/routes/FCM/fcm.unsubscribe[:token][:topic]route');
 const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[:collection].route');
 const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[:collection][:_id].route');
+const mongoGetCollection = require('./server/routes/mongo/mongo.get[:collection][:uid].route');
 
 
 global.SSE = new SSE(['initialize']);
@@ -146,6 +147,8 @@ app.get('/fcm/unsubscribe/:token/:topic', FCMUnsubscribe)
 
 app.get('/find/:group/:album', findGroupAlbumRoute);
 
+app.get('/mongo/get/:collection', mongoGetCollection);
+app.get('/mongo/get/:collection/:uid', mongoGetCollection);
 app.post('/mongo/save/:collection', mongoSaveCollection);
 app.post('/mongo/delete/:collection/:_id', mongoDeleteCollection);
 
