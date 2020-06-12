@@ -1,3 +1,6 @@
+const admin = require("firebase-admin");
+
+
 module.exports = function(req, res) {
     admin.messaging().unsubscribeFromTopic([req.params.token], req.params.topic)
         .then(function(response) {
