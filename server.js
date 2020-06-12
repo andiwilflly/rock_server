@@ -1,4 +1,5 @@
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const admin = require("firebase-admin");
 const request = require('request');
 const express = require('express');
@@ -17,6 +18,10 @@ const connectMongoDB = require('./server/utils/mongoDB/MongoDB.connect');
 const releasesDaysRoute = require('./server/routes/releases[:days].get.route');
 const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days].get.route');
 const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
+const FCMSubscribe = require('./server/routes/FCM/fcm.subscribe[:token][:topic]route');
+const FCMUnsubscribe = require('./server/routes/FCM/fcm.unsubscribe[:token][:topic]route');
+const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[:collection].route');
+const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[:collection][:_id].route');
 
 
 global.SSE = new SSE(['initialize']);
@@ -41,6 +46,10 @@ let spotifyTokenLifetime = 0;
 
 const app = express();
 app.use(express.static('public'))
+app.use(bodyParser.json());     // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({   // to support URL-encoded bodies
+    extended: true
+}));
 
 app.use(async function (req, res, next) {
 
@@ -50,6 +59,14 @@ app.use(async function (req, res, next) {
         let parserCollection = await global.MONGO_DB.collection('parser');
         if(!parserCollection) await global.MONGO_DB.createCollection('parser');
         global.MONGO_COLLECTION_PARSER = await global.MONGO_DB.collection('parser');
+
+        let notificationsCollection = await global.MONGO_DB.collection('notifications');
+        if(!notificationsCollection) await global.MONGO_DB.createCollection('notifications');
+        global.MONGO_COLLECTION_NOTIFICATIONS = await global.MONGO_DB.collection('notifications');
+
+        let subscriptionsCollection = await global.MONGO_DB.collection('subscriptions');
+        if(!subscriptionsCollection) await global.MONGO_DB.createCollection('subscriptions');
+        global.MONGO_COLLECTION_SUBSCRIPTIONS = await global.MONGO_DB.collection('subscriptions');
     }
 
     // 1hr lifetime
@@ -118,48 +135,19 @@ app.get('/send', async (req, res)=> {
 } );
 
 
-app.get('/fcm/subscribe/:token/:topic', (req, res)=> {
-    admin.messaging().subscribeToTopic([req.params.token], req.params.topic)
-        .then(function(response) {
-            global.SSE.send(['Successfully subscribed to topic' + req.params.topic]);
-            res.send(JSON.stringify({
-                msg: `Subscribed to topic: ${req.params.topic}`,
-                success: true
-            }));
-        })
-        .catch(function(error) {
-            global.SSE.send(['Error subscribing from topic' + req.params.topic]);
-            res.send(JSON.stringify({
-                msg: error,
-                error: true
-            }));
-        });
-})
-
-app.get('/fcm/unsubscribe/:token/:topic', (req, res)=> {
-    admin.messaging().unsubscribeFromTopic([req.params.token], req.params.topic)
-        .then(function(response) {
-            global.SSE.send(['Successfully unsubscribed to topic' + req.params.topic]);
-            res.send(JSON.stringify({
-                msg: `Unsubscribed to topic: ${req.params.topic}`,
-                success: true
-            }));
-        })
-        .catch(function(error) {
-            global.SSE.send(['Error unsubscribing to topic' + req.params.topic]);
-            res.send(JSON.stringify({
-                msg: error,
-                error: true
-            }));
-        });
-})
-
 app.get('/stream', global.SSE.init)
 app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 app.get('/releases/:artist/:days/:uid', releasesArtistDaysRoute);
+
+app.get('/fcm/subscribe/:token/:topic', FCMSubscribe)
+app.get('/fcm/unsubscribe/:token/:topic', FCMUnsubscribe)
+
 app.get('/find/:group/:album', findGroupAlbumRoute);
+
+app.post('/mongo/save/:collection', mongoSaveCollection);
+app.post('/mongo/delete/:collection/:_id', mongoDeleteCollection);
 
 
 app.listen(process.env.PORT || 3000, function() {

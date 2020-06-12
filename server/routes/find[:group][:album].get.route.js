@@ -23,7 +23,7 @@ module.exports = async function (req, res) {
         return;
     }
 
-    if(!browser) browser = await setupBrowser();
+    browser = await setupBrowser();
 
     const group = req.params.group.toLowerCase().trim();
     const album = req.params.album.toLowerCase().trim();
