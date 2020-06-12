@@ -7,10 +7,10 @@ module.exports = async function(collectionName, collection, _id) {
         await collection.deleteOne( { _id });
 
         if(document.uid) {
-            const documents = await collection.find().toArray();
+            const userDocuments = await collection.find({ uid: document.uid }).toArray();
             global.SSE.send([JSON.stringify({
-                    [data.uid]: {
-                        [collectionName]: documents
+                    [document.uid]: {
+                        [collectionName]: userDocuments
                     }
                 }
             )]);

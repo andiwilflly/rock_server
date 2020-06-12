@@ -3,12 +3,12 @@ module.exports = async function(collectionName, collection, data) {
         await collection.insertOne(data);
 
         if(data.uid) {
-            const documents = await collection.find().toArray();
+            const userDocuments = await collection.find({ uid: data.uid }).toArray();
             global.SSE.send([JSON.stringify({
-                [data.uid]: {
-                    [collectionName]: documents
+                    [data.uid]: {
+                        [collectionName]: userDocuments
+                    }
                 }
-            }
             )]);
         }
 
