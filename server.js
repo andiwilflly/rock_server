@@ -67,6 +67,9 @@ app.use(async function (req, res, next) {
         let subscriptionsCollection = await global.MONGO_DB.collection('subscriptions');
         if(!subscriptionsCollection) await global.MONGO_DB.createCollection('subscriptions');
         global.MONGO_COLLECTION_SUBSCRIPTIONS = await global.MONGO_DB.collection('subscriptions');
+
+        const subscriptions = await global.MONGO_COLLECTION_SUBSCRIPTIONS.find().toArray();
+        global.SSE.send(JSON.stringify(subscriptions));
     }
 
     // 1hr lifetime
