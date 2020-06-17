@@ -6,7 +6,7 @@ async function parsePage(browser, group, album) {
         const page = await setupPage(browser);
 
         // https://music.apple.com/us/search?searchIn=am&term=Asking%20alexandria%20-%20down%20to%20hell
-        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group} - ${album}`)}`, {
+        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
@@ -21,12 +21,31 @@ async function parsePage(browser, group, album) {
         }, album);
 
 
-        await page.waitFor(1000);
+        await page.waitFor(1500);
         // Find song
         console.log(`✨ APPLE PARSER | trying to find song ${album}...`,);
 
         // Try to search in artist page
         if(!albumPageLink) {
+            let songPageLink = await page.evaluate((_album)=> {
+                const $songPageBtn = [...document.querySelectorAll('[aria-label="Songs"] .list-lockup-track-content')]
+                    .find($name => $name.innerText.toLowerCase().includes(_album));
+
+                const isBtn = !!$songPageBtn;
+                if($songPageBtn) $songPageBtn.click();
+                return isBtn;
+            }, album);
+
+            await page.waitFor(2000);
+            console.log(`✨ APPLE PARSER | trying to find songPageLink ${songPageLink}...`, page.url());
+
+            if(songPageLink) {
+                return {
+                    source: 'apple',
+                    link: `${page.url()}`.replace('beta.', '')
+                };
+            }
+
             const groupPageLink = await page.evaluate((_group)=> {
                 const $groupPageLink = [...[...document.querySelectorAll('h2')]
                     .find($title => $title.innerText.includes('Artists'))
