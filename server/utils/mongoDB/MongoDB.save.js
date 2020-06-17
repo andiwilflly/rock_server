@@ -10,6 +10,8 @@ module.exports = async function(collectionName, collection, data) {
                     }
                 }
             ));
+        } else {
+            console.log(`🌼 MONGO DB | can't send SSE because no data.uid`, data);
         }
 
         console.log(`🌼 MONGO DB | saved to collection '${collectionName}'`);

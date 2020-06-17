@@ -1,11 +1,11 @@
-const Soundcloud = require("soundcloud.ts").default;
+// const Soundcloud = require("soundcloud.ts").default;
 
 
 async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
 
-        await page.goto(`https://soundcloud.com/search/sounds?q=${encodeURIComponent(`${group} - ${song}`)}`, {
+        await page.goto(`https://soundcloud.com/search?q=${encodeURIComponent(`${group} - ${song}`)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(100);

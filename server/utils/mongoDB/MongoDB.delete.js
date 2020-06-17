@@ -14,6 +14,8 @@ module.exports = async function(collectionName, collection, _id) {
                     }
                 }
             ));
+        } else {
+            console.log(`🌼 MONGO DB | can't send SSE because no document.uid`, document);
         }
 
         console.log(`🌼 MONGO DB | '${_id}' deleted from collection`);
