@@ -4,6 +4,8 @@
 async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
+        group = group.replace(/'/g, '').replace(/’/g, '')
+        song = song.replace(/'/g, '').replace(/’/g, '')
 
         await page.goto(`https://soundcloud.com/search?q=${encodeURIComponent(`${group} - ${song}`)}`, {
             waitUntil: 'networkidle2'
@@ -13,10 +15,10 @@ async function parsePage(browser, group, song) {
 
         const songLink = await page.evaluate((_song, _group)=> {
             const $songLink = [...document.querySelectorAll('.searchList__item a')]
-                .find($link => $link.innerText.toLowerCase().includes(_song));
+                .find($link => $link.innerText.toLowerCase().replace(/’/g, '').includes(_song));
 
             const $groupLink = [...document.querySelectorAll('.searchList__item a')]
-                .find($link => $link.innerText.toLowerCase().includes(_group));
+                .find($link => $link.innerText.toLowerCase().replace(/’/g, '').includes(_group));
 
             if(!$groupLink) return 0;
             return $songLink ? $songLink.getAttribute('href') : null
