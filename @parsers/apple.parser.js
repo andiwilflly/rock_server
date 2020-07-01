@@ -15,7 +15,7 @@ async function parsePage(browser, group, album) {
 
         let albumPageLink = await page.evaluate((_album)=> {
             const $albumPageLink = [...document.querySelectorAll('[aria-label="Albums"] .shelf-grid__list-item .lockup__name')]
-                .find($name => $name.innerText.toLowerCase().includes(_album));
+                .find($name => $name.innerText.toLowerCase() === _album);
 
             return $albumPageLink ? $albumPageLink.getAttribute('href') : null;
         }, album);
