@@ -35,7 +35,7 @@ async function parsePage(browser, group, album, originalGroupName) {
 
         const artistPageLink = await page.evaluate((_album)=> {
             const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]
-                .find($link => $link.getAttribute('aria-label').toLowerCase().includes(_album));
+                .find($link => $link.getAttribute('aria-label').toLowerCase().startsWith(_album));
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, album);

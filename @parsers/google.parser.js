@@ -32,7 +32,7 @@ async function parsePage(browser, group, album) {
 
         const albumLink = await page.evaluate((_album)=> {
             const $albumLink = [...document.querySelectorAll('.ImZGtf.mpg5gc .b8cIId a')]
-                .find($title => $title.innerText.toLowerCase().includes(_album));
+                .find($title => $title.innerText.toLowerCase().startsWith(_album));
 
             return $albumLink ? $albumLink.getAttribute('href') : null;
         }, album);

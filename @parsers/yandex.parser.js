@@ -14,14 +14,14 @@ async function parsePage(browser, group, album) {
 
         let link = await page.evaluate((_album)=> {
             const $link = [ ...document.querySelectorAll('.album .album__caption') ]
-                .find($artist => $artist.innerText.toLowerCase().includes(_album));
+                .find($artist => $artist.innerText.toLowerCase().startsWith(_album));
 
             return $link ? $link.getAttribute('href') : null;
         }, album);
 
         if(!link) link = await page.evaluate((_album)=> {
             const $link = [ ...document.querySelectorAll('.d-track .d-track__name a') ]
-                .find($artist => $artist.innerText.toLowerCase().includes(_album));
+                .find($artist => $artist.innerText.toLowerCase().startsWith(_album));
 
             return $link ? $link.getAttribute('href') : null;
         }, album);
@@ -63,7 +63,7 @@ async function parsePage(browser, group, album) {
 
         const albumLink = await page.evaluate((_album)=> {
             const $album = [...document.querySelector('.page-artist__albums').querySelectorAll('.album')]
-                .find($artist => $artist.querySelector('.album__title.typo-main').innerText.toLowerCase().includes(_album));
+                .find($artist => $artist.querySelector('.album__title.typo-main').innerText.toLowerCase().startsWith(_album));
 
             return $album ? $album.querySelector('a').getAttribute('href') : null;
         }, album)

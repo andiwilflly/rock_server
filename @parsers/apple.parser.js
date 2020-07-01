@@ -15,7 +15,7 @@ async function parsePage(browser, group, album) {
 
         let albumPageLink = await page.evaluate((_album)=> {
             const $albumPageLink = [...document.querySelectorAll('[aria-label="Albums"] .shelf-grid__list-item .lockup__name')]
-                .find($name => $name.innerText.toLowerCase() === _album);
+                .find($name => $name.innerText.toLowerCase().startsWith(_album));
 
             return $albumPageLink ? $albumPageLink.getAttribute('href') : null;
         }, album);
@@ -29,7 +29,7 @@ async function parsePage(browser, group, album) {
         if(!albumPageLink) {
             let songPageLink = await page.evaluate((_album)=> {
                 const $songPageBtn = [...document.querySelectorAll('[aria-label="Songs"] .list-lockup-track-content')]
-                    .find($name => $name.innerText.toLowerCase().includes(_album));
+                    .find($name => $name.innerText.toLowerCase().startsWith(_album));
 
                 const isBtn = !!$songPageBtn;
                 if($songPageBtn) $songPageBtn.click();
@@ -65,7 +65,7 @@ async function parsePage(browser, group, album) {
                 console.log(`✨ APPLE PARSER | ${group} page loaded...`);
 
                 albumPageLink = await page.evaluate((_album)=> {
-                    const $albumPageLink = [...document.querySelectorAll('.lockup__lines a')].find(x => x.innerText.toLowerCase().includes(_album))
+                    const $albumPageLink = [...document.querySelectorAll('.lockup__lines a')].find(x => x.innerText.toLowerCase().startsWith(_album))
                     return $albumPageLink ? $albumPageLink.getAttribute('href') : null
                 }, album);
             }
