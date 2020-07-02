@@ -5,12 +5,12 @@ async function parsePage(browser, group, album) {
     try {
         const page = await setupPage(browser);
 
-        await page.goto(`https://music.yandex.ua/search?text=${group}`, {
+        await page.goto(`https://music.yandex.ua/search?text=${group} - ${album}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
 
-        console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group.charAt(0).toUpperCase() + group.slice(1)}`);
+        console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group} - ${album}`);
 
         let link = await page.evaluate((_album)=> {
             const $link = [ ...document.querySelectorAll('.album .album__caption') ]
@@ -72,6 +72,16 @@ async function parsePage(browser, group, album) {
         if(!albumLink) return { source: 'yandex', error: `No such album: ${album}` };
 
         console.log('✨ YANDEX ENTER page', `https://music.yandex.ua${albumLink}`);
+
+
+        // Album page
+        await page.goto(`https://music.yandex.ua${albumLink}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(1000);
+        await page.$eval('.entity-cover__image', ($el)=> $el.click());
+        const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
+
 
         await page.close();
         return {
