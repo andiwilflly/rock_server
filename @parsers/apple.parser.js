@@ -123,9 +123,9 @@ async function start(browser, group, album) {
     console.log('✨ APPLE PARSER:START...');
 
     // Cache
-    // const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `apple | ${group} | ${album}` });
-    // if(prevResult) console.log('🌼 MONGO DB | APPLE PARSER: return prev result...');
-    // if(prevResult && !prevResult.link.includes('search?')) return prevResult;
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `apple | ${group} | ${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | APPLE PARSER: return prev result...');
+    if(prevResult && !prevResult.link.includes('search?')) return prevResult;
 
     const response = await parsePage(browser, group, album);
 
