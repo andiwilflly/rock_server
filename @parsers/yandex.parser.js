@@ -5,7 +5,7 @@ async function parsePage(browser, group, album) {
     try {
         const page = await setupPage(browser);
 
-        await page.goto(`https://music.yandex.ua/search?text=${group} - ${album}`, {
+        await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
