@@ -66,6 +66,12 @@ module.exports = async function (req, res) {
         }, {});
 
         res.send(results);
+
+        fetch(`https://rockbot.pixis.com.ua/index.php?save_links=1&results=${JSON.stringify({
+            group,
+            album,
+            results
+        })}`, {  method: "POST" });
     });
 
     if(browser) await browser.close();
