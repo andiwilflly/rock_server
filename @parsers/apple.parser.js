@@ -20,12 +20,13 @@ async function parsePage(browser, group, album) {
             return isFound;
         }, group, album);
 
-
         console.log('APPLE PARSER | isFound0: ', isFound, page.url());
         await page.waitFor(1500);
         console.log('APPLE PARSER | isFound1: ', isFound, page.url());
         await page.waitFor(1500);
         console.log('APPLE PARSER | isFound2: ', isFound, page.url());
+        await page.waitFor(1500);
+        console.log('APPLE PARSER | isFound3: ', isFound, page.url());
 
         if(!isFound) return {
             source: 'apple',
