@@ -17,6 +17,7 @@ let browser = null;
 
 module.exports = async function (req, res) {
     const resources = req.query.q ? req.query.q.toLowerCase().split(',') : [];
+    const callback = req.query.callback;
 
     if(browser) {
         res.status(500).send('Another parser in progress...');
@@ -67,11 +68,15 @@ module.exports = async function (req, res) {
 
         res.send(results);
 
-        fetch(`https://rockbot.pixis.com.ua/index.php?save_links=1&results=${JSON.stringify({
-            group,
-            album,
-            results
-        })}`, {  method: "POST" });
+        if(callback) {
+            await fetch(`https://rockbot.pixis.com.ua/index.php?save_links=1&results=${encodeURIComponent(JSON.stringify({
+                group,
+                album,
+                results
+            }))}`, {  method: "POST" });
+
+            console.log(`👮 POST results to 'rockbot.pixis.com.ua'`);
+        }
     });
 
     if(browser) await browser.close();
