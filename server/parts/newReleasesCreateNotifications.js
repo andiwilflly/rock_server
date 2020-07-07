@@ -16,7 +16,12 @@ module.exports = async function(NEW_RELEASES = {}) {
 
     const browser = await setupBrowser();
 
-    for(const newRelease of Object.values(NEW_RELEASES)) {
+    const notifications = await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray();
+
+    const newReleases = Object.values(NEW_RELEASES).filter(release => !notifications.find(n => n.id === release.id));
+
+    console.log(newReleases, 'newReleases');
+    for(const newRelease of newReleases) {
 
         // let apple = await fetch(`${global.BASE_URL}/find/${encodeURIComponent(newRelease.artist)}/${encodeURIComponent(newRelease.name)}?q=apple`);
         // apple = await apple.json();
