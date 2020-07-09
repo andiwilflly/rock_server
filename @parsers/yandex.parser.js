@@ -22,7 +22,7 @@ async function parsePage(browser, group, album) {
             const author = $link.parentNode.querySelector('.album__artist').innerText;
             if(!author.toLowerCase().includes(_group)) return null;
 
-            return $link.getAttribute('href');
+            return $link.querySelector('a').getAttribute('href');
         }, group, album);
 
         if(!link) link = await page.evaluate((_group, _album)=> {
