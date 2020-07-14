@@ -23,6 +23,7 @@ const FCMUnsubscribe = require('./server/routes/FCM/fcm.unsubscribe[:token][:top
 const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[:collection].route');
 const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[:collection][:_id].route');
 const mongoGetCollection = require('./server/routes/mongo/mongo.get[:collection][:uid].route');
+const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[:collection][:uid].route');
 
 
 global.SSE = new SSE(['initialize']);
@@ -151,6 +152,7 @@ app.get('/mongo/get/:collection', mongoGetCollection);
 app.get('/mongo/get/:collection/:uid', mongoGetCollection);
 app.post('/mongo/save/:collection', mongoSaveCollection);
 app.post('/mongo/delete/:collection/:_id', mongoDeleteCollection);
+app.get('/mongo/remove/:collection', mongoRemoveCollection);
 
 
 app.listen(process.env.PORT || 3000, function() {

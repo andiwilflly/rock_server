@@ -7,25 +7,23 @@ async function search(page, group, song, url) {
     await page.waitFor(100);
     console.log(`✨ SOUNDCLOUD PARSER | page loaded...`, `https://soundcloud.com/search?q=${encodeURIComponent(`${group} - ${song}`)}`);
 
-    const songLink = await page.evaluate((_song, _group)=> {
+    return page.evaluate((_song, _group)=> {
         const $songLink = [...document.querySelectorAll('.searchList__item a')]
-            .find($link => $link.innerText.toLowerCase().replace(/’/g, '').includes(_song));
-
-        const $groupLink = [...document.querySelectorAll('.searchList__item a')]
-            .find($link => $link.innerText.toLowerCase().replace(/’/g, '').includes(_group));
-
-        if(!$groupLink) return 0;
+            .find($link => {
+                const text = $link.innerText.toLowerCase().replace(/’/g, '');
+                const matchSong = text.includes(_song);
+                const matchGroup = text.includes(_group);
+                return matchSong && matchGroup;
+            });
         return $songLink ? $songLink.getAttribute('href') : null
     }, song, group);
-
-    return songLink;
 }
 
 async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
-        group = group.replace(/'/g, '').replace(/’/g, '')
-        song = song.replace(/'/g, '').replace(/’/g, '')
+        group = group.replace(/'/g, '').replace(/’/g, '');
+        song = song.replace(/'/g, '').replace(/’/g, '');
 
         let songLink = await search(page, group, song, 'https://soundcloud.com/search/albums');
         if(!songLink) songLink = await search(page, group, song, 'https://soundcloud.com/search');
