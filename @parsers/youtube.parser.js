@@ -23,6 +23,27 @@
 //
 // module.exports = start;
 
+async function findInSongs(page, group, album) {
+
+    const isFound = await page.evaluate((_group, _album)=> {
+        const $item = [...document.querySelectorAll('div.ytmusic-play-button-renderer')].map($el => {
+            return $el.closest('.ytmusic-shelf-renderer')
+        }).find($el => {
+            const title = $el.querySelector('.title').innerText.toLowerCase();
+            return title.includes(_group) && title.includes(_album);
+        });
+        if(!$item) return null;
+
+        $item.querySelector('div.ytmusic-play-button-renderer').click();
+        return true;
+    }, group, album);
+
+    if(!isFound) return null;
+    await page.waitFor(2500);
+    return page.url();
+}
+
+
 async function parsePage(browser, group, album, originalGroupName) {
     try {
         const page = await browser.newPage();
@@ -33,20 +54,22 @@ async function parsePage(browser, group, album, originalGroupName) {
         await page.waitFor(1000);
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${encodeURIComponent(group)}`);
 
-        const artistPageLink = await page.evaluate((_album)=> {
+        let artistPageLink = await page.evaluate((_album)=> {
             const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]
-                .find($link => $link.getAttribute('aria-label').toLowerCase().startsWith(_album));
+                .find($link => $link.getAttribute('aria-label').toLowerCase().includes(_album));
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, album);
-        if(!artistPageLink) await page.close();
+        if(!artistPageLink) artistPageLink = await findInSongs(page, group, album);
         if(!artistPageLink) return { source: 'youtube', error: `Can't find ${group} - ${album} (https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)})` };
 
+        await page.close();
         return {
             source: 'youtube',
-            link: `https://music.youtube.com/${artistPageLink}`
+            link: artistPageLink.includes('https') ? artistPageLink : `https://music.youtube.com/${artistPageLink}`
         };
     } catch(e) {
+        await page.close();
         return { source: 'youtube', error: e.toString() };
     }
 }

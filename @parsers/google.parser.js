@@ -13,12 +13,15 @@ async function parsePage(browser, group, album) {
 
         // Link
         const link = await page.evaluate((_group, _album)=> {
-            return [...document.querySelectorAll('.WHE7ib.mpg5gc')].find($el => {
+            const link = [...document.querySelectorAll('.WHE7ib.mpg5gc')].find($el => {
                 const authorMatch = $el.querySelector('.KoLSrc').textContent.toLowerCase() === _group;
                 const songMatch = $el.querySelector('.WsMG1c.nnK0zc').textContent.toLowerCase().startsWith(_album)
                 return authorMatch && songMatch && $el.offsetParent;
-            }).querySelector('a').getAttribute('href')
+            });
+            return link ? link.querySelector('a').getAttribute('href') : null;
         }, group, album);
+
+        if(!link) return { source: 'google', error: `Not found ${encodeURIComponent(group)} - ${encodeURIComponent(album)}` };
 
         // Copyright
         await page.goto(`https://play.google.com${link}`, {
