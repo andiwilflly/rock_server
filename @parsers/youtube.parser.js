@@ -55,6 +55,12 @@ async function parsePage(browser, group, album, originalGroupName) {
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${encodeURIComponent(group)}`);
 
         let artistPageLink = await page.evaluate((_album)=> {
+            return [...document.querySelectorAll('.yt-simple-endpoint.yt-formatted-string')]
+                .find($el => $el.innerText.toLowerCase() === _album)
+                .getAttribute('href');
+        }, album);
+
+        if(!artistPageLink) artistPageLink = await page.evaluate((_album)=> {
             const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]
                 .find($link => $link.getAttribute('aria-label').toLowerCase().includes(_album));
 
