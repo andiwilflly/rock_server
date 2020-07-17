@@ -75,7 +75,6 @@ async function parsePage(browser, group, album, originalGroupName) {
             link: artistPageLink.includes('https') ? artistPageLink : `https://music.youtube.com/${artistPageLink}`
         };
     } catch(e) {
-        await page.close();
         return { source: 'youtube', error: e.toString() };
     }
 }
