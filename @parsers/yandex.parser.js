@@ -1,6 +1,63 @@
 const setupPage = require('../server/utils/setupPage.utils');
 
 
+async function newParser(page, group, album) {
+    console.log(`✨ YANDEX PARSER | RUN NEW PARSER... (step 1)`);
+
+    let link = await page.evaluate((_group, _album)=> {
+        const $link = [ ...document.querySelectorAll('.album .album__title') ]
+            .find($artist => $artist.innerText.toLowerCase().startsWith(_album));
+
+        if(!$link) return null;
+
+        // Author is not the same
+        const author = $link.parentNode.querySelector('.album__artist').innerText;
+        if(!author.toLowerCase().includes(_group)) return null;
+
+        return $link.querySelector('a').getAttribute('href');
+    }, group, album);
+
+    console.log(`✨ YANDEX PARSER | RUN NEW PARSER... (step 2)`, link);
+
+    if(!link) link = await page.evaluate((_group, _album)=> {
+        const $link = [ ...document.querySelectorAll('.d-track .d-track__name a') ]
+            .find($artist => $artist.innerText.toLowerCase().startsWith(_album));
+
+        if(!$link) return null;
+
+        // Author is not the same
+        const author = $link.parentNode.parentNode.querySelector('.d-track__meta').innerText;
+        if(!author.toLowerCase().includes(_group)) return null;
+
+        return $link.getAttribute('href');
+    }, group, album);
+
+    console.log(`✨ YANDEX PARSER | RUN NEW PARSER... (step 3)`, link);
+
+    if(link) {
+        // Album page
+        await page.goto(`https://music.yandex.ua${link}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(1000);
+        await page.$eval('.entity-cover__image', ($el)=> $el.click());
+
+        let albumImg = '';
+        try {
+           albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
+        } catch {}
+
+        return {
+            source: 'yandex',
+            link: `https://music.yandex.ua${link}`,
+            image: albumImg.replace('//', 'https://')
+        };
+    } else {
+        return { source: 'yandex', error: `No such album: ${album}` };
+    }
+}
+
+
 async function parsePage(browser, group, album) {
     try {
         const page = await setupPage(browser);
@@ -12,51 +69,19 @@ async function parsePage(browser, group, album) {
 
         console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group} - ${album}`);
 
-        // let link = await page.evaluate((_group, _album)=> {
-        //     const $link = [ ...document.querySelectorAll('.album .album__title') ]
-        //         .find($artist => $artist.innerText.toLowerCase().startsWith(_album));
-        //
-        //     if(!$link) return null;
-        //
-        //     // Author is not the same
-        //     const author = $link.parentNode.querySelector('.album__artist').innerText;
-        //     if(!author.toLowerCase().includes(_group)) return null;
-        //
-        //     return $link.querySelector('a').getAttribute('href');
-        // }, group, album);
-        //
-        // if(!link) link = await page.evaluate((_group, _album)=> {
-        //     const $link = [ ...document.querySelectorAll('.d-track .d-track__name a') ]
-        //         .find($artist => $artist.innerText.toLowerCase().startsWith(_album));
-        //
-        //     if(!$link) return null;
-        //
-        //     // Author is not the same
-        //     const author = $link.parentNode.parentNode.querySelector('.d-track__meta').innerText;
-        //     if(!author.toLowerCase().includes(_group)) return null;
-        //
-        //     return $link.getAttribute('href');
-        // }, group, album);
-        //
-        // if(link) {
-        //     // Album page
-        //     await page.goto(`https://music.yandex.ua${link}`, {
-        //         waitUntil: 'networkidle2'
-        //     });
-        //     await page.waitFor(1000);
-        //     await page.$eval('.entity-cover__image', ($el)=> $el.click());
-        //     const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
-        //
-        //     return {
-        //         source: 'yandex',
-        //         link: `https://music.yandex.ua${link}`,
-        //         image: albumImg.replace('//', 'https://')
-        //     };
-        // } else {
-        //     return { source: 'yandex', error: `No such album: ${album}` };
-        // }
+        // Try new parser first...
+        const result = await newParser(page, group, album);
+        if(!result.error) return result;
 
-        // // TODO: This part is old
+        console.log(`✨ YANDEX PARSER | RUN OLD PARSER...`);
+
+
+        await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(1000);
+
+        // TODO: This part is old
         const artistLink = await page.evaluate((_group)=> {
             const $artistLink = [ ...document.querySelectorAll('.serp-snippet__artists > .artist .artist__name a') ]
                 .find($artist => $artist.innerText.toLowerCase().includes(_group));
