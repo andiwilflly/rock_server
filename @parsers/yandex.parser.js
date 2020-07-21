@@ -17,7 +17,7 @@ async function newParser(page, group, album) {
         return $link.querySelector('a').getAttribute('href');
     }, group, album);
 
-    console.log(`✨ YANDEX PARSER | RUN NEW PARSER... (step 2)`, link);
+    console.log(`✨ YANDEX PARSER | (step 2)`, link);
 
     if(!link) link = await page.evaluate((_group, _album)=> {
         const $link = [ ...document.querySelectorAll('.d-track .d-track__name a') ]
@@ -32,7 +32,7 @@ async function newParser(page, group, album) {
         return $link.getAttribute('href');
     }, group, album);
 
-    console.log(`✨ YANDEX PARSER | RUN NEW PARSER... (step 3)`, link);
+    console.log(`✨ YANDEX PARSER | (step 3)`, link);
 
     if(link) {
         // Album page
@@ -81,7 +81,7 @@ async function parsePage(browser, group, album) {
         });
         await page.waitFor(1000);
 
-        // TODO: This part is old
+
         const artistLink = await page.evaluate((_group)=> {
             const $artistLink = [ ...document.querySelectorAll('.serp-snippet__artists > .artist .artist__name a') ]
                 .find($artist => $artist.innerText.toLowerCase().includes(_group));
@@ -139,9 +139,9 @@ async function start(browser, group, album) {
     console.log('✨ YANDEX PARSER:START...');
 
     // Cache
-    // const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `yandex | ${group} | ${album}` });
-    // if(prevResult) console.log('🌼 MONGO DB | YANDEX PARSER: return prev result...');
-    // if(prevResult) return prevResult;
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `yandex | ${group} | ${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | YANDEX PARSER: return prev result...');
+    if(prevResult) return prevResult;
 
 
     const response = await parsePage(browser, group, album);
