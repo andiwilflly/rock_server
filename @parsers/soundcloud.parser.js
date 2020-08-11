@@ -1,5 +1,26 @@
 // const Soundcloud = require("soundcloud.ts").default;
 
+
+async function newSearch(page, group, song, url) {
+    await page.goto(`${url}?q=${encodeURIComponent(`${group} - ${song}`)}`, {
+        waitUntil: 'networkidle2'
+    });
+    await page.waitFor(100);
+    console.log(`✨ SOUNDCLOUD PARSER | new search...`, `https://soundcloud.com/search?q=${encodeURIComponent(`${group} - ${song}`)}`);
+
+    return page.evaluate((_song, _group)=> {
+        const $songLink =  [...document.querySelectorAll('.searchList__item')]
+            .find($item => {
+                const group = $item.querySelector('.soundTitle__usernameText').innerText.toLowerCase();
+                const song = $item.querySelector('.soundTitle__title').innerText.toLowerCase();
+                const matchSong = song.startsWith(_song);
+                const matchGroup = group.startsWith(_group);
+                return matchSong && matchGroup;
+            });
+        return $songLink ? $songLink.querySelector('a').getAttribute('href') : null
+    }, song, group);
+}
+
 async function search(page, group, song, url) {
     await page.goto(`${url}?q=${encodeURIComponent(`${group} - ${song}`)}`, {
         waitUntil: 'networkidle2'
@@ -25,7 +46,8 @@ async function parsePage(browser, group, song) {
         group = group.replace(/'/g, '').replace(/’/g, '');
         song = song.replace(/'/g, '').replace(/’/g, '');
 
-        let songLink = await search(page, group, song, 'https://soundcloud.com/search/albums');
+        let songLink = await newSearch(page, group, song, 'https://soundcloud.com/search');
+        if(!songLink) songLink = await search(page, group, song, 'https://soundcloud.com/search/albums');
         if(!songLink) songLink = await search(page, group, song, 'https://soundcloud.com/search');
 
         if(songLink === 0) return { source: 'soundcloud', error: `Song is found, buy group '${group}' is not` };
@@ -45,9 +67,9 @@ async function start(browser, group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
-    if(prevResult) return prevResult;
+    // const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
+    // if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
+    // if(prevResult) return prevResult;
 
     return await parsePage(browser, group, album);
 }
