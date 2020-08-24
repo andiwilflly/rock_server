@@ -46,7 +46,8 @@ async function parsePage(browser, group, song) {
         group = group.replace(/'/g, '').replace(/’/g, '');
         song = song.replace(/'/g, '').replace(/’/g, '');
 
-        let songLink = await newSearch(page, group, song, 'https://soundcloud.com/search');
+        let songLink = await newSearch(page, group, song, 'https://soundcloud.com/search/albums');
+        if(!songLink) songLink = await newSearch(page, group, song, 'https://soundcloud.com/search');
         if(!songLink) songLink = await search(page, group, song, 'https://soundcloud.com/search/albums');
         if(!songLink) songLink = await search(page, group, song, 'https://soundcloud.com/search');
 
