@@ -24,6 +24,8 @@ const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[:coll
 const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[:collection][:_id].route');
 const mongoGetCollection = require('./server/routes/mongo/mongo.get[:collection][:uid].route');
 const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[:collection][:uid].route');
+const sokkerPlayer = require('./server/routes/sokker/player[:id].get.route');
+const sokkerTeam = require('./server/routes/sokker/team[:id].get.route');
 
 
 global.SSE = new SSE(['initialize']);
@@ -153,6 +155,10 @@ app.get('/mongo/get/:collection/:uid', mongoGetCollection);
 app.post('/mongo/save/:collection', mongoSaveCollection);
 app.post('/mongo/delete/:collection/:_id', mongoDeleteCollection);
 app.get('/mongo/remove/:collection', mongoRemoveCollection);
+
+
+app.get('/sokker/player/:pid', sokkerPlayer);
+app.get('/sokker/team/:teamID', sokkerTeam);
 
 
 app.listen(process.env.PORT || 3000, function() {
