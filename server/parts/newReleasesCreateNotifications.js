@@ -30,12 +30,12 @@ module.exports = async function(NEW_RELEASES = {}) {
         const group = newRelease.artist.toLowerCase().trim();
         const album = newRelease.name.toLowerCase().trim();
 
-        let youtube = await searchAlbumYouTube(group, album);
-        let lastfm = await lastFmParser(browser, group, album);
-        let yandex = await yandexParser(browser, group, album);
-        let soundcloud = await soundcloudParser(browser, group, album);
-        let google = await googleParser(browser, group, album);
-        let apple = await appleParser(browser, group, album);
+        // let youtube = await searchAlbumYouTube(group, album);
+        // let lastfm = await lastFmParser(browser, group, album);
+        // let yandex = await yandexParser(browser, group, album);
+        // let soundcloud = await soundcloudParser(browser, group, album);
+        // let google = await googleParser(browser, group, album);
+        // let apple = await appleParser(browser, group, album);
 
         try {
             await MongoDBSave('notifications', global[`MONGO_COLLECTION_NOTIFICATIONS`], {
@@ -46,12 +46,12 @@ module.exports = async function(NEW_RELEASES = {}) {
                     spotify: {
                         link: newRelease.spotifyLink
                     },
-                    youtube,
-                    lastfm,
-                    yandex,
-                    soundcloud,
-                    google,
-                    apple
+                    // youtube,
+                    // lastfm,
+                    // yandex,
+                    // soundcloud,
+                    // google,
+                    // apple
                 }
             });
             console.log("Document successfully written! TOPIC: ", newRelease.subscription.uid);
