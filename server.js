@@ -71,6 +71,19 @@ app.use(async function (req, res, next) {
         let subscriptionsCollection = await global.MONGO_DB.collection('subscriptions');
         if(!subscriptionsCollection) await global.MONGO_DB.createCollection('subscriptions');
         global.MONGO_COLLECTION_SUBSCRIPTIONS = await global.MONGO_DB.collection('subscriptions');
+
+        // Sending data to each connected SSE client
+        console.error(`SERVER | SSE: start polling data to client...`);
+        global.SSE.send(JSON.stringify({
+            notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
+            subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
+        }));
+        setInterval(async ()=> {
+            global.SSE.send(JSON.stringify({
+                notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
+                subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
+            }));
+        }, 10000);
     }
 
     // 1hr lifetime
