@@ -80,8 +80,8 @@ app.use(async function (req, res, next) {
         }));
         setInterval(async ()=> {
             global.SSE.send(JSON.stringify({
-                notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
-                subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
+                notifications: [],
+                subscriptions: []
             }));
         }, 10000);
     }
