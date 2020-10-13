@@ -54,6 +54,8 @@ async function parsePage(browser, group, album, originalGroupName) {
         await page.waitFor(1000);
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${encodeURIComponent(group)}`);
 
+        await page.waitFor(1500);
+
         let artistPageLink = await page.evaluate((_album)=> {
             return [...document.querySelectorAll('.yt-simple-endpoint.yt-formatted-string')]
                 .find($el => $el.innerText.toLowerCase() === _album)
@@ -66,7 +68,9 @@ async function parsePage(browser, group, album, originalGroupName) {
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, album);
+
         if(!artistPageLink) artistPageLink = await findInSongs(page, group, album);
+
         if(!artistPageLink) return { source: 'youtube', error: `Can't find ${group} - ${album} (https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)})` };
 
         await page.close();
