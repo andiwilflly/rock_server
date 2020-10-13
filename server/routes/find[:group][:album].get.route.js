@@ -36,7 +36,7 @@ module.exports = async function (req, res) {
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
 
         !resources.length || resources.includes('lastfm') ? lastFmParser(browser, group, album) : null,
-        !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group) : null,
+        !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group, req.params.album) : null,
         !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
