@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer-extra');
 
 module.exports = async function setupBrowser() {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         ignoreDefaultArgs: ["--mute-audio", "--hide-scrollbars"],
         devtools: false, // not needed so far, we can see websocket frames and xhr responses without that.
         defaultViewport: { //--window-size in args
