@@ -26,6 +26,7 @@ const mongoGetCollection = require('./server/routes/mongo/mongo.get[:collection]
 const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[:collection][:uid].route');
 const sokkerPlayer = require('./server/routes/sokker/player[:id].get.route');
 const sokkerTeam = require('./server/routes/sokker/team[:id].get.route');
+const findConcerts = require('./server/routes/concerts[:artist].get.route');
 
 
 global.SSE = new SSE(['initialize']);
@@ -157,6 +158,8 @@ app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN })
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
 app.get('/releases/:artist/:days/:uid', releasesArtistDaysRoute);
+
+app.get('/concerts/:artist', findConcerts);
 
 app.get('/fcm/subscribe/:token/:topic', FCMSubscribe)
 app.get('/fcm/unsubscribe/:token/:topic', FCMUnsubscribe)
