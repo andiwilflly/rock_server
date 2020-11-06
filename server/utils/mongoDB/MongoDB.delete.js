@@ -4,7 +4,7 @@ module.exports = async function(collectionName, collection, _id) {
 
         if(!document) throw new Error(`🌼 MONGO DB | No such document '${_id}' in collection ${collectionName}`);
 
-        // await collection.deleteOne( { _id });
+        await collection.deleteOne( { _id });
 
         if(document.uid) {
             const userDocuments = await collection.find({ uid: document.uid }).toArray();
