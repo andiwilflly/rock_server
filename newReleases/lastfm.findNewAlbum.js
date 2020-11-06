@@ -1,3 +1,6 @@
+const fetch = require("node-fetch");
+
+
 async function findNewAlbum(subscription, spotifyToken) {
 	let NEW_RELEASES = {};
 
