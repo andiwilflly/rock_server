@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 const yandexParser = require('../../@parsers/yandex.parser');
 const googleParser = require('../../@parsers/google.parser');
 const appleParser = require('../../@parsers/apple.parser');

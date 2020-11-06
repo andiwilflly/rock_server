@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 module.exports = async function getArtistId(artistName = '', spotifyToken) {
 
     let artist = await fetch(`https://api.spotify.com/v1/search?type=artist&q=${encodeURIComponent(artistName)}`, {

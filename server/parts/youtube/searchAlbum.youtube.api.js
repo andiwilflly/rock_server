@@ -1,3 +1,4 @@
+const fetch = require("node-fetch");
 const Fuse = require('fuse.js');
 const fs = require('fs');
 
