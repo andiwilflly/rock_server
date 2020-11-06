@@ -9,7 +9,7 @@ module.exports = async function(collectionName, collection, _id) {
         if(document.uid) {
             const userDocuments = await collection.find({ uid: document.uid }).toArray();
             global.SSE.send(JSON.stringify({
-                    [document.uid]: {
+                    data: {
                         [collectionName]: userDocuments
                     }
                 }
