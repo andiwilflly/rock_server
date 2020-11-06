@@ -25,6 +25,7 @@
     "googleapis": "^51.0.0",
     "jsdom": "^16.4.0",
     "mongodb": "^3.5.8",
+    "node-cache": "^5.1.2",
     "node-cron": "^2.0.3",
     "puppeteer": "^2.1.1",
     "puppeteer-cluster": "^0.21.0",
