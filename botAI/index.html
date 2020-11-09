@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная</title>
+    <meta charset="utf-8" />
+</head>
+<body style="margin: 0; background: lightgray; font-family: monospace">
+
+    <div style="padding: 20px; margin: 0 auto; width: 700px">
+        <h2>🤖 BOT AI</h2>
+        <ul id="bot_msg"></ul>
+
+        <hr />
+        <form onsubmit="return false">
+            <input type="text" id="ask_text">
+            <button type="submit" onclick="ask(document.querySelector('#ask_text').value)">Ask me</button>
+            <ul id="bot_answer"></ul>
+        </form>
+
+        <hr />
+
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        window.socket = window.io.connect();
+
+        socket.on('AI.BOT:msg', function(msg) {
+            const $li = document.createElement('li');
+            $li.innerText = `${new Date().toLocaleString()}: ${msg}`;
+            document.querySelector('#bot_msg').appendChild($li);
+        });
+
+        socket.on('AI.BOT:answer', function(answer) {
+            console.log('AI.BOT:answer:', answer);
+            const $li = document.createElement('li');
+            $li.innerHTML = `
+                <div>
+                    <b>${answer.response}</b>
+                    <br />
+                    <i>(confidence: ${answer.confidence}, implies: ${answer.phrase ? answer.phrase.implies.join(' | ') : '-'})</i>
+                </div>`;
+            document.querySelector('#bot_answer').appendChild($li);
+        });
+
+        window.ask = async function (phrase) {
+            if(phrase.length < 5) return alert('Phrase is too short..');
+            socket.emit('AI.BOT:ask', phrase);
+        };
+    </script>
+</body>
+<html>
