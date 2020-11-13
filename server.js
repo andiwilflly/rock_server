@@ -79,12 +79,12 @@ app.use(async function (req, res, next) {
             notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
             subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
         }));
-        setInterval(async ()=> {
-            global.SSE.send(JSON.stringify([{
-                notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
-                subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
-            }]));
-        }, 60000); // 1 min
+        // setInterval(async ()=> {
+        //     global.SSE.send(JSON.stringify([{
+        //         notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
+        //         subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
+        //     }]));
+        // }, 60000); // 1 min
     }
 
     // 1hr lifetime
