@@ -35,7 +35,6 @@ async function init(CLIENT) {
 
     await AI.BOT.initialize(conf);
     CLIENT.emit('AI.BOT:msg', '🤖 BOT AI | Ready');
-    console.log(`🤖 BOT AI | initialized`);
     AI.userData = new UserData();
     AI.userData.initialize();
     CLIENT.emit('AI.BOT:msg', '🤖 BOT AI | userData initialized');
