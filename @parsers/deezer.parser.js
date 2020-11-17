@@ -81,7 +81,7 @@ async function parsePage(browser, group, album) {
             error: `Album not found ${group} - ${album}`
         };
     } catch(e) {
-        return { source: 'https://www.deezer.com', error: e.toString() };
+        return { source: 'deezer', error: e.toString() };
     }
 }
 
