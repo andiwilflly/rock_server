@@ -18,6 +18,8 @@ async function init(CLIENT) {
             ...require('./DB/questions.json'),
             ...require('./DB/greetings.json'),
             ...require('./DB/interests.json'),
+            ...require('./DB/jokes.json'),
+            ...require('./DB/responses.json')
         ]
     };
 

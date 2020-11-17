@@ -13,11 +13,11 @@ async function parsePage(browser, group, album) {
     try {
         const page = await setupPage(browser);
 
-        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '').split(' ').join('+')} - ${album.replace(/'/g, '').split(' ').join('+')}`)}`, {
+        await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '').split(' ').join('+')}+-+${album.replace(/'/g, '').split(' ').join('+')}`)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
-        console.log(`✨ APPLE PARSER | page loaded...`, `https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '').split(' ').join('+')} - ${album.replace(/'/g, '').split(' ').join('+')}`)}`);
+        console.log(`✨ APPLE PARSER | page loaded...`, `https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '').split(' ').join('+')}+-+${album.replace(/'/g, '').split(' ').join('+')}`)}`);
 
 
         const isFound = await page.evaluate((_group, _album)=> {

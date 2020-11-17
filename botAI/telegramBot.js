@@ -13,16 +13,17 @@ async function start(AI) {
     });
 
     bot.on('message', async (ctx) => {
+        if(ctx.message.chat.type === 'group' && !ctx.message.text.startsWith('Комрад')) return;
+        if(ctx.message.chat.type === 'group' && !ctx.message.text.startsWith('комрад')) return;
 
         console.log(ctx.message, 42);
         let ans = await AI.BOT.getResult(ctx.message.text, AI.userData);
 
         switch (true) {
-
             case ans.confidence >= 0.5: return ctx.reply(ans.response);
-
         }
-        ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
+
+        return ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
     })
 
 
