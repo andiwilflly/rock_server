@@ -2,6 +2,7 @@ const fetch = require("node-fetch");
 const admin = require("firebase-admin");
 
 const yandexParser = require('../../@parsers/yandex.parser');
+const deezerParser = require('../../@parsers/deezer.parser');
 const googleParser = require('../../@parsers/google.parser');
 const appleParser = require('../../@parsers/apple.parser');
 const youTubeParser = require('../../@parsers/youtube.parser');
@@ -35,6 +36,8 @@ module.exports = async function (req, res) {
     console.time(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
 
     await Promise.all([
+        !resources.length || resources.includes('deezer') ? deezerParser(browser, group, album) : null,
+
         !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
 
