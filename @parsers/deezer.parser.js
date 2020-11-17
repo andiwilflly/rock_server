@@ -37,23 +37,10 @@ async function parsePage(browser, group, album) {
 
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) return {
-            source: 'https://www.deezer.com',
+            source: 'deezer',
             type: 'album',
             link: `https://www.deezer.com${albumLink}`
         }
-
-        // await page.focus('#login_mail')
-        // await page.keyboard.type(login);
-        //
-        // await page.focus('#login_password')
-        // await page.keyboard.type(pass);
-        //
-        // await page.waitFor(3000);
-        // // await page.click('#login_form_submit');
-        // await page.evaluate((selector) => document.querySelector('#login_form_submit').click());
-        //
-        // await page.waitFor(30000);
-
         return {
             error: `Album not found ${group} - ${album}`
         };

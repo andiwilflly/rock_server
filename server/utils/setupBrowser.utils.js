@@ -8,7 +8,7 @@ puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 module.exports = async function setupBrowser() {
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         ignoreDefaultArgs: ["--mute-audio", "--hide-scrollbars"],
         devtools: false, // not needed so far, we can see websocket frames and xhr responses without that.
         defaultViewport: { //--window-size in args
