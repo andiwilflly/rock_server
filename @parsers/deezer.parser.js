@@ -41,9 +41,6 @@ async function findTrack(page, group, album) {
 }
 
 
-// TODO: https://www.deezer.com/search/Rave%20The%20Reqviem%20-%20Holy%20Homicide/track
-
-
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
