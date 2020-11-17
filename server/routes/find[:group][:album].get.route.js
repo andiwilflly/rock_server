@@ -75,7 +75,7 @@ module.exports = async function (req, res) {
         const message2 = {
             notification: {
                 title: `${group} - ${album}`,
-                body: `${group} - ${album} (${resources.join(',')} => ${results.filter(r => r.link).map(r => r.source).join(', ')})`
+                body: `(${resources.join(',')})`
             },
             topic: 'JKooKnosrveuLhmbnpdDVAUk6Cp1' // 'allDevices'
         };
