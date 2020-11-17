@@ -48,11 +48,11 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
     try {
         const page = await browser.newPage();
 
-        await page.goto(`https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
+        await page.goto(`https://music.youtube.com/search?q=${encodeURIComponent(group.split(' ').join('+'))} - ${encodeURIComponent(album.split(' ').join('+'))}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
-        console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`);
+        console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${encodeURIComponent(group.split(' ').join('+'))} - ${encodeURIComponent(album.split(' ').join('+'))}`);
 
         await page.waitFor(1500);
 
