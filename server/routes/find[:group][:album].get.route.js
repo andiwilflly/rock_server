@@ -74,7 +74,7 @@ module.exports = async function (req, res) {
 
         const message2 = {
             notification: {
-                title: 'New release!',
+                title: `${group} - ${album}`,
                 body: `${group} - ${album} (${resources.join(',')} => ${results.filter(r => r.link).map(r => r.source).join(', ')})`
             },
             topic: 'JKooKnosrveuLhmbnpdDVAUk6Cp1' // 'allDevices'
@@ -86,12 +86,10 @@ module.exports = async function (req, res) {
             .then((response) => {
                 // Response is a message ID string.
                 console.log('Successfully sent message2:', response);
-                res.send('sended');
                 // res.send('Hello World!');
             })
             .catch((error) => {
                 console.log('Error sending message2:', error);
-                res.send("Not Hello World!");
             });
 
 
