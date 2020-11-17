@@ -89,7 +89,7 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
         await page.screenshot({path: 'youtube3.png'});
         console.log(artistPageLink, 4);
 
-        if(!artistPageLink) return { source: 'youtube', error: `Can't find ${q} (https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)})` };
+        if(!artistPageLink) return { source: 'youtube', error: `Can't find (https://music.youtube.com/search?q=${q})` };
 
         await page.close();
         return {
