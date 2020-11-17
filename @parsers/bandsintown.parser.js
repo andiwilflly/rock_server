@@ -9,12 +9,19 @@ async function parseConcerts(browser, concertsUrls = []) {
             });
 
             const concertDetails = await page.evaluate(()=> {
+
+                const $widget = document.querySelector('#stay22-widget') ?
+                    document.querySelector('#stay22-widget').getAttribute('src').match(/lat=[-\d.]*/)
+                    :
+                    null;
+                const lat = $widget ? $widget[0].replace('lat=', '') : null;
+                const lng = $widget ? $widget[0].replace('lng=', '') : null;
                 return {
                     date:  document.querySelector('._1pJ33vJuFJKauIgYOkCleu').innerText,
                     place: document.querySelector('._1fBpJ_FMo49Ky4JD3xE6wq').innerText,
-                    logo:  document.querySelector('._3FxoLllHIYDsTLMcW1mAl8 img').getAttribute('src'),
-                    lat:   document.querySelector('#stay22-widget').getAttribute('src').match(/lat=[-\d.]*/)[0].replace('lat=', ''),
-                    lng:   document.querySelector('#stay22-widget').getAttribute('src').match(/lng=[-\d.]*/)[0].replace('lng=', '')
+                    maps:  lat ? `https://www.google.com.ua/maps/place/Zenith/@${lat},${lng},17z/` : null,
+                    lat,
+                    lng
                 };
             });
 
@@ -48,8 +55,8 @@ async function parsePage(browser, artist) {
         await page.waitFor(500);
 
         const firstResultUrl = await page.evaluate((_artist)=> {
-            const firstResult = document.querySelector('._19JBZBd19dn8PF0B4MjSaX').children[0];
-            return firstResult ? firstResult.getAttribute('href') : null
+            const firstResult = document.querySelector('._19JBZBd19dn8PF0B4MjSaX').children;
+            return firstResult ? firstResult[0].getAttribute('href') : null
         }, artist);
 
         if(!firstResultUrl) return { error: `Artist not found: ${artist}` };
@@ -60,7 +67,9 @@ async function parsePage(browser, artist) {
         await page.waitFor(500);
 
         const concertsUrls = await page.evaluate(()=> {
-            return [...document.querySelector('._2jeHbgNeqh7EbnCEJRiwHL').children].map($concert => $concert.getAttribute('href'))
+            const $el = document.querySelector('._2jeHbgNeqh7EbnCEJRiwHL');
+            if(!$el) return; // No upcoming events
+            return [...$el.children].filter(Boolean).map($concert => $concert.getAttribute('href'))
         });
 
         if(!concertsUrls) return { error: `No upcoming concerts: ${artist} (${firstResultUrl})`}

@@ -21,6 +21,29 @@ async function findAlbum(page, group, album) {
 }
 
 
+async function findTrack(page, group, album) {
+    return await page.evaluate((_group, _album)=> {
+        const $rows = [...document.querySelectorAll('.datagrid-row')];
+
+        const rows = $rows.map($row => {
+            const $cells = [...$row.querySelectorAll('.datagrid-label.datagrid-label-main')];
+            const $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()))
+            if(!$trackCell) return null;
+
+            return $trackCell.getAttribute('href');
+        }).filter(Boolean);
+
+        if(!rows.length) return null;
+
+        return rows[0];
+
+    }, group, album);
+}
+
+
+// TODO: https://www.deezer.com/search/Rave%20The%20Reqviem%20-%20Holy%20Homicide/track
+
+
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
@@ -41,6 +64,22 @@ async function parsePage(browser, group, album) {
             type: 'album',
             link: `https://www.deezer.com${albumLink}`
         }
+
+        await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(100);
+
+        await page.screenshot({ path: 'deezer1.jpg' });
+        console.log(`✨ DEZZER PARSER | track page loaded... (https://www.deezer.com/search/${group} - ${album}/track)`);
+
+        const trackLink = await findTrack(page, group, album);
+        if(trackLink) return {
+            source: 'deezer',
+            type: 'track',
+            link: `https://www.deezer.com${trackLink}`
+        }
+
         return {
             error: `Album not found ${group} - ${album}`
         };

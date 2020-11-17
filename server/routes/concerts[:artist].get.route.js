@@ -17,7 +17,7 @@ module.exports = async function (req, res) {
     if(cachedResults) return res.send(cachedResults);
 
     if(browser) {
-        res.status(500).send('Another parser in progress...');
+        res.status(500).send('Another [concerts] parser in progress...');
         return;
     }
 
@@ -32,6 +32,6 @@ module.exports = async function (req, res) {
 
     console.timeEnd();
 
-    cache.set(key, results, 86400000); // 1 day
+    if(!results.error) cache.set(key, results, 86400000); // 1 day
     res.send(results);
 };
