@@ -68,9 +68,9 @@ async function start(browser, group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
 
     // Cache
-    // const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
-    // if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
-    // if(prevResult) return prevResult;
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
+    if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
+    if(prevResult) return prevResult;
 
     return await parsePage(browser, group, album);
 }
