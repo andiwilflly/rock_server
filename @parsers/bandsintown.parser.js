@@ -10,12 +10,16 @@ async function parseConcerts(browser, concertsUrls = []) {
 
             const concertDetails = await page.evaluate(()=> {
 
-                const $widget = document.querySelector('#stay22-widget') ?
+                const $widgetLat = document.querySelector('#stay22-widget') ?
                     document.querySelector('#stay22-widget').getAttribute('src').match(/lat=[-\d.]*/)
                     :
                     null;
-                const lat = $widget ? $widget[0].replace('lat=', '') : null;
-                const lng = $widget ? $widget[0].replace('lng=', '') : null;
+                const $widgetLng = document.querySelector('#stay22-widget') ?
+                    document.querySelector('#stay22-widget').getAttribute('src').match(/lng=[-\d.]*/)
+                    :
+                    null;
+                const lat = $widgetLat ? $widgetLat[0].replace('lat=', '') : null;
+                const lng = $widgetLng ? $widgetLng[0].replace('lng=', '') : null;
                 return {
                     date:  document.querySelector('._1pJ33vJuFJKauIgYOkCleu').innerText,
                     place: document.querySelector('._1fBpJ_FMo49Ky4JD3xE6wq').innerText,
