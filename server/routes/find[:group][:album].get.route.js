@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const admin = require("firebase-admin");
 
 const yandexParser = require('../../@parsers/yandex.parser');
 const googleParser = require('../../@parsers/google.parser');
@@ -69,6 +70,30 @@ module.exports = async function (req, res) {
         }, {});
 
         res.send(results);
+
+
+        const message2 = {
+            notification: {
+                title: 'New release!',
+                body: `${group} - ${album} (${resources.join(',')} => ${results.filter(r => r.link).map(r => r.source).join(', ')})`
+            },
+            topic: 'JKooKnosrveuLhmbnpdDVAUk6Cp1' // 'allDevices'
+        };
+
+        // Send a message to the device corresponding to the provided
+        // registration token.
+        admin.messaging().send(message2)
+            .then((response) => {
+                // Response is a message ID string.
+                console.log('Successfully sent message2:', response);
+                res.send('sended');
+                // res.send('Hello World!');
+            })
+            .catch((error) => {
+                console.log('Error sending message2:', error);
+                res.send("Not Hello World!");
+            });
+
 
         if(callback) {
             await fetch(`https://rockbot.pixis.com.ua/index.php?save_links=1&results=${encodeURIComponent(JSON.stringify({
