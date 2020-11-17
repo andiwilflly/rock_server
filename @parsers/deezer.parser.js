@@ -42,8 +42,6 @@ async function parsePage(browser, group, album) {
             link: `https://www.deezer.com${albumLink}`
         }
 
-        await page.waitFor(3000000);
-
         // await page.focus('#login_mail')
         // await page.keyboard.type(login);
         //
@@ -57,8 +55,7 @@ async function parsePage(browser, group, album) {
         // await page.waitFor(30000);
 
         return {
-            source: 'deezer',
-            link: `??`
+            error: `Album not found ${group} - ${album}`
         };
     } catch(e) {
         return { source: 'https://www.deezer.com', error: e.toString() };
