@@ -48,11 +48,13 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
     try {
         const page = await browser.newPage();
 
-        await page.goto(`https://music.youtube.com/search?q=${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`, {
+        const q = `${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`;
+
+        await page.goto(`https://music.youtube.com/search?q=${q}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
-        console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`);
+        console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${q}`);
 
         await page.waitFor(1500);
 
@@ -68,7 +70,7 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
             return $link.getAttribute('href');
         }, album);
 
-
+        await page.screenshot({path: 'youtube1.png'});
         console.log(artistPageLink, 1);
 
         if(!artistPageLink) artistPageLink = await page.evaluate((_album)=> {
@@ -78,14 +80,16 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, album);
 
+        await page.screenshot({path: 'youtube2.png'});
         console.log(artistPageLink, 2);
 
         if(!artistPageLink) artistPageLink = await findInSongs(page, group, album);
 
 
+        await page.screenshot({path: 'youtube3.png'});
         console.log(artistPageLink, 4);
 
-        if(!artistPageLink) return { source: 'youtube', error: `Can't find ${group} - ${album} (https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)})` };
+        if(!artistPageLink) return { source: 'youtube', error: `Can't find ${q} (https://music.youtube.com/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)})` };
 
         await page.close();
         return {
