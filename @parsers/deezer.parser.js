@@ -57,7 +57,7 @@ async function parsePage(browser, group, album) {
         // await page.waitFor(30000);
 
         return {
-            source: 'https://www.deezer.com',
+            source: 'deezer',
             link: `??`
         };
     } catch(e) {
