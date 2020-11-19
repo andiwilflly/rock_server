@@ -5,6 +5,8 @@ const animals = require('random-animals-api');
 const { Telegraf, Extra, Markup } = require('telegraf');
 const bot = new Telegraf('1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw') //сюда помещается токен, который дал botFather
 
+const getRandomJoke = require('./telegramBot/joke.telegram');
+
 
 const keyboard = Markup.inlineKeyboard([
     Markup.urlButton('❤️', 'http://telegraf.js.org'),
@@ -34,12 +36,15 @@ async function start(AI) {
                 case ans.response === '[cat]':    return ctx.replyWithPhoto(await animals.cat());
                 case ans.response === '[dog]':    return ctx.replyWithPhoto(await animals.dog());
                 case ans.response === '[fox]':    return ctx.replyWithPhoto(await animals.fox());
-                case ans.response === '[duck]':    return ctx.replyWithPhoto(await animals.duck());
-                case ans.response === '[owl]':    return ctx.replyWithVideo(await animals.owl());
-                case ans.response === '[lizard]':    return ctx.replyWithPhoto(await animals.lizard());
+                case ans.response === '[duck]':   return ctx.replyWithPhoto(await animals.duck());
+                case ans.response === '[owl]':    return ctx.replyWithPhoto(await animals.owl());
+                case ans.response === '[lizard]': return ctx.replyWithPhoto(await animals.lizard());
+
+                case ans.response === '[joke]':   return ctx.reply(await getRandomJoke());
                 case ans.confidence >= 0.5:       return ctx.reply(ans.response);
             }
-        } catch {
+        } catch(e) {
+            console.log(e);
             await ctx.telegram.sendCopy(ctx.chat.id, ctx.message, Extra.markup(keyboard));
         }
 
