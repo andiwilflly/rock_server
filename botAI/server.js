@@ -14,12 +14,15 @@ async function init(CLIENT) {
     let { UserData } = require('neural-phrasex');
     const DB = {
         "data": [
-            ...require('./DB/main.json'),
-            ...require('./DB/questions.json'),
-            ...require('./DB/greetings.json'),
-            ...require('./DB/interests.json'),
-            ...require('./DB/jokes.json'),
-            ...require('./DB/responses.json')
+            //...require('./DB/main.json'),
+            // ...require('./DB/questions.json'),
+            // ...require('./DB/greetings.json'),
+            // ...require('./DB/interests.json'),
+            // ...require('./DB/komrad.json'),
+            // ...require('./DB/jokes.json'),
+            ...require('./DB/animals.json'),
+            ...require('./DB/weather.json'),
+            // ...require('./DB/responses.json')
         ]
     };
 
@@ -70,4 +73,5 @@ io.on('connection', async function(CLIENT) {
 });
 
 
+console.log('SERVER LISTEN :3000');
 server.listen(3000);

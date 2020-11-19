@@ -41,6 +41,7 @@
     "puppeteer-extra-plugin-adblocker": "^2.11.3",
     "puppeteer-extra-plugin-anonymize-ua": "^2.2.8",
     "puppeteer-extra-plugin-stealth": "^2.6.5",
+    "random-animals-api": "^1.2.0",
     "request": "^2.88.2",
     "simple-node-logger": "^18.12.24",
     "socket.io": "^3.0.1",
