@@ -1,28 +1,61 @@
-const fetch = require("node-fetch");
-const animals = require('random-animals-api');
 
-async function test() {
-    // const data = ['cat', 'fox', 'bird', 'dog', 'bunny', 'lizard', 'owl', 'tiger', 'shiba', 'lion', 'duck', 'panda', 'redPanda', 'penguin'];
-    //
-    // for(let i = 0; i < data.length ; i++) {
-    //     try {
-    //         console.log(await animals[data[i]](), i, data[i]);
-    //     } catch {
-    //         // console.log('EMPTY: ', i, data[i]);
-    //     }
-    // }
 
-    function _randomInteger(min, max) {
-        let rand = min - 0.5 + Math.random() * (max - min + 1);
-        return Math.round(rand);
-    }
+// // Imports the Google Cloud client library
+//     const language = require('@google-cloud/language');
+//
+// // Creates a client
+//     const client = new language.LanguageServiceClient();
+//
+//     /**
+//      * TODO(developer): Uncomment the following line to run this code.
+//      */
+// // const text = 'Your text to analyze, e.g. Hello, world!';
+//
+// // Prepares a document, representing the provided text
+//     const document = {
+//         content: "Валера Карпин хочет ту отдохнуть а Путин нет",
+//         type: 'PLAIN_TEXT',
+//     };
+//
+// // Detects entities in the document
+//     const [result] = await client.analyzeEntities({document});
+//
+//     const entities = result.entities;
+//
+//     entities.forEach(entity => {
+//         console.log(entity.name);
+//         console.log(` - Type: ${entity.type}, Salience: ${entity.salience}`);
+//         if (entity.metadata && entity.metadata.wikipedia_url) {
+//             console.log(` - Wikipedia URL: ${entity.metadata.wikipedia_url}`);
+//         }
+//     });
 
-    let response = await fetch('http://umorili.herokuapp.com/api/get?name=new+anekdot&num=200');
-    response = await response.json();
 
-    const index = _randomInteger(0, response.length);
 
-    console.log(index, response[index], response.length)
+async function quickstart() {
+    // Imports the Google Cloud client library
+    const language = require('@google-cloud/language');
+
+    // Creates a client
+    const client = new language.LanguageServiceClient();
+
+    // Prepares a document, representing the provided text
+    const document = {
+        content: "Я хочу гулять, а ты?",
+        type: 'PLAIN_TEXT',
+    };
+
+    // Need to specify an encodingType to receive word offsets
+    const encodingType = 'UTF8';
+
+    // Detects the sentiment of the document
+    const [syntax] = await client.analyzeSyntax({document, encodingType});
+
+    console.log('Tokens:');
+    syntax.tokens.forEach(part => {
+        console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
+        console.log('Morphology:', part.partOfSpeech);
+    });
 }
 
-test();
+quickstart();

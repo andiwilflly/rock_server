@@ -14,7 +14,7 @@
         <form onsubmit="return false">
             <input type="text" id="ask_text">
             <button type="submit" onclick="ask(document.querySelector('#ask_text').value)">Ask me</button>
-            <ul id="bot_answer"></ul>
+            <pre id="bot_answer"></pre>
         </form>
 
         <hr />
@@ -34,14 +34,7 @@
 
         socket.on('AI.BOT:answer', function(answer) {
             console.log('AI.BOT:answer:', answer);
-            const $li = document.createElement('li');
-            $li.innerHTML = `
-                <div>
-                    <b>${answer.response}</b>
-                    <br />
-                    <i>(confidence: ${answer.confidence}, implies: ${answer.phrase ? answer.phrase.implies.join(' | ') : '-'})</i>
-                </div>`;
-            document.querySelector('#bot_answer').appendChild($li);
+            document.querySelector('#bot_answer').innerHTML = answer;
         });
 
         window.ask = async function (phrase) {

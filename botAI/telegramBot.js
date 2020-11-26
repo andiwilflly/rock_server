@@ -6,20 +6,17 @@ const { Telegraf, Extra, Markup } = require('telegraf');
 const bot = new Telegraf('1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw') //сюда помещается токен, который дал botFather
 
 const getRandomJoke = require('./telegramBot/joke.telegram');
+const weather = require('./telegramBot/weather.telegram');
 
 
 const keyboard = Markup.inlineKeyboard([
-    Markup.urlButton('❤️', 'http://telegraf.js.org'),
-    Markup.callbackButton('Delete', 'delete')
+    Markup.locationRequestButton('Send location')
 ])
 
 
 // @SOURCE: https://telegraf.js.org
+// @SOURCE: https://cloud.google.com/natural-language/docs
 async function start(AI) {
-    bot.start(async (ctx) => {
-        let ans = await AI.BOT.getResult("Привет!", AI.userData);
-        ctx.reply(ans.response);
-    });
 
     bot.on('message', async (ctx) => {
         if(ctx.message.chat.type === 'group' && !ctx.message.text.startsWith('Комрад')) return;
@@ -30,6 +27,7 @@ async function start(AI) {
         console.log('ctx.message | ', ctx.message);
         console.log('ans | ', ans);
 
+        if(ans.confidence <= 0.6) return await ctx.reply("Я нифига не понял что ты написал");
         try {
             switch (true) {
                 case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
@@ -40,12 +38,12 @@ async function start(AI) {
                 case ans.response === '[owl]':    return ctx.replyWithPhoto(await animals.owl());
                 case ans.response === '[lizard]': return ctx.replyWithPhoto(await animals.lizard());
 
+                case ans.response === '[weather]': return Extra.markup(keyboard);
                 case ans.response === '[joke]':   return ctx.reply(await getRandomJoke());
-                case ans.confidence >= 0.5:       return ctx.reply(ans.response);
             }
         } catch(e) {
             console.log(e);
-            await ctx.telegram.sendCopy(ctx.chat.id, ctx.message, Extra.markup(keyboard));
+            await ctx.reply("Ошибка");
         }
 
         return ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
@@ -54,6 +52,13 @@ async function start(AI) {
 
     bot.catch((err, ctx) => {
         console.log(`BOT ERROR | ${ctx.updateType}`, err)
+    })
+
+    bot.use(async (ctx, next) => {
+        const start = new Date()
+        await next()
+        const ms = new Date() - start
+        console.log('Response time: %sms', ms)
     })
 
     await bot.launch();
@@ -67,7 +72,7 @@ function _randomInteger(min, max) {
 }
 
 function _getRandomAnimal() {
-    const data = ['cat', 'fox', 'bird', 'dog', 'bunny', 'lizard', 'owl', 'tiger', 'shiba', 'lion', 'duck', 'panda', 'redPanda', 'penguin'];
+    const data = ['cat', 'fox', 'dog', 'lizard', 'owl', 'tiger', 'shiba', 'lion', 'duck', 'redPanda'];
     return data[_randomInteger(0, data.length-1)];
 }
 
