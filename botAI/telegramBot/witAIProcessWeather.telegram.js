@@ -18,6 +18,7 @@ module.export = async function(witAns) {
 
     if(!entities.length) return 'Какой город?';
 
+    console.log('WEATHER');
     return await getAllWeather(entities[0].entities);
 }
 

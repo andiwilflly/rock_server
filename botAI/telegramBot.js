@@ -55,6 +55,7 @@ async function start(AI) {
                 await ctx.reply("Ошибка");
             }
         } else {
+            await ctx.reply(JSON.stringify(witAns, null, 3))
             // Wit AI
             switch (true) {
                 case !witAns.intents[0]: return await ctx.reply(JSON.stringify(witAns, null, 3));
@@ -64,7 +65,7 @@ async function start(AI) {
                     return await witAIProcessQuestion(witAns);
                 default: await ctx.reply(JSON.stringify(witAns, null, 3))
             }
-            return;
+            return ctx.reply('wit.ai not found');
         }
 
         return ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
