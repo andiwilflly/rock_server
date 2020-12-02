@@ -1,21 +1,9 @@
-const fetch = require("node-fetch");
 
 function _randomInteger(min, max) {
     let rand = min - 0.5 + Math.random() * (max - min + 1);
     return Math.round(rand);
 }
 
-// https://htmlweb.ru/service/sklonjator.php
-// https://htmlweb.ru/json/service/inflect?inflect=магадан&nolimit
-
-async function getGrammems(word) {
-    let response = await fetch(`https://htmlweb.ru/json/service/grammems/?grammems=${word}&nolimit`);
-    return await response.json();
-}
-async function getInflect(word) {
-    let response = await fetch(`https://htmlweb.ru/json/service/inflect?inflect=${word}&nolimit`);
-    return await response.json();
-}
 
 module.export = async function(witAns) {
     const entities = Object.keys(witAns.entities).reduce((res, key)=> {
@@ -30,7 +18,6 @@ module.export = async function(witAns) {
     const subjects = entities.filter(e => e.key === 'message_subject');
     const verbs = entities.filter(e => e.key === 'verb');
     const ratings = entities.filter(e => e.key === 'rating');
-
 }
 
 

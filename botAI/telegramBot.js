@@ -12,8 +12,8 @@ const witAI = new Wit({
 });
 
 const getRandomJoke = require('./telegramBot/joke.telegram');
-const weather = require('./telegramBot/weather.telegram');
 const witAIProcessQuestion = require('./telegramBot/witAIProcessQuestion.telegram');
+const witAIProcessWeather = require('./telegramBot/witAIProcessWeather.telegram');
 
 
 const keyboard = Markup.inlineKeyboard([
@@ -58,13 +58,14 @@ async function start(AI) {
             // Wit AI
             switch (true) {
                 case !witAns.intents[0]: return await ctx.reply(JSON.stringify(witAns, null, 3));
+                case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
+                    return await ctx.reply(await witAIProcessWeather(witAns));
                 case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
                     return await witAIProcessQuestion(witAns);
                 default: await ctx.reply(JSON.stringify(witAns, null, 3))
             }
             return;
         }
-
 
         return ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
     })
@@ -92,7 +93,7 @@ function _randomInteger(min, max) {
 }
 
 function _getRandomAnimal() {
-    const data = ['cat', 'fox', 'dog', 'lizard', 'owl', 'tiger', 'shiba', 'lion', 'duck', 'redPanda'];
+    const data = ['cat', 'fox', 'dog', 'lizard', 'tiger', 'shiba', 'lion', 'duck', 'redPanda'];
     return data[_randomInteger(0, data.length-1)];
 }
 

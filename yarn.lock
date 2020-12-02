@@ -5244,6 +5244,11 @@ opencollective@1.0.3:
     node-fetch "1.6.3"
     opn "4.0.2"
 
+openweather-apis@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/openweather-apis/-/openweather-apis-4.3.1.tgz#13f9ddd7a5453dfe80879c29c3e7a91c0188132b"
+  integrity sha512-1QuLVtYMCcZm7w9UVlJIbVsvA5ecDVU/jiumlxCVsSeFXrGHc7ko60PFt+GabpPIfTgnzp/G7lULHB+iTEvXvQ==
+
 opn@4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/opn/-/opn-4.0.2.tgz#7abc22e644dff63b0a96d5ab7f2790c0f01abc95"

@@ -7,7 +7,7 @@
     "deploy": "git add . && git commit -m 'her' && git push heroku master",
     "start": "git reset --hard && git pull && npm run start:bot && npm run start:server && pm2 monit",
     "start:server": "pm2 stop server && pm2 start server",
-    "start:bot": "pm2 stop setupBot.js && pm2 start setupBot.js",
+    "start:bot": "pm2 stop server.bot.js && pm2 start server.bot.js",
     "ssh": "ssh -i digitaalocean_ssh root@167.71.12.148"
   },
   "keywords": [],
@@ -39,6 +39,7 @@
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
     "node-wit": "^6.0.0",
+    "openweather-apis": "^4.3.1",
     "puppeteer": "^5.5.0",
     "puppeteer-cluster": "^0.21.0",
     "puppeteer-extra": "^3.1.15",
