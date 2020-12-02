@@ -37,6 +37,7 @@ async function start(AI) {
         // console.log('ans | ', ans);
 
         if(ans.confidence >= 0.60) {
+            await ctx.reply(JSON.stringify(ans, null, 3))
             try {
                 switch (true) {
                     case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
