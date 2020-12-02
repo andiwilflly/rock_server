@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "deploy": "git add . && git commit -m 'her' && git push heroku master",
-    "start": "git reset --hard && git pull && pm2 stop server && pm2 start server && npm run start:bot && pm2 monit",
+    "start": "git reset --hard && git pull && npm run start:bot && npm run start:server && pm2 monit",
+    "start:server": "pm2 stop server && pm2 start server",
     "start:bot": "pm2 stop setupBot.js && pm2 start setupBot.js",
     "ssh": "ssh -i digitaalocean_ssh root@167.71.12.148"
   },
