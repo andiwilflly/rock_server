@@ -1,6 +1,7 @@
 // Name: Валера
 // ID: valera_ne_bot
 // Token: 1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw
+const { Wit } = require('node-wit');
 const animals = require('random-animals-api');
 const { Telegraf, Extra, Markup } = require('telegraf');
 const bot = new Telegraf('1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw') //сюда помещается токен, который дал botFather
