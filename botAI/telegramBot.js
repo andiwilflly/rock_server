@@ -36,7 +36,7 @@ async function start(AI) {
         console.log('ctx.message | ', ctx.message);
         console.log('ans | ', ans);
 
-        if(ans.confidence >= 0.65) {
+        if(ans.confidence >= 0.60) {
             try {
                 switch (true) {
                     case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
@@ -57,10 +57,12 @@ async function start(AI) {
         } else {
             // Wit AI
             switch (true) {
+                case !witAns.intents[0]: return await ctx.reply(JSON.stringify(witAns, null, 3));
                 case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
                     return await witAIProcessQuestion(witAns);
-                default: await ctx.reply('Wit AI...');
+                default: await ctx.reply(JSON.stringify(witAns, null, 3))
             }
+            return;
         }
 
 

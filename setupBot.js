@@ -3,15 +3,15 @@ const path = require('path');
 
 const DB = {
     "data": [
-        ...require(path.resolve(__dirname, 'botAI/DB/main.json'))
-        // ...require(path.resolve(__dirname, '/DB/questions.json'),
-        // ...require(path.resolve(__dirname, '/DB/greetings.json'),
-        // ...require(path.resolve(__dirname, '/DB/interests.json'),
-        // ...require(path.resolve(__dirname, '/DB/komrad.json'),
-        // ...require(path.resolve(__dirname, '/DB/jokes.json'),
-        // ...require(path.resolve(__dirname, '/DB/animals.json'),
-        // ...require(path.resolve(__dirname, '/DB/weather.json'),
-        // ...require(path.resolve(__dirname, '/DB/responses.json')
+        ...require(path.resolve(__dirname, 'botAI/DB/main.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/questions.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/greetings.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/interests.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/komrad.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/jokes.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/animals.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/weather.json')),
+        ...require(path.resolve(__dirname, 'botAI/DB/responses.json'))
     ]
 };
 
