@@ -45,6 +45,3 @@ async function getAllWeather(origCity) {
         });
     })
 }
-
-
-test();
