@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "deploy": "git add . && git commit -m 'her' && git push heroku master",
-    "start": "git reset --hard && git pull && pm2 stop server && pm2 start server && pm2 monit",
+    "start": "language && git reset --hard && git pull && pm2 stop server && pm2 start server && pm2 monit",
+    "language": "export GOOGLE_APPLICATION_CREDENTIALS=\"natural language-9a3c8ac08bce.json\"",
     "ssh": "ssh -i digitaalocean_ssh root@167.71.12.148"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/language": "^4.2.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
     "billboard-top-100": "^2.5.9",
@@ -35,6 +37,7 @@
     "node-cache": "^5.1.2",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
+    "node-wit": "^6.0.0",
     "puppeteer": "^5.5.0",
     "puppeteer-cluster": "^0.21.0",
     "puppeteer-extra": "^3.1.15",
@@ -47,6 +50,8 @@
     "socket.io": "^3.0.1",
     "soundcloud.ts": "^0.2.3",
     "telegraf": "^3.38.0",
+    "telegraf-wit": "^2.1.0",
+    "wikijs": "^6.0.1",
     "yandex-music-api": "0.0.3"
   }
 }

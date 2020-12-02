@@ -5,8 +5,14 @@ const animals = require('random-animals-api');
 const { Telegraf, Extra, Markup } = require('telegraf');
 const bot = new Telegraf('1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw') //сюда помещается токен, который дал botFather
 
+const witAI = new Wit({
+    accessToken: "R3S6ALGHOZ5X3BSKJJMDVUS4MTYRJ5LG",
+    // logger: new log.Logger(log.DEBUG) // optional
+});
+
 const getRandomJoke = require('./telegramBot/joke.telegram');
 const weather = require('./telegramBot/weather.telegram');
+const witAIProcessQuestion = require('./telegramBot/witAIProcessQuestion.telegram');
 
 
 const keyboard = Markup.inlineKeyboard([
@@ -19,6 +25,8 @@ const keyboard = Markup.inlineKeyboard([
 async function start(AI) {
 
     bot.on('message', async (ctx) => {
+        const witAns = await witAI.message(ctx.message.text);
+
         if(ctx.message.chat.type === 'group' && !ctx.message.text.startsWith('Комрад')) return;
         if(ctx.message.chat.type === 'group' && !ctx.message.text.startsWith('комрад')) return;
 
@@ -27,24 +35,33 @@ async function start(AI) {
         console.log('ctx.message | ', ctx.message);
         console.log('ans | ', ans);
 
-        if(ans.confidence <= 0.6) return await ctx.reply("Я нифига не понял что ты написал");
-        try {
-            switch (true) {
-                case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
-                case ans.response === '[cat]':    return ctx.replyWithPhoto(await animals.cat());
-                case ans.response === '[dog]':    return ctx.replyWithPhoto(await animals.dog());
-                case ans.response === '[fox]':    return ctx.replyWithPhoto(await animals.fox());
-                case ans.response === '[duck]':   return ctx.replyWithPhoto(await animals.duck());
-                case ans.response === '[owl]':    return ctx.replyWithPhoto(await animals.owl());
-                case ans.response === '[lizard]': return ctx.replyWithPhoto(await animals.lizard());
+        if(ans.confidence >= 0.65) {
+            try {
+                switch (true) {
+                    case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
+                    case ans.response === '[cat]':    return ctx.replyWithPhoto(await animals.cat());
+                    case ans.response === '[dog]':    return ctx.replyWithPhoto(await animals.dog());
+                    case ans.response === '[fox]':    return ctx.replyWithPhoto(await animals.fox());
+                    case ans.response === '[duck]':   return ctx.replyWithPhoto(await animals.duck());
+                    case ans.response === '[owl]':    return ctx.replyWithPhoto(await animals.owl());
+                    case ans.response === '[lizard]': return ctx.replyWithPhoto(await animals.lizard());
 
-                case ans.response === '[weather]': return Extra.markup(keyboard);
-                case ans.response === '[joke]':   return ctx.reply(await getRandomJoke());
+                    case ans.response === '[weather]': return Extra.markup(keyboard);
+                    case ans.response === '[joke]':   return ctx.reply(await getRandomJoke());
+                }
+            } catch(e) {
+                console.log(e);
+                await ctx.reply("Ошибка");
             }
-        } catch(e) {
-            console.log(e);
-            await ctx.reply("Ошибка");
+        } else {
+            // Wit AI
+            switch (true) {
+                case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
+                    return await witAIProcessQuestion(witAns);
+                default: await ctx.reply('Wit AI...');
+            }
         }
+
 
         return ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
     })

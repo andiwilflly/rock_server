@@ -38,7 +38,6 @@
         });
 
         window.ask = async function (phrase) {
-            if(phrase.length < 5) return alert('Phrase is too short..');
             socket.emit('AI.BOT:ask', phrase);
         };
     </script>

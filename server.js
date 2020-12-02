@@ -8,7 +8,6 @@ const SSE = require('express-sse');
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
 // Parts
-// require('./server/cron');
 require('./server/parts/initializeFirebase');
 // Utils
 require('./server/utils/extendJs.utils');
