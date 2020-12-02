@@ -33,8 +33,8 @@ async function start(AI) {
 
         let ans = await AI.BOT.getResult(ctx.message.text, AI.userData);
 
-        console.log('ctx.message | ', ctx.message);
-        console.log('ans | ', ans);
+        // console.log('ctx.message | ', ctx.message);
+        // console.log('ans | ', ans);
 
         if(ans.confidence >= 0.60) {
             try {
