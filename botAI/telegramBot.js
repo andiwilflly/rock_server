@@ -7,7 +7,7 @@ const { Telegraf, Extra, Markup } = require('telegraf');
 const bot = new Telegraf('1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw') //сюда помещается токен, который дал botFather
 
 const witAI = new Wit({
-    accessToken: "R3S6ALGHOZ5X3BSKJJMDVUS4MTYRJ5LG",
+    accessToken: "SKFYG45FKJ2RSVJIXDITMVLOKBSRSLQZ",
     // logger: new log.Logger(log.DEBUG) // optional
 });
 
