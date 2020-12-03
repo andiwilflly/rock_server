@@ -31,13 +31,13 @@ module.exports = async function(ctx, witAns) {
 
     const result = await getAllWeather(locationEntity.value);
 
-    ctx.reply(JSON.stringify(result, null, 3));
+    if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
 
     return ctx.reply(`
-        🏠 ${result.name} (${result.weather.description})
-        температура:    🌡 ${Math.round(result.weather.temp)}℃ (ощущается как ${Math.round(result.weather.feels_like)}℃)
-        влажность:      ${result.clouds.humidity }%
-        облачность:     ${result.clouds.all > 50 ? '🌥 облачно' : '🌤 безоблачно' }
+        🏠 ${result.name} (${ result.weather.map(d => d.description).join(', ') })
+        температура:    🌡 ${Math.round(result.main.temp)}℃ (ощущается как ${Math.round(result.main.feels_like)}℃)
+        влажность:      💧 ${result.main.humidity }%
+        облачность:      ${result.clouds.all > 50 ? '🌥 облачно' : '🌤 безоблачно' }
         скорость ветра: 🌪 ${Math.round((result.wind.speed * 60 * 60) / 1000)} км в час
     `);
 }
