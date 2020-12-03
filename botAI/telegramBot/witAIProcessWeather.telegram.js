@@ -24,8 +24,8 @@ module.exports = async function(ctx, witAns) {
     const result = await getAllWeather(locationEntity.value, dateEntity);
 
     if(result.shortday) return ctx.reply(`
-        🏠 Прогноз погоды в ${result.city} 
-        ${result.date} (${result.dateType})
+        🏠 Прогноз погоды в городе ${result.city} 
+        📅 ${result.date} (${result.dateType})
         🌡 От ${result.low}℃ до ${result.high}℃
         🌧 Вероятность осадков ${result.precip}%
     `);
