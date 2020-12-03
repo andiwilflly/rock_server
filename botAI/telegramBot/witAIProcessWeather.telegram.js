@@ -18,7 +18,11 @@ module.exports = async function(ctx, witAns) {
         return res;
     }, []).sort((a,b)=> a.start - b.start);
 
-    if(!entities.length) return ctx.reply(randomAnswer([
+    ctx.reply(entities);
+
+    const locationEntity = witAns.entities['wit$location:location'];
+
+    if(!locationEntity) return ctx.reply(randomAnswer([
         'Какой город?',
         'В каком городе ты живешь?',
         'Нужно указать город',
@@ -29,12 +33,13 @@ module.exports = async function(ctx, witAns) {
     ctx.reply(randomAnswer([
         'опрашивем погодных экспертов...',
         'выезжаем на место для определения погоды',
-        `открываем https://sinoptik.ua/${entities[0].entities}`,
+        `открываем https://sinoptik.ua/${locationEntity.value}`,
         'опрашивем погодных экспертов...',
+        'подготавливаем термометры',
         'выезжаем на место...',
     ]));
 
-    return ctx.reply(await getAllWeather(entities[0].entities));
+    return ctx.reply(await getAllWeather(locationEntity.value));
 }
 
 
@@ -42,14 +47,12 @@ async function getAllWeather(origCity) {
 
     weather.setCity(origCity);
     return new Promise(async resolve => {
-
         await weather.getAllWeather(async function(err, res) {
-
             if(res.cod === '404') {
                 const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
                 const page = await wikiAPI.search(origCity, 2);
+
                 const city = page.results.sort((a,b)=> a.length - b.length)[0];
-                console.log('city', city);
 
                 weather.setCity(city);
                 weather.getAllWeather(function(err, res) {
@@ -61,3 +64,7 @@ async function getAllWeather(origCity) {
         });
     })
 }
+
+(async function (){
+    await getAllWeather('каменке');
+})();
