@@ -124,16 +124,3 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
         })
     });
 }
-
-getDateForecastWeather('Бердичев', {
-    "id": "1078308975947067",
-    "name": "date_time",
-    "role": "date_time",
-    "start": 15,
-    "end": 21,
-    "body": "послезавтра",
-    "confidence": 1,
-    "entities": [],
-    "value": "послезавтра",
-    "type": "value"
-});
