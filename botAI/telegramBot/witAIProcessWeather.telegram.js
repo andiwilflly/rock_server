@@ -47,7 +47,7 @@ async function getAllWeather(origCity) {
 
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
 
-                   weather.find({search: city, degreeType: 'C'}, function(err, result) {
+                   weather2.find({search: city, degreeType: 'C'}, function(err, result) {
                        if(err) resolve(err);
                        resolve(result);
                    });
@@ -57,7 +57,7 @@ async function getAllWeather(origCity) {
                        resolve({ ...res, city });
                    });
                } catch(e) {
-                   resolve(e);
+                   resolve('error: ' + e);
                }
             // } else {
             //     resolve(res);
