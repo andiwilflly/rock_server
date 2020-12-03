@@ -29,8 +29,9 @@ module.exports = async function(ctx, witAns) {
         'выезжаем на место...',
     ]));
 
-    ctx.reply(locationEntity);
+    ctx.reply(locationEntity + ' ????');
 
+    ctx.reply('ctiy: ', locationEntity.value);
     return ctx.reply(await getAllWeather(locationEntity.value));
 }
 
