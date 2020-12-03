@@ -29,7 +29,7 @@ module.exports = async function(ctx, witAns) {
         'выезжаем на место...',
     ]));
 
-    ctx.reply(locationEntity + ' ????');
+    ctx.reply(JSON.stringify(locationEntity, null, 3));
 
     ctx.reply('ctiy: ', locationEntity.value);
     return ctx.reply(await getAllWeather(locationEntity.value));
