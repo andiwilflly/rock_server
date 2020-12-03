@@ -47,11 +47,11 @@ async function getAllWeather(origCity) {
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
 
                    const x = await wikiAPI.find(city);
-                   console.log(421, await x.mainImage());
+                   console.log(421, await x.mainImage(), await x.image());
 
                    weather.setCity(city);
                    weather.getAllWeather(function(err, res) {
-                       resolve(res);
+                       resolve({ ...res, city });
                    });
                } catch(e) {
                    resolve(e);
