@@ -23,6 +23,9 @@ const keyboard = Markup.inlineKeyboard([
 
 // @SOURCE: https://telegraf.js.org
 // @SOURCE: https://cloud.google.com/natural-language/docs
+// TODO: https://telegraf.js.org/#/?id=example
+// TODO: https://github.com/dmtrbrl/BooksAndBot
+// TODO: https://github.com/RealSpeaker/telegraf-session-local
 async function start(AI) {
 
     bot.on('message', async (ctx) => {
@@ -37,7 +40,7 @@ async function start(AI) {
         // console.log('ans | ', ans);
 
         if(ans.confidence >= 0.60) {
-            await ctx.reply(JSON.stringify(ans, null, 3))
+            await ctx.reply(JSON.stringify(ans, null, 3));
             try {
                 switch (true) {
                     case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
@@ -48,7 +51,6 @@ async function start(AI) {
                     case ans.response === '[owl]':    return ctx.replyWithPhoto(await animals.owl());
                     case ans.response === '[lizard]': return ctx.replyWithPhoto(await animals.lizard());
 
-                    case ans.response === '[weather]': return Extra.markup(keyboard);
                     case ans.response === '[joke]':   return ctx.reply(await getRandomJoke());
                 }
             } catch(e) {
@@ -59,17 +61,14 @@ async function start(AI) {
             await ctx.reply(JSON.stringify(witAns, null, 3))
             // Wit AI
             switch (true) {
-                case !witAns.intents[0]: return await ctx.reply(JSON.stringify(witAns, null, 3));
+                case !witAns.intents[0]:
+                    return null;
                 case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
-                    return await ctx.reply(await witAIProcessWeather(witAns));
+                    return await witAIProcessWeather(ctx, witAns);
                 case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
                     return await witAIProcessQuestion(witAns);
-                default: await ctx.reply(JSON.stringify(witAns, null, 3))
             }
-            return ctx.reply('wit.ai not found');
         }
-
-        return ctx.reply(ans.confidence < 0.5 ? "Прости, я потерял нить нашего разговора... Не могу бы ты уточнить?" : ans.response);
     })
 
 

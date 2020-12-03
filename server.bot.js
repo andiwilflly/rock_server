@@ -10,7 +10,6 @@ const DB = {
         ...require(path.resolve(__dirname, 'botAI/data/komrad.json')),
         ...require(path.resolve(__dirname, 'botAI/data/jokes.json')),
         ...require(path.resolve(__dirname, 'botAI/data/animals.json')),
-        ...require(path.resolve(__dirname, 'botAI/data/weather.json')),
         ...require(path.resolve(__dirname, 'botAI/data/responses.json'))
     ]
 };

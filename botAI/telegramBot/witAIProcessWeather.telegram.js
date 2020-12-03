@@ -1,13 +1,15 @@
 const fs = require('fs');
 const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
+const randomAnswer = require('./functions/randomAnswer.function');
+
 
 const KEY = 'e0ec6da3ca0381df4cc5564f7053ca85';
 
 weather.setLang('ru');
 weather.setAPPID(KEY);
 
-module.export = async function(witAns) {
+module.export = async function(ctx, witAns) {
     const entities = Object.keys(witAns.entities).reduce((res, key)=> {
         res.push({
             ...witAns.entities[key][0],
@@ -16,10 +18,23 @@ module.export = async function(witAns) {
         return res;
     }, []).sort((a,b)=> a.start - b.start);
 
-    if(!entities.length) return 'Какой город?';
+    if(!entities.length) return ctx.reply(randomAnswer([
+        'Какой город?',
+        'В каком городе ты живешь?',
+        'Нужно указать город',
+        'Обязательно нужно писать город и можно также задать день недели (например погода в четверг)',
+        'Прогноз погоды в каком городе тебя интересует?'
+    ]));
 
-    console.log('WEATHER');
-    return await getAllWeather(entities[0].entities);
+    ctx.reply(randomAnswer([
+        'опрашивем погодных экспертов...',
+        'выезжаем на место для определения погоды',
+        `открываем https://sinoptik.ua/${entities[0].entities}`,
+        'опрашивем погодных экспертов...',
+        'выезжаем на место...',
+    ]));
+
+    return ctx.reply(await getAllWeather(entities[0].entities));
 }
 
 
