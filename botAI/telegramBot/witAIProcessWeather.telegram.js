@@ -10,16 +10,6 @@ weather.setLang('ru');
 weather.setAPPID(KEY);
 
 module.exports = async function(ctx, witAns) {
-    const entities = Object.keys(witAns.entities).reduce((res, key)=> {
-        res.push({
-            ...witAns.entities[key][0],
-            key: key.split(':')[1]
-        })
-        return res;
-    }, []).sort((a,b)=> a.start - b.start);
-
-    ctx.reply(entities);
-
     const locationEntity = witAns.entities['wit$location:location'];
 
     if(!locationEntity) return ctx.reply(randomAnswer([
@@ -39,6 +29,8 @@ module.exports = async function(ctx, witAns) {
         'выезжаем на место...',
     ]));
 
+    ctx.reply(locationEntity);
+
     return ctx.reply(await getAllWeather(locationEntity.value));
 }
 
@@ -49,15 +41,19 @@ async function getAllWeather(origCity) {
     return new Promise(async resolve => {
         await weather.getAllWeather(async function(err, res) {
             if(res.cod === '404') {
-                const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
-                const page = await wikiAPI.search(origCity, 2);
+               try {
+                   const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+                   const page = await wikiAPI.search(origCity, 2);
 
-                const city = page.results.sort((a,b)=> a.length - b.length)[0];
+                   const city = page.results.sort((a,b)=> a.length - b.length)[0];
 
-                weather.setCity(city);
-                weather.getAllWeather(function(err, res) {
-                    resolve(JSON.stringify(res, null, 3));
-                });
+                   weather.setCity(city);
+                   weather.getAllWeather(function(err, res) {
+                       resolve(JSON.stringify(res, null, 3));
+                   });
+               } catch(e) {
+                   resolve(e);
+               }
             } else {
                 resolve(JSON.stringify(res, null, 3));
             }
