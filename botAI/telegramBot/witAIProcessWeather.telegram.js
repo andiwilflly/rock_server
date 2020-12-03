@@ -23,9 +23,10 @@ module.exports = async function(ctx, witAns) {
 
     const result = await getAllWeather(locationEntity.value, dateEntity);
 
-    if(result.shortday) return ctx.reply(`
-    
-        🏠 Прогноз погоды в городе ${result.city} 
+    if(result.shortday) return ctx.reply(`  
+        Комрадский гидрометцентр сообщает:  
+        🏠 Прогноз погоды в городе ${result.city}
+        ${ result.isFeature ? '' : '♻ Ух ты, прогноз погоды из прошлого!' }
         📅 ${result.date} (${result.dateType})
         🌡 От ${result.low}℃ до ${result.high}℃
         🌧 Вероятность осадков ${result.precip}%
@@ -34,7 +35,7 @@ module.exports = async function(ctx, witAns) {
     if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
 
     return ctx.reply(`
-       
+        Комрадский гидрометцентр сообщает: 
         🏠 ${result.name} (${ result.weather.map(d => d.description).join(', ') })
         🌡 ${Math.round(result.main.temp)}℃ (ощущается как ${Math.round(result.main.feels_like)}℃)
         💧 ${result.main.humidity }%
@@ -117,13 +118,19 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
     }
 
+    console.log(weekDays.indexOf(weekDay), new Date().getDay());
+
     weather.find({ search: city, degreeType: 'C' }, function(err, result) {
         if(err) console.log(err);
         resolve({
             ...result[0].forecast.find(cast => cast.shortday === weekDay),
             city,
             dateType,
-            weekDay
+            weekDay,
+            isFeature: weekDays.indexOf(weekDay) > new Date().getDay()
         })
     });
 }
+
+
+getDateForecastWeather('бердичев', { value: 'среда'}, ()=> {});
