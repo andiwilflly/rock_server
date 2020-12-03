@@ -24,9 +24,10 @@ module.exports = async function(ctx, witAns) {
     const result = await getAllWeather(locationEntity.value, dateEntity);
 
     if(result.shortday) return ctx.reply(`  
+        ${ result.isFeature ? '' : '♻ Ух ты, прогноз погоды из прошлого!' }
+        
         Комрадский гидрометцентр сообщает:  
         🏠 Прогноз погоды в городе ${result.city}
-        ${ result.isFeature ? '' : '♻ Ух ты, прогноз погоды из прошлого!' }
         📅 ${result.date} (${result.dateType})
         🌡 От ${result.low}℃ до ${result.high}℃
         🌧 Вероятность осадков ${result.precip}%
