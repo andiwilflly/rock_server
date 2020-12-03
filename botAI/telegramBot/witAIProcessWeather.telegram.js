@@ -1,7 +1,6 @@
 const fs = require('fs');
 const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
-const weather2 = require('weather-js');
 const randomAnswer = require('./functions/randomAnswer.function');
 
 
@@ -21,7 +20,7 @@ module.exports = async function(ctx, witAns) {
         'Прогноз погоды в каком городе тебя интересует?'
     ]));
 
-    const result = await getAllWeather(locationEntity.value, ctx);
+    const result = await getAllWeather(locationEntity.value);
 
     if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
 
@@ -35,7 +34,7 @@ module.exports = async function(ctx, witAns) {
 }
 
 
-async function getAllWeather(origCity, ctx) {
+async function getAllWeather(origCity) {
 
     weather.setCity(origCity);
     return new Promise(async resolve => {
@@ -46,11 +45,6 @@ async function getAllWeather(origCity, ctx) {
                    const page = await wikiAPI.search(origCity, 2);
 
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
-
-                   weather2.find({search: city, degreeType: 'C'}, function(err, result) {
-                       if(err) ctx.reply(err);
-                       ctx.reply(result);
-                   });
 
                    weather.setCity(city);
                    weather.getAllWeather(function(err, res) {
