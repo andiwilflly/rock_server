@@ -20,15 +20,6 @@ module.exports = async function(ctx, witAns) {
         'Прогноз погоды в каком городе тебя интересует?'
     ]));
 
-    ctx.reply(randomAnswer([
-        '🌤 опрашивем погодных экспертов...',
-        'выезжаем на место для определения погоды...',
-        `открываем https://sinoptik.ua/${locationEntity.value}...`,
-        'опрашивем погодных экспертов... ☂',
-        'подготавливаем термометры... 🌡',
-        '🌪🌪🌪 выезжаем на место...',
-    ]));
-
     const result = await getAllWeather(locationEntity.value);
 
     if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
@@ -48,12 +39,15 @@ async function getAllWeather(origCity) {
     weather.setCity(origCity);
     return new Promise(async resolve => {
         await weather.getAllWeather(async function(err, res) {
-            if(res.cod === '404') {
+            // if(res.cod === '404') {
                try {
                    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
                    const page = await wikiAPI.search(origCity, 2);
 
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
+
+                   const x = await wikiAPI.find(city);
+                   console.log(421, await x.mainImage());
 
                    weather.setCity(city);
                    weather.getAllWeather(function(err, res) {
@@ -62,9 +56,9 @@ async function getAllWeather(origCity) {
                } catch(e) {
                    resolve(e);
                }
-            } else {
-                resolve(res);
-            }
+            // } else {
+            //     resolve(res);
+            // }
         });
     })
 }

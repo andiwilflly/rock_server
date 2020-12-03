@@ -26,7 +26,7 @@
     "firebase": "^7.14.3",
     "firebase-admin": "^8.12.1",
     "fs": "^0.0.1-security",
-    "fuse.js": "^6.0.0",
+    "fuse.js": "^6.4.3",
     "google-auth-library": "^6.0.0",
     "googleapis": "^51.0.0",
     "intelligo": "^1.3.0",
