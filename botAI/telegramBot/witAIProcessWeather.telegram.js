@@ -102,13 +102,13 @@ async function getAllWeather(origCity) {
 
                    weather.setCity(city);
                    weather.getAllWeather(function(err, res) {
-                       resolve(JSON.stringify(res, null, 3));
+                       resolve(res);
                    });
                } catch(e) {
                    resolve(e);
                }
             } else {
-                resolve(JSON.stringify(res, null, 3));
+                resolve(res);
             }
         });
     })
