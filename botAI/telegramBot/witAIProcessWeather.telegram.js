@@ -47,7 +47,7 @@ async function getAllWeather(origCity) {
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
 
                    const x = await wikiAPI.find(city);
-                   console.log(333, await x.fullInfo());
+                   console.log(333, await x.images());
 
                    weather.setCity(city);
                    weather.getAllWeather(function(err, res) {
