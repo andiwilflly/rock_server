@@ -5,7 +5,7 @@ function _randomInteger(min, max) {
 }
 
 
-module.export = async function(witAns) {
+module.exports = async function(witAns) {
     const entities = Object.keys(witAns.entities).reduce((res, key)=> {
         res.push({
             ...witAns.entities[key][0],

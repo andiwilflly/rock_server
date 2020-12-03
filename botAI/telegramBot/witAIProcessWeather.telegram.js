@@ -9,7 +9,7 @@ const KEY = 'e0ec6da3ca0381df4cc5564f7053ca85';
 weather.setLang('ru');
 weather.setAPPID(KEY);
 
-module.export = async function(ctx, witAns) {
+module.exports = async function(ctx, witAns) {
     const entities = Object.keys(witAns.entities).reduce((res, key)=> {
         res.push({
             ...witAns.entities[key][0],
