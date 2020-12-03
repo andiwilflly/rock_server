@@ -1,6 +1,7 @@
 const fs = require('fs');
 const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
+const weather2 = require('weather-js');
 const randomAnswer = require('./functions/randomAnswer.function');
 
 
@@ -46,8 +47,10 @@ async function getAllWeather(origCity) {
 
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
 
-                   const x = await wikiAPI.find(city);
-                   console.log(333, (await x.images())[0]);
+                   weather.find({search: city, degreeType: 'C'}, function(err, result) {
+                       if(err) resolve(err);
+                       resolve(result);
+                   });
 
                    weather.setCity(city);
                    weather.getAllWeather(function(err, res) {

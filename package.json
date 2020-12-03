@@ -53,6 +53,7 @@
     "soundcloud.ts": "^0.2.3",
     "telegraf": "^3.38.0",
     "telegraf-wit": "^2.1.0",
+    "weather-js": "^2.0.0",
     "wikijs": "^6.0.1",
     "yandex-music-api": "0.0.3"
   }
