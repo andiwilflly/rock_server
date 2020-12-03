@@ -35,10 +35,10 @@ module.exports = async function(ctx, witAns) {
 
     return ctx.reply(`
         🏠 ${result.name} (${ result.weather.map(d => d.description).join(', ') })
-        температура:    🌡 ${Math.round(result.main.temp)}℃ (ощущается как ${Math.round(result.main.feels_like)}℃)
-        влажность:        💧 ${result.main.humidity }%
-        облачность:       ${result.clouds.all > 50 ? '🌥 облачно' : '🌤 безоблачно' }
-        скорость ветра: 🌪 ${Math.round((result.wind.speed * 60 * 60) / 1000)} км в час
+        🌡 ${Math.round(result.main.temp)}℃ (ощущается как ${Math.round(result.main.feels_like)}℃)
+        💧 ${result.main.humidity }%
+        ${result.clouds.all > 50 ? '🌥 облачно' : '🌤 безоблачно' }
+        🌪 ${Math.round((result.wind.speed * 60 * 60) / 1000)} км в час
     `);
 }
 
