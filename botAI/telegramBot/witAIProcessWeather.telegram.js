@@ -31,14 +31,10 @@ module.exports = async function(ctx, witAns) {
 
     await ctx.replyWithMediaGroup([
         {
-            media: 'AgADBAADXME4GxQXZAc6zcjjVhXkE9FAuxkABAIQ3xv265UJKGYEAAEC',
             caption: 'From file_id',
-            type: 'photo'
         },
         {
-            media: 'https://picsum.photos/200/500/',
             caption: 'From URL',
-            type: 'photo'
         },
     ]);
     return ctx.reply(await getAllWeather(locationEntity.value));
