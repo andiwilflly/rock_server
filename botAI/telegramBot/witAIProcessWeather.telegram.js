@@ -29,54 +29,9 @@ module.exports = async function(ctx, witAns) {
         '🌪🌪🌪 выезжаем на место...',
     ]));
 
-
-    a = {
-        "coord": {
-            "lon": 32.1,
-            "lat": 49.03
-        },
-        "weather": [
-            {
-                "id": 804,
-                "main": "Clouds",
-                "description": "пасмурно",
-                "icon": "04d"
-            }
-        ],
-        "base": "stations",
-        "main": {
-            "temp": 1.49,
-            "feels_like": -2.79,
-            "temp_min": 1.49,
-            "temp_max": 1.49,
-            "pressure": 1026,
-            "humidity": 91,
-            "sea_level": 1026,
-            "grnd_level": 1011
-        },
-        "visibility": 10000,
-        "wind": {
-            "speed": 3.32,
-            "deg": 110
-        },
-        "clouds": {
-            "all": 100
-        },
-        "dt": 1606991844,
-        "sys": {
-            "country": "UA",
-            "sunrise": 1606973242,
-            "sunset": 1607003762
-        },
-        "timezone": 7200,
-        "id": 707052,
-        "name": "Каменка",
-        "cod": 200
-    }
-
     const result = await getAllWeather(locationEntity.value);
 
-    if(!result.weather) return ctx.reply(JSON.stringify(result, null, 3));
+    ctx.reply(JSON.stringify(result, null, 3));
 
     return ctx.reply(`
         🏠 ${result.name} (${result.weather.description})
