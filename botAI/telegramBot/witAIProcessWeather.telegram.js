@@ -21,7 +21,7 @@ module.exports = async function(ctx, witAns) {
         'Прогноз погоды в каком городе тебя интересует?'
     ]));
 
-    const result = await getAllWeather(locationEntity.value);
+    const result = await getAllWeather(locationEntity.value, ctx);
 
     if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
 
@@ -35,7 +35,7 @@ module.exports = async function(ctx, witAns) {
 }
 
 
-async function getAllWeather(origCity) {
+async function getAllWeather(origCity, ctx) {
 
     weather.setCity(origCity);
     return new Promise(async resolve => {
@@ -48,8 +48,8 @@ async function getAllWeather(origCity) {
                    const city = page.results.sort((a,b)=> a.length - b.length)[0];
 
                    weather2.find({search: city, degreeType: 'C'}, function(err, result) {
-                       if(err) resolve(err);
-                       resolve(result);
+                       if(err) ctx.reply(err);
+                       ctx.reply(result);
                    });
 
                    weather.setCity(city);
