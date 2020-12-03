@@ -28,6 +28,7 @@ const sokkerTeam = require('./server/routes/sokker/team[:id].get.route');
 const findConcerts = require('./server/routes/concerts[:artist].get.route');
 
 
+
 global.SSE = new SSE(['initialize']);
 global.SPOTIFY_TOKEN = null;
 global.BASE_URL = 'https://newrockbot.herokuapp.com';

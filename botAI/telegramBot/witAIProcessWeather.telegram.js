@@ -3,6 +3,7 @@ const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
 const randomAnswer = require('./functions/randomAnswer.function');
 
+// TODO: https://openbase.io/js/dark-sky-api
 
 const KEY = 'e0ec6da3ca0381df4cc5564f7053ca85';
 
@@ -26,11 +27,11 @@ module.exports = async function(ctx, witAns) {
     if(result.shortday) return ctx.reply(`  
         ${ result.isFeature ? '' : '♻ Ух ты, прогноз погоды из прошлого!' }
         
-        Комрадский гидрометцентр сообщает:  
-        🏠 Прогноз погоды в городе ${result.city}
-        📅 ${result.date} (${result.dateType})
-        🌡 От ${result.low}℃ до ${result.high}℃
-        🌧 Вероятность осадков ${result.precip}%
+        Комрадский гидрометцентр сообщает:
+        🏠  Прогноз погоды в городе ${result.city}
+        📅  ${result.date} (${result.dateType})
+        🌡  От ${result.low}℃ до ${result.high}℃
+        🌧  Вероятность осадков ${result.precip}%
     `);
 
     if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
@@ -41,7 +42,7 @@ module.exports = async function(ctx, witAns) {
         🌡 ${Math.round(result.main.temp)}℃ (ощущается как ${Math.round(result.main.feels_like)}℃)
         💧 ${result.main.humidity }%
         ${result.clouds.all > 50 ? '🌥 облачно' : '🌤 безоблачно' }
-        🌪 ${Math.round((result.wind.speed * 60 * 60) / 1000)} км в час
+        🌪 ${Math.round(result.wind.speed)} метра в секунду
     `);
 }
 
