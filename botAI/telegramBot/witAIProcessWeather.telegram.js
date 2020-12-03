@@ -10,7 +10,7 @@ weather.setLang('ru');
 weather.setAPPID(KEY);
 
 module.exports = async function(ctx, witAns) {
-    const locationEntity = witAns.entities['wit$location:location'];
+    const locationEntity = witAns.entities['wit$location:location'] ? witAns.entities['wit$location:location'][0] : null;
 
     if(!locationEntity) return ctx.reply(randomAnswer([
         'Какой город?',
@@ -29,9 +29,6 @@ module.exports = async function(ctx, witAns) {
         'выезжаем на место...',
     ]));
 
-    ctx.reply(JSON.stringify(locationEntity, null, 3));
-
-    ctx.reply('ctiy: ', locationEntity.value);
     return ctx.reply(await getAllWeather(locationEntity.value));
 }
 
