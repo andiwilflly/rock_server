@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 const currencyExchange = async function(ctx, witAns) {
     const currencyEntities = witAns.entities['currency:currency'];
 
-    //ctx.reply(JSON.stringify(currencyEntities, null, 3));
+    ctx.reply(JSON.stringify(currencyEntities, null, 3));
 
     if(!currencyEntities.length) return ctx.reply('case 1');
     if(currencyEntities.length !== 2) return ctx.reply('case 2');
@@ -14,8 +14,6 @@ const currencyExchange = async function(ctx, witAns) {
     let from = currencyEntities[0].body;
     let to = currencyEntities[1].body;
     const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
-
-    ctx.reply(JSON.stringify({ from ,to }, null, 3));
 
     if(!icons[from] || !icons[to]) {
         from = fuse.search(from.replace(/\d+/, ''))[0];
