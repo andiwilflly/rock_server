@@ -127,7 +127,8 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
             💧 Влажность воздуха: ${result.current.humidity }%
             🌥 Облачность: ${result.current.clouds}%      
         ${hourly.map(hour => {
-            return `${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)`
+            return `${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)
+            `
         }).join('')}
     `;
 }
