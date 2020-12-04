@@ -77,9 +77,7 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
     }
 
-    const subDays = weekDays.indexOf(weekDay) - new Date().getDay();
-
-    console.log('weekDay:', weekDay, 'subDays!', subDays);
+    console.log('nextDate:', nextDate(weekDays.indexOf(weekDay)), 'subDays!', subDays);
 
     resolve(await getWeatherCity(city));
 }
@@ -135,6 +133,13 @@ async function getWeatherCity(city, timeMs=Date.now()) {
     `;
 }
 
+
+function nextDate(dayIndex) {
+    const today = new Date();
+    today.setDate(today.getDate() + (dayIndex - 1 - today.getDay() + 7) % 7 + 1);
+    return today;
+}
+
 const data = [
     'понедельник',
     'вторник',
@@ -150,7 +155,7 @@ const data = [
     'послезавтра',
 ];
 
-const weekDaysRus = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье'];
-const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const weekDaysRus = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const fuse = new Fuse(data, { threshold: 0.3 });
