@@ -1,17 +1,6 @@
 const Fuse = require('fuse.js');
 const fetch = require("node-fetch");
 
-
-const data = [
-    'бакс',
-    'доллар',
-    'гривна',
-    'рубль',
-    'евро'
-];
-
-const fuse = new Fuse(data, { threshold: 0.3 });
-
 const currencyExchange = async function(ctx, witAns) {
     let rates = await fetch('http://api.currencylayer.com/live?access_key=9ab4413f09489f1d3b436a6f706c1cff');
     rates = await rates.json();
@@ -30,7 +19,7 @@ const currencyExchange = async function(ctx, witAns) {
     from = fuse.search(from.replace(/\d+/, ''));
     to = fuse.search(to);
 
-    ctx.reply(JSON.stringify({ from, to, amount }, null, 3));
+    ctx.reply(JSON.stringify({ from: match[from], to: match[to], amount }, null, 3));
 
     // const { source, target, rate, ...rest } = await exchange.convert({ source: 'UAN', target: 'USD' });
     //
@@ -41,6 +30,25 @@ const currencyExchange = async function(ctx, witAns) {
 
 }
 
+
+const data = [
+    'бакс',
+    'доллар',
+    'гривна',
+    'рубль',
+    'евро'
+];
+const match = {
+    'бакс': "USD",
+    'доллар': "USD",
+    'гривна': "UAH",
+    'рубль': "RUB",
+    'евро': "EUR"
+};
+const fuse = new Fuse(data, { threshold: 0.3 });
+
 //currencyExchange({}, {}, '200 баксов', 'доллары');
+
+
 
 module.exports = currencyExchange;
