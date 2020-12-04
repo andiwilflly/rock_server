@@ -1,4 +1,5 @@
 const Fuse = require('fuse.js');
+const fetch = require("node-fetch");
 const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
 const randomAnswer = require('./functions/randomAnswer.function');
@@ -79,11 +80,11 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
 
     console.log('nextDate:', nextDate(weekDays.indexOf(weekDay)));
 
-    resolve(await getWeatherCity(city, nextDate(weekDays.indexOf(weekDay))));
+    resolve(await getWeatherCity(city, nextDate(weekDays.indexOf(weekDay)), true));
 }
 
 
-async function getWeatherCity(city, timeMs=Date.now()) {
+async function getWeatherCity(city, timeMs=Date.now(), isFeature = false) {
     const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
     const page = await wikiAPI.find(city);
 
@@ -94,9 +95,8 @@ async function getWeatherCity(city, timeMs=Date.now()) {
     let result = await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&lang=ru&units=metric&dt=${Math.round(timeMs/1000)}&appid=e0ec6da3ca0381df4cc5564f7053ca85`)
     result = await result.json();
 
-    const dayNumber = new Date(timeMs).getDate();
-    const hourly = result.hourly;
-       // .filter(hour => hour.dt *1000 > new Date(timeMs).getTime());
+    const dayNumber = new Date().getDate();
+    const hourly = result.hourly.filter(hour => hour.dt*1000 > new Date().getTime() && dayNumber === new Date(hour.dt *1000).getDate());
 
     function formatWeather(day, showDetails = true) {
         const pressure = Math.round(day.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
@@ -112,7 +112,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
                 ⏰  ${date.toLocaleString('en-US', {
                     hour: 'numeric', minute: 'numeric', second: 'numeric',
                     hour12: false
-                })}       
+                })}
                 🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)        
             `;
         }
@@ -128,9 +128,9 @@ async function getWeatherCity(city, timeMs=Date.now()) {
 
     return `
         🏠 ${city} (${result.current.weather[0].description})
-        ${ formatWeather(result.current)}
+        ${formatWeather(result.current)}
         По часам:
-        ${hourly.map(hour => formatWeather(hour, false)).join(' ')}
+        ${ isFeature ? '' : hourly.map(hour => formatWeather(hour, false)).join(' ')}
     `;
 }
 
@@ -160,3 +160,9 @@ const weekDaysRus = ['воскресенье', 'понедельник', 'вто
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const fuse = new Fuse(data, { threshold: 0.3 });
+
+
+(async function () {
+    console.log(new Date(nextDate(0)))
+    console.log(await getWeatherCity('Киев', nextDate(0)));
+})();
