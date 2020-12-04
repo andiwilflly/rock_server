@@ -96,11 +96,6 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
     const dayNumber = new Date(timeMs).getDate();
     const hourly = result.hourly.filter(hour => hour.dt *1000 > Date.now() && dayNumber === new Date(hour.dt *1000).getDate());
     const daily = result.daily.filter(day => new Date(day.dt * 1000).getDay() === new Date(timeMs).getDay())[0];
-    const options = {
-        year: 'numeric', month: 'numeric', day: 'numeric',
-        hour: 'numeric', minute: 'numeric', second: 'numeric',
-        hour12: false
-    };
 
     if(isFeature) {
         const pressure = Math.round(daily.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
@@ -115,6 +110,8 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
                 🌫 Атмосферное давление: ${pressure} мм. рт. ст.
                 💧 Влажность воздуха: ${daily.humidity }%
                 🌥 Облачность: ${daily.clouds}%
+                ${daily.rain}
+                ${daily.snow}
             `
     }
 
@@ -126,7 +123,9 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
             🌪 ${Math.round(result.current.wind_speed)} метра в секунду
             🌫 Атмосферное давление: ${pressure} мм. рт. ст.
             💧 Влажность воздуха: ${result.current.humidity }%
-            🌥 Облачность: ${result.current.clouds}%      
+            🌥 Облачность: ${result.current.clouds}%   
+            ${result.current.rain}   
+            ${result.current.snow}   
         ${hourly.map(hour => {
             return `${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)
             `
