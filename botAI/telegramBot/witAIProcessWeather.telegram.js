@@ -66,13 +66,13 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
         case dateType === 'сегодня':
             weekDay = weekDays[(new Date()).getDay()];
             break;
-        case dateType === 'zavtra':
-        case dateType === 'завтра':
-            weekDay = weekDays[(new Date()).getDay()+1] || 'Sun';
-            break;
         case dateEntity.value === 'poslezavtra':
         case dateEntity.value === 'послезавтра':
             weekDay = weekDays[(new Date()).getDay()+2] || weekDays[((new Date()).getDay()+2) - 6] || '?';
+            break;
+        case dateType === 'zavtra':
+        case dateType === 'завтра':
+            weekDay = weekDays[(new Date()).getDay()+1] || 'Sun';
             break;
         default:
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
