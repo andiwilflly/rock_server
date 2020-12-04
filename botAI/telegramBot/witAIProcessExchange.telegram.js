@@ -6,28 +6,32 @@ const fetch = require("node-fetch");
 const currencyExchange = async function(ctx, witAns) {
     const currencyEntities = witAns.entities['currency:currency'];
 
-    ctx.reply(JSON.stringify(currencyEntities, null, 3));
+    //ctx.reply(JSON.stringify(currencyEntities, null, 3));
 
     if(!currencyEntities.length) return ctx.reply('case 1');
     if(currencyEntities.length !== 2) return ctx.reply('case 2');
 
-    let from = currencyEntities[0].value;
-    let to = currencyEntities[1].value;
+    let from = currencyEntities[0].body;
+    let to = currencyEntities[1].body;
     const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
 
-    from = fuse.search(from.replace(/\d+/, ''))[0];
-    to = fuse.search(to)[0];
-    from = from ? from.item : null;
-    to = to ? to.item : null;
-    from = match[from];
-    to = match[to];
+    ctx.reply(JSON.stringify({ from ,to }, null, 3));
+
+    if(!icons[from] || !icons[to]) {
+        from = fuse.search(from.replace(/\d+/, ''))[0];
+        to = fuse.search(to)[0];
+        from = from ? from.item : null;
+        to = to ? to.item : null;
+        from = match[from];
+        to = match[to];
+    }
 
     let rates = await fetch(`https://api.exchangerate.host/latest?base=${from}`);
     rates = (await rates.json()).rates;
 
     const result = rates[to] * amount;
 
-    if(isNaN(result)) return  ctx.reply(JSON.stringify({
+    if(isNaN(result)) return ctx.reply(JSON.stringify({
         from,
         to,
         rate: rates[to],
@@ -49,10 +53,8 @@ const data = [
     'евро'
 ];
 const match = {
-    'usd': "USD",
     'бакс': "USD",
     'доллар': "USD",
-    'uah': "UAH",
     'гривна': "UAH",
     'рубль': "RUB",
     'евро': "EUR"
@@ -71,24 +73,24 @@ currencyExchange({ reply: console.log }, { entities: {
             "id": "1089102248228413",
             "name": "currency",
             "role": "currency",
-            "start": 0,
-            "end": 10,
-            "body": "200 гривен",
-            "confidence": 0.9893,
+            "start": 11,
+            "end": 14,
+            "body": "USD",
+            "confidence": 1,
             "entities": [],
-            "value": "200 гривен",
+            "value": "usd",
             "type": "value"
         },
         {
             "id": "1089102248228413",
             "name": "currency",
             "role": "currency",
-            "start": 13,
-            "end": 17,
-            "body": "евро",
-            "confidence": 0.9695,
+            "start": 15,
+            "end": 18,
+            "body": "UAH",
+            "confidence": 1,
             "entities": [],
-            "value": "евро",
+            "value": "uah",
             "type": "value"
         }
     ]
