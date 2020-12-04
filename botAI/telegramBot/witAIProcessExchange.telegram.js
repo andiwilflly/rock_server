@@ -14,6 +14,18 @@ const currencyExchange = async function(ctx, witAns) {
     if(!currencyEntities.length) return ctx.reply('case 1');
     if(currencyEntities.length !== 2) return ctx.reply('case 2');
 
+    let allRates = await fetch(`https://api.exchangerate.host/latest`);
+    allRates = (await allRates.json()).rates;
+
+    const fuse = new Fuse([...data, ...Object.keys(allRates)], { threshold: 0.3 });
+    const match = {
+        ..._match,
+        ...Object.keys(allRates).reduce((res, next)=> {
+            res[next] = next;
+            return res;
+        }, {})
+    };
+
     let from = currencyEntities[0].body;
     let to = currencyEntities[1].body;
     const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
@@ -45,10 +57,6 @@ const currencyExchange = async function(ctx, witAns) {
 
 
 const data = [
-    'USD',
-    'UAH',
-    'RUB',
-    'EUR',
     'бакс',
     'доллар',
     'гривна',
@@ -58,11 +66,7 @@ const data = [
     'dollar',
     'евро'
 ];
-const match = {
-    'USD': "USD",
-    'UAH': "UAH",
-    'RUB': "RUB",
-    'EUR': "EUR",
+const _match = {
     'бакс': "USD",
     'доллар': "USD",
     'dollar': "USD",
@@ -81,36 +85,34 @@ const icons = {
 
 const formatter = new Intl.NumberFormat();
 
-const fuse = new Fuse(data, { threshold: 0.3 });
-
-// currencyExchange({ reply: console.log }, { entities: {
-//     'currency:currency': [
-//         {
-//             "id": "1089102248228413",
-//             "name": "currency",
-//             "role": "currency",
-//             "start": 11,
-//             "end": 14,
-//             "body": "456677USD",
-//             "confidence": 1,
-//             "entities": [],
-//             "value": "usd",
-//             "type": "value"
-//         },
-//         {
-//             "id": "1089102248228413",
-//             "name": "currency",
-//             "role": "currency",
-//             "start": 15,
-//             "end": 18,
-//             "body": "UAH",
-//             "confidence": 1,
-//             "entities": [],
-//             "value": "uah",
-//             "type": "value"
-//         }
-//     ]
-// } });
+currencyExchange({ reply: console.log }, { entities: {
+    'currency:currency': [
+        {
+            "id": "1089102248228413",
+            "name": "currency",
+            "role": "currency",
+            "start": 11,
+            "end": 14,
+            "body": "456677USD",
+            "confidence": 1,
+            "entities": [],
+            "value": "usd",
+            "type": "value"
+        },
+        {
+            "id": "1089102248228413",
+            "name": "currency",
+            "role": "currency",
+            "start": 15,
+            "end": 18,
+            "body": "UAH",
+            "confidence": 1,
+            "entities": [],
+            "value": "uah",
+            "type": "value"
+        }
+    ]
+} });
 
 
 
