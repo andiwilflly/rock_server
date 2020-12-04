@@ -105,8 +105,9 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
     if(isFeature) {
         const pressure = Math.round(daily.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
         return `
+        
                 🏠 ${city} (${daily.weather[0].description})
-                ⏰  ${new Date(timeMs).toLocaleDateString()}
+                📅  ${new Date(timeMs).toLocaleDateString()}
                 🌡 Утро  ${Math.round(daily.temp.morn)}°C (ощущается как ${Math.round(daily.feels_like.morn)}°C)
                 🌡 День  ${Math.round(daily.temp.day)}°C (ощущается как ${Math.round(daily.feels_like.day)}°C)
                 🌡 Вечер ${Math.round(daily.temp.eve)}°C (ощущается как ${Math.round(daily.feels_like.eve)}°C)
@@ -119,8 +120,9 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
 
     const pressure = Math.round(result.current.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
     return `
-        🏠 ${city} (${result.current.weather[0].description})
-            ⏰  ${new Date(result.current.dt * 1000).toLocaleString('en-US', options)}       
+    
+            🏠 ${city} (${result.current.weather[0].description})
+            📅  ${new Date(result.current.dt * 1000).toLocaleString('en-US', options)}       
             🌡 ${Math.round(result.current.temp)}°C (ощущается как ${Math.round(result.current.feels_like)}°C)
             🌪 ${Math.round(result.current.wind_speed)} метра в секунду
             🌫 Атмосферное давление: ${pressure} мм. рт. ст.
