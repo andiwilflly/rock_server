@@ -110,7 +110,7 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
                 🌫 Атмосферное давление: ${pressure} мм. рт. ст.
                 💧 Влажность воздуха: ${daily.humidity }%
                 🌥 Облачность: ${daily.clouds}%
-               ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без осадков'}   
+                ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без осадков'}   
             `
     }
 
