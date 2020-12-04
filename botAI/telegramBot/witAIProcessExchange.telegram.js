@@ -85,34 +85,34 @@ const icons = {
 
 const formatter = new Intl.NumberFormat();
 
-currencyExchange({ reply: console.log }, { entities: {
-    'currency:currency': [
-        {
-            "id": "1089102248228413",
-            "name": "currency",
-            "role": "currency",
-            "start": 11,
-            "end": 14,
-            "body": "456677USD",
-            "confidence": 1,
-            "entities": [],
-            "value": "usd",
-            "type": "value"
-        },
-        {
-            "id": "1089102248228413",
-            "name": "currency",
-            "role": "currency",
-            "start": 15,
-            "end": 18,
-            "body": "UAH",
-            "confidence": 1,
-            "entities": [],
-            "value": "uah",
-            "type": "value"
-        }
-    ]
-} });
+// currencyExchange({ reply: console.log }, { entities: {
+//     'currency:currency': [
+//         {
+//             "id": "1089102248228413",
+//             "name": "currency",
+//             "role": "currency",
+//             "start": 11,
+//             "end": 14,
+//             "body": "456677USD",
+//             "confidence": 1,
+//             "entities": [],
+//             "value": "usd",
+//             "type": "value"
+//         },
+//         {
+//             "id": "1089102248228413",
+//             "name": "currency",
+//             "role": "currency",
+//             "start": 15,
+//             "end": 18,
+//             "body": "UAH",
+//             "confidence": 1,
+//             "entities": [],
+//             "value": "uah",
+//             "type": "value"
+//         }
+//     ]
+// } });
 
 
 
