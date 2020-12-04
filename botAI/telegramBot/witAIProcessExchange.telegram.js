@@ -23,10 +23,14 @@ const currencyExchange = async function(ctx, witAns) {
     if(!currencyEntities.length) return ctx.reply('case 1');
     if(currencyEntities.length !== 2) return ctx.reply('case 2');
 
-    const from = currencyEntities[0].value;
-    const to = currencyEntities[1].value;
+    let from = currencyEntities[0].value;
+    let to = currencyEntities[1].value;
+    const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
 
-    ctx.reply(JSON.stringify({ from, to }, null, 3));
+    from = fuse.search(from);
+    to = fuse.search(to);
+
+    ctx.reply(JSON.stringify({ from, to, amount }, null, 3));
 
     // const { source, target, rate, ...rest } = await exchange.convert({ source: 'UAN', target: 'USD' });
     //
