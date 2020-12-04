@@ -4,7 +4,7 @@ const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
 const randomAnswer = require('./functions/randomAnswer.function');
 
-// TODO: https://openbase.io/js/dark-sky-api
+// TODO: Советы на разную погоду
 
 const KEY = 'e0ec6da3ca0381df4cc5564f7053ca85';
 
@@ -102,10 +102,10 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
         return `
 🏠 ${city} (${daily.weather[0].description})
 📅  ${new Date(timeMs).toLocaleDateString()}
-🌡 Утро  ${Math.round(daily.temp.morn)}°C (ощущается как ${Math.round(daily.feels_like.morn)}°C)
-🌡 День  ${Math.round(daily.temp.day)}°C (ощущается как ${Math.round(daily.feels_like.day)}°C)
-🌡 Вечер ${Math.round(daily.temp.eve)}°C (ощущается как ${Math.round(daily.feels_like.eve)}°C)
-🌡 Ночь  ${Math.round(daily.temp.night)}°C (ощущается как ${Math.round(daily.feels_like.night)}°C)            
+🌡 Утро  ${Math.round(daily.temp.morn)}°C (ощущается ${Math.round(daily.feels_like.morn)}°C)
+🌡 День  ${Math.round(daily.temp.day)}°C (ощущается ${Math.round(daily.feels_like.day)}°C)
+🌡 Вечер ${Math.round(daily.temp.eve)}°C (ощущается ${Math.round(daily.feels_like.eve)}°C)
+🌡 Ночь  ${Math.round(daily.temp.night)}°C (ощущается ${Math.round(daily.feels_like.night)}°C)            
 🌫 Атмосферное давление: ${pressure} мм. рт. ст.
 💧 Влажность воздуха: ${daily.humidity }%
 🌥 Облачность: ${daily.clouds}%
@@ -115,7 +115,7 @@ ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без оса
     const pressure = Math.round(result.current.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
     return `
 🏠 ${city} (${result.current.weather[0].description})
-🌡 ${Math.round(result.current.temp)}°C (ощущается как ${Math.round(result.current.feels_like)}°C)
+🌡 ${Math.round(result.current.temp)}°C (ощущается ${Math.round(result.current.feels_like)}°C)
 🌪 ${Math.round(result.current.wind_speed)} метра в секунду
 🌫 Атмосферное давление: ${pressure} мм. рт. ст.
 💧 Влажность воздуха: ${result.current.humidity }%
