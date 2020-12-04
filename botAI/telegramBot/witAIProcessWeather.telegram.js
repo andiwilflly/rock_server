@@ -112,7 +112,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
                     hour: 'numeric', minute: 'numeric', second: 'numeric',
                     hour12: false
                 })}       
-                🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)          
+                🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)        
             `;
         }
         return `
