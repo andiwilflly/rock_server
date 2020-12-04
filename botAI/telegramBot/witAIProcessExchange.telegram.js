@@ -16,15 +16,15 @@ const currencyExchange = async function(ctx, witAns) {
     let rates = await fetch('http://api.currencylayer.com/live?access_key=9ab4413f09489f1d3b436a6f706c1cff');
     rates = await rates.json();
 
-    const currencyEntity = witAns.entities['currency:currency'] ? witAns.entities['currency:currency'][0] : null;
+    const currencyEntities = witAns.entities['currency:currency'];
 
-    ctx.reply(JSON.stringify(currencyEntity, null, 3));
+    ctx.reply(JSON.stringify(currencyEntities, null, 3));
 
-    if(!currencyEntity.length) return ctx.reply('case 1');
-    if(currencyEntity.length !== 2) return ctx.reply('case 2');
+    if(!currencyEntities.length) return ctx.reply('case 1');
+    if(currencyEntities.length !== 2) return ctx.reply('case 2');
 
-    const from = currencyEntity[0].value;
-    const to = currencyEntity[1].value;
+    const from = currencyEntities[0].value;
+    const to = currencyEntities[1].value;
 
     ctx.reply(JSON.stringify({ from, to }, null, 3));
 
