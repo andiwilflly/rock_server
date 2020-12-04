@@ -122,7 +122,6 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
     return `
     
             🏠 ${city} (${result.current.weather[0].description})
-            📅  ${new Date(result.current.dt * 1000).toLocaleString('en-US', options)}       
             🌡 ${Math.round(result.current.temp)}°C (ощущается как ${Math.round(result.current.feels_like)}°C)
             🌪 ${Math.round(result.current.wind_speed)} метра в секунду
             🌫 Атмосферное давление: ${pressure} мм. рт. ст.
