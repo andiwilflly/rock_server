@@ -100,33 +100,29 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
     if(isFeature) {
         const pressure = Math.round(daily.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
         return `
-        
-                🏠 ${city} (${daily.weather[0].description})
-                📅  ${new Date(timeMs).toLocaleDateString()}
-                🌡 Утро  ${Math.round(daily.temp.morn)}°C (ощущается как ${Math.round(daily.feels_like.morn)}°C)
-                🌡 День  ${Math.round(daily.temp.day)}°C (ощущается как ${Math.round(daily.feels_like.day)}°C)
-                🌡 Вечер ${Math.round(daily.temp.eve)}°C (ощущается как ${Math.round(daily.feels_like.eve)}°C)
-                🌡 Ночь  ${Math.round(daily.temp.night)}°C (ощущается как ${Math.round(daily.feels_like.night)}°C)            
-                🌫 Атмосферное давление: ${pressure} мм. рт. ст.
-                💧 Влажность воздуха: ${daily.humidity }%
-                🌥 Облачность: ${daily.clouds}%
-                ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без осадков'}   
-            `
+🏠 ${city} (${daily.weather[0].description})
+📅  ${new Date(timeMs).toLocaleDateString()}
+🌡 Утро  ${Math.round(daily.temp.morn)}°C (ощущается как ${Math.round(daily.feels_like.morn)}°C)
+🌡 День  ${Math.round(daily.temp.day)}°C (ощущается как ${Math.round(daily.feels_like.day)}°C)
+🌡 Вечер ${Math.round(daily.temp.eve)}°C (ощущается как ${Math.round(daily.feels_like.eve)}°C)
+🌡 Ночь  ${Math.round(daily.temp.night)}°C (ощущается как ${Math.round(daily.feels_like.night)}°C)            
+🌫 Атмосферное давление: ${pressure} мм. рт. ст.
+💧 Влажность воздуха: ${daily.humidity }%
+🌥 Облачность: ${daily.clouds}%
+${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без осадков'}`
     }
 
     const pressure = Math.round(result.current.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
     return `
-    
-            🏠 ${city} (${result.current.weather[0].description})
-            🌡 ${Math.round(result.current.temp)}°C (ощущается как ${Math.round(result.current.feels_like)}°C)
-            🌪 ${Math.round(result.current.wind_speed)} метра в секунду
-            🌫 Атмосферное давление: ${pressure} мм. рт. ст.
-            💧 Влажность воздуха: ${result.current.humidity }%
-            🌥 Облачность: ${result.current.clouds}%   
-            ${result.current.rain ? '🌨 Снег' : result.current.snow ? '🌧 Дождь' : 'Без осадков'}   
-        ${hourly.map(hour => {
-            return `${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)
-            `
+🏠 ${city} (${result.current.weather[0].description})
+🌡 ${Math.round(result.current.temp)}°C (ощущается как ${Math.round(result.current.feels_like)}°C)
+🌪 ${Math.round(result.current.wind_speed)} метра в секунду
+🌫 Атмосферное давление: ${pressure} мм. рт. ст.
+💧 Влажность воздуха: ${result.current.humidity }%
+🌥 Облачность: ${result.current.clouds}%   
+${result.current.rain ? '🌨 Снег' : result.current.snow ? '🌧 Дождь' : 'Без осадков'}   
+${hourly.map(hour => {
+    return `${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)`
         }).join('')}
     `;
 }
