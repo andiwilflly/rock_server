@@ -36,7 +36,7 @@ const currencyExchange = async function(ctx, witAns) {
     }, null, 3));
 
     ctx.reply(`
-        💰 ${amount} ${icons[from]} -> ${result.toFixed(2)} ${icons[to]} 
+        💰 ${formatter.format(amount)} ${icons[from]} -> ${formatter.format(+result.toFixed(2))} ${icons[to]} 
     `);
 }
 
@@ -71,6 +71,9 @@ const icons = {
     "RUB": '₽',
     "UAH": '₴'
 }
+
+const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
 const fuse = new Fuse(data, { threshold: 0.3 });
 
 currencyExchange({ reply: console.log }, { entities: {
