@@ -49,8 +49,10 @@ const data = [
     'евро'
 ];
 const match = {
+    'usd': "USD",
     'бакс': "USD",
     'доллар': "USD",
+    'uah': "UAH",
     'гривна': "UAH",
     'рубль': "RUB",
     'евро': "EUR"
