@@ -1,4 +1,4 @@
-const fs = require('fs');
+const Fuse = require('fuse.js');
 const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
 const randomAnswer = require('./functions/randomAnswer.function');
@@ -77,29 +77,10 @@ async function getAllWeather(origCity, dateEntity = {}) {
     })
 }
 
+
+
 async function getDateForecastWeather(city, dateEntity, resolve) {
-    const Fuse = require('fuse.js');
     const weather = require('weather-js');
-
-    const data = [
-        'понедельник',
-        'вторник',
-        'среда',
-        'четверг',
-        'пятница',
-        'суббота',
-        'воскресенье',
-        'сегодня',
-        'завтра',
-        'zavtra',
-        'poslezavtra',
-        'послезавтра',
-    ];
-
-    const weekDaysRus = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    const fuse = new Fuse(data, { threshold: 0.3 });
 
     const dateType = fuse.search(dateEntity.value)[0] ? fuse.search(dateEntity.value)[0].item : '';
 
@@ -120,8 +101,6 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
     }
 
-    console.log(weekDays.indexOf(weekDay), new Date().getDay());
-
     weather.find({ search: city, degreeType: 'C' }, function(err, result) {
         if(err) console.log(err);
         resolve({
@@ -134,5 +113,22 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
     });
 }
 
+const data = [
+    'понедельник',
+    'вторник',
+    'среда',
+    'четверг',
+    'пятница',
+    'суббота',
+    'воскресенье',
+    'сегодня',
+    'завтра',
+    'zavtra',
+    'poslezavtra',
+    'послезавтра',
+];
 
-getDateForecastWeather('бердичев', { value: 'среда'}, ()=> {});
+const weekDaysRus = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+const fuse = new Fuse(data, { threshold: 0.3 });

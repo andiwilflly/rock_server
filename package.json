@@ -20,6 +20,7 @@
     "body-parser": "^1.19.0",
     "brain.js": "^2.0.0-beta.2",
     "details": "^1.0.0",
+    "eurobank-converter": "^0.1.1",
     "express": "^4.17.1",
     "express-sse": "^0.5.3",
     "firebase": "^7.14.3",
@@ -30,6 +31,7 @@
     "googleapis": "^51.0.0",
     "intelligo": "^1.3.0",
     "jsdom": "^16.4.0",
+    "live-currency-exchange": "^1.0.2",
     "mongodb": "^3.5.8",
     "neural-chatbot": "^2.0.18",
     "neural-phrasex": "^1.0.18",
@@ -52,6 +54,7 @@
     "soundcloud.ts": "^0.2.3",
     "telegraf": "^3.38.0",
     "telegraf-wit": "^2.1.0",
+    "unirest": "^0.6.0",
     "weather-js": "^2.0.0",
     "wikijs": "^6.0.1",
     "yandex-music-api": "0.0.3"

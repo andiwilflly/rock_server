@@ -14,6 +14,7 @@ const witAI = new Wit({
 const getRandomJoke = require('./telegramBot/joke.telegram');
 const witAIProcessQuestion = require('./telegramBot/witAIProcessQuestion.telegram');
 const witAIProcessWeather = require('./telegramBot/witAIProcessWeather.telegram');
+const witAIProcessExchange = require('./telegramBot/witAIProcessExchange.telegram');
 
 
 const keyboard = Markup.inlineKeyboard([
@@ -64,6 +65,8 @@ async function start(AI) {
             switch (true) {
                 case !witAns.intents[0]:
                     return null;
+                case witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
+                    return await witAIProcessExchange(ctx, witAns);
                 case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
                     return await witAIProcessWeather(ctx, witAns);
                 case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
