@@ -79,6 +79,8 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
 
     const subDays = weekDays.indexOf(weekDay) - new Date().getDay();
 
+    console.log('weekDay:', weekDay, 'subDays!', subDays);
+
     resolve(await getWeatherCity(city));
 }
 
