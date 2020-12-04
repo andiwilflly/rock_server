@@ -95,7 +95,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
     result = await result.json();
 
     const dayNumber = new Date(timeMs).getDate();
-    const hourly = result.hourly.filter(hour => hour.dt *1000 > Date.now() && dayNumber === new Date(hour.dt *1000).getDate());
+    const hourly = result.hourly.filter(hour => hour.dt *1000 > new Date(timeMs).getTime() && dayNumber === new Date(hour.dt *1000).getDate());
 
     function formatWeather(day, showDetails = true) {
         const pressure = Math.round(day.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
