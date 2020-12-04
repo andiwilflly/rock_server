@@ -108,7 +108,10 @@ async function getWeatherCity(city, timeMs=Date.now()) {
 
         if(!showDetails) {
             return `
-                ⏰  ${date.toLocaleString('en-US', options)}       
+                ⏰  ${date.toLocaleString('en-US', {
+                    hour: 'numeric', minute: 'numeric', second: 'numeric',
+                    hour12: false
+                })}       
                 🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)          
             `;
         }
