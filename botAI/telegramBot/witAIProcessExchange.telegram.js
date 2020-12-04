@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 const currencyExchange = async function(ctx, witAns) {
     const currencyEntities = witAns.entities['currency:currency'];
 
-    ctx.reply(JSON.stringify(currencyEntities, null, 3));
+    // ctx.reply(JSON.stringify(currencyEntities, null, 3));
 
     if(!currencyEntities.length) return ctx.reply('case 1');
     if(currencyEntities.length !== 2) return ctx.reply('case 2');
