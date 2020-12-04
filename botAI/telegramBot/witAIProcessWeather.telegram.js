@@ -64,15 +64,15 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
     let weekDay = '';
     switch (true) {
         case dateType === 'сегодня':
-            weekDay = weekDays[(new Date()).getDay()-1];
+            weekDay = weekDays[(new Date()).getDay()];
             break;
         case dateType === 'zavtra':
         case dateType === 'завтра':
-            weekDay = weekDays[(new Date()).getDay()] || 'Mon';
+            weekDay = weekDays[(new Date()).getDay()+1] || 'Sun';
             break;
         case dateType === 'poslezavtra':
         case dateType === 'послезавтра':
-            weekDay = weekDays[(new Date()).getDay()+1] || weekDays[((new Date()).getDay()+1) - 5] || '?';
+            weekDay = weekDays[(new Date()).getDay()+2] || weekDays[((new Date()).getDay()+2) - 6] || '?';
             break;
         default:
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
@@ -128,8 +128,7 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
             🌥 Облачность: ${result.current.clouds}%      
         ${hourly.map(hour => {
             return `
-                ⏰  ${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })}       
-                🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)         
+                ⏰  ${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)         
             `
         }).join('')}
     `;
