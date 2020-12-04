@@ -97,7 +97,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
     const dayNumber = new Date(timeMs).getDate();
     const hourly = result.hourly.filter(hour => hour.dt *1000 > Date.now() && dayNumber === new Date(hour.dt *1000).getDate());
 
-    function formatWeather(day) {
+    function formatWeather(day, showDetails = true) {
         const pressure = Math.round(day.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
         const date = new Date(day.dt * 1000);
         const options = {
@@ -109,10 +109,10 @@ async function getWeatherCity(city, timeMs=Date.now()) {
         return `
             ⏰  ${date.toLocaleString('en-US', options)}       
             🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)
-            🌫 Атмосферное давление: ${pressure} мм. рт. ст.
-            💧 Влажность воздуха: ${day.humidity }%
-            🌥 Облачность: ${day.clouds}%
             🌪 ${Math.round(day.wind_speed)} метра в секунду
+            ${ showDetails ? `🌫 Атмосферное давление: ${pressure} мм. рт. ст.` : '' }          
+            ${ showDetails ? `💧 Влажность воздуха: ${day.humidity }%` : '' }
+            ${ showDetails ? `🌥 Облачность: ${day.clouds}%` : '' }          
         `;
     }
 
@@ -120,7 +120,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
         🏠 ${city} (${result.current.weather[0].description})
         ${ formatWeather(result.current)}
         По часам:
-        ${hourly.map(hour => formatWeather(hour)).join(' ')}
+        ${hourly.map(hour => formatWeather(hour, false)).join(' ')}
     `;
 }
 
