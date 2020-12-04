@@ -106,8 +106,8 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
 🌡 День  ${Math.round(daily.temp.day)}°C (ощущается ${Math.round(daily.feels_like.day)}°C)
 🌡 Вечер ${Math.round(daily.temp.eve)}°C (ощущается ${Math.round(daily.feels_like.eve)}°C)
 🌡 Ночь  ${Math.round(daily.temp.night)}°C (ощущается ${Math.round(daily.feels_like.night)}°C)            
-🌫 Атмосферное давление: ${pressure} мм. рт. ст.
-💧 Влажность воздуха: ${daily.humidity }%
+🌫 Давление:   ${pressure} мм. рт. ст.
+💧 Влажность:  ${daily.humidity }%
 🌥 Облачность: ${daily.clouds}%
 ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без осадков'}`
     }
@@ -117,8 +117,8 @@ ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без оса
 🏠 ${city} (${result.current.weather[0].description})
 🌡 ${Math.round(result.current.temp)}°C (ощущается ${Math.round(result.current.feels_like)}°C)
 🌪 ${Math.round(result.current.wind_speed)} метра в секунду
-🌫 Атмосферное давление: ${pressure} мм. рт. ст.
-💧 Влажность воздуха: ${result.current.humidity }%
+🌫 Давление:   ${pressure} мм. рт. ст.
+💧 Влажность:  ${result.current.humidity }%
 🌥 Облачность: ${result.current.clouds}%   
 ${result.current.rain ? '🌨 Снег' : result.current.snow ? '🌧 Дождь' : 'Без осадков'}   
 ${hourly.map(hour => {
