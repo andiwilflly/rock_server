@@ -28,6 +28,6 @@ const currencyExchange = async function(ctx, witAns) {
 
 }
 
-currencyExchange({}, {}, '200 баксов', 'доллары');
+//currencyExchange({}, {}, '200 баксов', 'доллары');
 
 module.exports = currencyExchange;
