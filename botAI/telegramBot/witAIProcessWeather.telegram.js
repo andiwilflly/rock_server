@@ -89,7 +89,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
 
     const { lat, lon } = await page.coordinates();
 
-    console.log(lat, lon, Math.round(timeMs/1000));
+    console.log(lat, lon, new Date(timeMs));
 
     let result = await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&lang=ru&units=metric&dt=${Math.round(timeMs/1000)}&appid=e0ec6da3ca0381df4cc5564f7053ca85`)
     result = await result.json();
