@@ -24,26 +24,7 @@ module.exports = async function(ctx, witAns) {
 
     const result = await getAllWeather(locationEntity.value, dateEntity);
 
-    if(result.shortday) return ctx.reply(`  
-        ${ result.isFeature ? '' : '♻ Ух ты, прогноз погоды из прошлого!' }
-        
-        Комрадский гидрометцентр сообщает:
-        🏠  Прогноз погоды в городе ${result.city}
-        📅  ${result.date} (${result.dateType})
-        🌡  От ${result.low}℃ до ${result.high}℃
-        🌧  Вероятность осадков ${result.precip}%
-    `);
-
-    if(!result.main) return ctx.reply(JSON.stringify(result, null, 3));
-
-    return ctx.reply(`
-        Комрадский гидрометцентр сообщает: 
-        🏠 ${result.name} (${ result.weather.map(d => d.description).join(', ') })
-        🌡 ${Math.round(result.main.temp)}℃ (ощущается как ${Math.round(result.main.feels_like)}℃)
-        💧 ${result.main.humidity }%
-        ${result.clouds.all > 50 ? '🌥 облачно' : '🌤 безоблачно' }
-        🌪 ${Math.round(result.wind.speed)} метра в секунду
-    `);
+    return ctx.reply(result);
 }
 
 
@@ -62,10 +43,7 @@ async function getAllWeather(origCity, dateEntity = {}) {
                    if(dateEntity) {
                        getDateForecastWeather(city, dateEntity, resolve);
                    } else {
-                       weather.setCity(city);
-                       weather.getAllWeather(function(err, res) {
-                           resolve({ ...res, city });
-                       });
+                       resolve(await getWeatherCity(city));
                    }
                } catch(e) {
                    resolve('error: ' + e);
@@ -80,37 +58,70 @@ async function getAllWeather(origCity, dateEntity = {}) {
 
 
 async function getDateForecastWeather(city, dateEntity, resolve) {
-    const weather = require('weather-js');
-
     const dateType = fuse.search(dateEntity.value)[0] ? fuse.search(dateEntity.value)[0].item : '';
 
     let weekDay = '';
     switch (true) {
         case dateType === 'сегодня':
-            weekDay = weekDays[(new Date()).getDay()];
+            weekDay = weekDays[(new Date()).getDay()-1];
             break;
         case dateType === 'zavtra':
         case dateType === 'завтра':
-            weekDay = weekDays[(new Date()).getDay()+1] || 'Sun';
+            weekDay = weekDays[(new Date()).getDay()] || 'Mon';
             break;
         case dateType === 'poslezavtra':
         case dateType === 'послезавтра':
-            weekDay = weekDays[(new Date()).getDay()+2] || weekDays[((new Date()).getDay()+2) - 6] || '?';
+            weekDay = weekDays[(new Date()).getDay()+1] || weekDays[((new Date()).getDay()+1) - 5] || '?';
             break;
         default:
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
     }
 
-    weather.find({ search: city, degreeType: 'C' }, function(err, result) {
-        if(err) console.log(err);
-        resolve({
-            ...result[0].forecast.find(cast => cast.shortday === weekDay),
-            city,
-            dateType,
-            weekDay,
-            isFeature: weekDays.indexOf(weekDay) > new Date().getDay()
-        })
-    });
+    const subDays = weekDays.indexOf(weekDay) - new Date().getDay();
+
+    resolve(await getWeatherCity(city));
+}
+
+
+async function getWeatherCity(city, timeMs=Date.now()) {
+    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+    const page = await wikiAPI.find(city);
+
+    const { lat, lon } = await page.coordinates();
+
+    console.log(lat, lon, Math.round(timeMs/1000));
+
+    let result = await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&lang=ru&units=metric&dt=${Math.round(timeMs/1000)}&appid=e0ec6da3ca0381df4cc5564f7053ca85`)
+    result = await result.json();
+
+    const dayNumber = new Date(timeMs).getDate();
+    const hourly = result.hourly.filter(hour => hour.dt *1000 > Date.now() && dayNumber === new Date(hour.dt *1000).getDate());
+
+    function formatWeather(day) {
+        const pressure = Math.round(day.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
+        const date = new Date(day.dt * 1000);
+        const options = {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour12: false
+        };
+
+        return `
+            ⏰  ${date.toLocaleString('en-US', options)}       
+            🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)
+            🌫 Атмосферное давление: ${pressure} мм. рт. ст.
+            💧 Влажность воздуха: ${day.humidity }%
+            🌥 Облачность: ${day.clouds}%
+            🌪 ${Math.round(day.wind_speed)} метра в секунду
+        `;
+    }
+
+    return `
+        🏠 ${city} (${result.current.weather[0].description})
+        ${ formatWeather(result.current)}
+        По часам:
+        ${hourly.map(hour => formatWeather(hour)).join(' ')}
+    `;
 }
 
 const data = [
@@ -128,7 +139,7 @@ const data = [
     'послезавтра',
 ];
 
-const weekDaysRus = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const weekDaysRus = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье'];
+const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const fuse = new Fuse(data, { threshold: 0.3 });
