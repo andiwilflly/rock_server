@@ -27,7 +27,7 @@ const currencyExchange = async function(ctx, witAns) {
     let to = currencyEntities[1].value;
     const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
 
-    from = fuse.search(from);
+    from = fuse.search(from.replace(/\d+/, ''));
     to = fuse.search(to);
 
     ctx.reply(JSON.stringify({ from, to, amount }, null, 3));
