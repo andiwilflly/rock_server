@@ -110,8 +110,7 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
                 🌫 Атмосферное давление: ${pressure} мм. рт. ст.
                 💧 Влажность воздуха: ${daily.humidity }%
                 🌥 Облачность: ${daily.clouds}%
-                ${daily.rain}
-                ${daily.snow}
+               ${daily.rain ? '🌨 Снег' : daily.snow ? '🌧 Дождь' : 'Без осадков'}   
             `
     }
 
@@ -124,8 +123,7 @@ async function getWeatherCity(city, timeMs, isFeature = false) {
             🌫 Атмосферное давление: ${pressure} мм. рт. ст.
             💧 Влажность воздуха: ${result.current.humidity }%
             🌥 Облачность: ${result.current.clouds}%   
-            ${result.current.rain}   
-            ${result.current.snow}   
+            ${result.current.rain ? '🌨 Снег' : result.current.snow ? '🌧 Дождь' : 'Без осадков'}   
         ${hourly.map(hour => {
             return `${new Date(hour.dt * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })} 🌡 ${Math.round(hour.temp)}°C (ощущается как ${Math.round(hour.feels_like)}°C)
             `
