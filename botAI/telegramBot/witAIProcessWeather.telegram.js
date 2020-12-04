@@ -79,7 +79,7 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
 
     console.log('nextDate:', nextDate(weekDays.indexOf(weekDay)));
 
-    resolve(await getWeatherCity(city));
+    resolve(await getWeatherCity(city, nextDate(weekDays.indexOf(weekDay))));
 }
 
 
@@ -137,7 +137,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
 function nextDate(dayIndex) {
     const today = new Date();
     today.setDate(today.getDate() + (dayIndex - 1 - today.getDay() + 7) % 7 + 1);
-    return today;
+    return new Date(today).getTime();
 }
 
 const data = [
