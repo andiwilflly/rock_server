@@ -120,7 +120,7 @@ async function getWeatherCity(city, timeMs=Date.now()) {
             🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)
             🌪 ${Math.round(day.wind_speed)} метра в секунду
             🌫 Атмосферное давление: ${pressure} мм. рт. ст.
-             Влажность воздуха: ${day.humidity }%
+            💧 Влажность воздуха: ${day.humidity }%
             🌥 Облачность: ${day.clouds}%
         `;
     }
