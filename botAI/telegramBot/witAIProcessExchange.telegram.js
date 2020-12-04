@@ -1,10 +1,9 @@
 const Fuse = require('fuse.js');
 const fetch = require("node-fetch");
 
-const currencyExchange = async function(ctx, witAns) {
-    let rates = await fetch('http://api.currencylayer.com/live?access_key=9ab4413f09489f1d3b436a6f706c1cff');
-    rates = await rates.json();
 
+// https://exchangerate.host/#/#docs
+const currencyExchange = async function(ctx, witAns) {
     const currencyEntities = witAns.entities['currency:currency'];
 
     ctx.reply(JSON.stringify(currencyEntities, null, 3));
@@ -16,18 +15,29 @@ const currencyExchange = async function(ctx, witAns) {
     let to = currencyEntities[1].value;
     const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
 
-    from = fuse.search(from.replace(/\d+/, ''));
-    to = fuse.search(to);
+    from = fuse.search(from.replace(/\d+/, ''))[0];
+    to = fuse.search(to)[0];
+    from = from ? from.item : null;
+    to = to ? to.item : null;
+    from = match[from];
+    to = match[to];
 
-    ctx.reply(JSON.stringify({ from: match[from], to: match[to], amount }, null, 3));
+    let rates = await fetch(`https://api.exchangerate.host/latest?base=${from}`);
+    rates = (await rates.json()).rates;
 
-    // const { source, target, rate, ...rest } = await exchange.convert({ source: 'UAN', target: 'USD' });
-    //
-    // const value = await converter(67, { from: 'EUR', to: 'RUB' });
-    console.log(rates)
+    const result = rates[to] * amount;
 
-    //return ctx.reply(`CURRENCY`);
+    if(isNaN(result)) return  ctx.reply(JSON.stringify({
+        from,
+        to,
+        rate: rates[to],
+        result: rates[to] * amount,
+        amount
+    }, null, 3));
 
+    ctx.reply(`
+        💰 ${amount} ${icons[from]} -> ${result.toFixed(2)} ${icons[to]} 
+    `);
 }
 
 
@@ -45,9 +55,42 @@ const match = {
     'рубль': "RUB",
     'евро': "EUR"
 };
+const icons = {
+    "EUR": '€',
+    "USD": '$',
+    "RUB": '₽',
+    "UAH": '₴'
+}
 const fuse = new Fuse(data, { threshold: 0.3 });
 
-//currencyExchange({}, {}, '200 баксов', 'доллары');
+currencyExchange({ reply: console.log }, { entities: {
+    'currency:currency': [
+        {
+            "id": "1089102248228413",
+            "name": "currency",
+            "role": "currency",
+            "start": 0,
+            "end": 10,
+            "body": "200 гривен",
+            "confidence": 0.9893,
+            "entities": [],
+            "value": "200 гривен",
+            "type": "value"
+        },
+        {
+            "id": "1089102248228413",
+            "name": "currency",
+            "role": "currency",
+            "start": 13,
+            "end": 17,
+            "body": "евро",
+            "confidence": 0.9695,
+            "entities": [],
+            "value": "евро",
+            "type": "value"
+        }
+    ]
+} });
 
 
 
