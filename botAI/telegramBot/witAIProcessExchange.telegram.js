@@ -1,6 +1,9 @@
 const Fuse = require('fuse.js');
 const fetch = require("node-fetch");
 
+// TODO: обмен 0.5$ на грн
+// TODO: 0.5 евро в гривне
+// TODO: 34.6 EUR TO UAH
 
 // https://exchangerate.host/#/#docs
 const currencyExchange = async function(ctx, witAns) {
@@ -36,7 +39,7 @@ const currencyExchange = async function(ctx, witAns) {
     }, null, 3));
 
     ctx.reply(`
-        💰 ${formatter.format(amount)} ${icons[from]} ⇨ ${formatter.format(+result.toFixed(0))} ${icons[to]} 
+        💰 ${formatter.format(amount)} ${icons[from]} ⇨ ${formatter.format(+result.toFixed(2))} ${icons[to]} 
     `);
 }
 
@@ -49,6 +52,8 @@ const data = [
     'бакс',
     'доллар',
     'гривна',
+    'грн',
+    'руб',
     'рубль',
     'dollar',
     'евро'
@@ -62,7 +67,9 @@ const match = {
     'доллар': "USD",
     'dollar': "USD",
     'гривна': "UAH",
+    'грн': "UAH",
     'рубль': "RUB",
+    'руб': "RUB",
     'евро': "EUR"
 };
 const icons = {
