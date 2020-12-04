@@ -162,7 +162,7 @@ const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const fuse = new Fuse(data, { threshold: 0.3 });
 
 
-(async function () {
-    console.log(new Date(nextDate(0)))
-    console.log(await getWeatherCity('Киев', nextDate(0)));
-})();
+// (async function () {
+//     console.log(new Date(nextDate(0)))
+//     console.log(await getWeatherCity('Киев', nextDate(0)));
+// })();
