@@ -18,13 +18,14 @@ const currencyExchange = async function(ctx, witAns) {
 
     const currencyEntity = witAns.entities['currency:currency'] ? witAns.entities['currency:currency'][0] : null;
 
+    ctx.reply(JSON.stringify(currencyEntity, null, 3));
+
     if(!currencyEntity.length) return ctx.reply('case 1');
     if(currencyEntity.length !== 2) return ctx.reply('case 2');
 
     const from = currencyEntity[0].value;
     const to = currencyEntity[1].value;
 
-    ctx.reply(JSON.stringify(witAns, null, 3));
     ctx.reply(JSON.stringify({ from, to }, null, 3));
 
     // const { source, target, rate, ...rest } = await exchange.convert({ source: 'UAN', target: 'USD' });
