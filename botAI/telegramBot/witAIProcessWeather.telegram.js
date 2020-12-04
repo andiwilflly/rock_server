@@ -106,13 +106,19 @@ async function getWeatherCity(city, timeMs=Date.now()) {
             hour12: false
         };
 
+        if(!showDetails) {
+            return `
+                ⏰  ${date.toLocaleString('en-US', options)}       
+                🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)          
+            `;
+        }
         return `
             ⏰  ${date.toLocaleString('en-US', options)}       
             🌡 ${Math.round(day.temp)}°C (ощущается как ${Math.round(day.feels_like)}°C)
             🌪 ${Math.round(day.wind_speed)} метра в секунду
-            ${ showDetails ? `🌫 Атмосферное давление: ${pressure} мм. рт. ст.` : '' }          
-            ${ showDetails ? `💧 Влажность воздуха: ${day.humidity }%` : '' }
-            ${ showDetails ? `🌥 Облачность: ${day.clouds}%` : '' }          
+            🌫 Атмосферное давление: ${pressure} мм. рт. ст.
+             Влажность воздуха: ${day.humidity }%
+            🌥 Облачность: ${day.clouds}%
         `;
     }
 
