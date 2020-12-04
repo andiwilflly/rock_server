@@ -77,7 +77,7 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
     }
 
-    console.log('nextDate:', nextDate(weekDays.indexOf(weekDay)), 'subDays!', subDays);
+    console.log('nextDate:', nextDate(weekDays.indexOf(weekDay)));
 
     resolve(await getWeatherCity(city));
 }
