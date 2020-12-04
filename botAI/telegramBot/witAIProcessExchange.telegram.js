@@ -15,14 +15,12 @@ const currencyExchange = async function(ctx, witAns) {
     let to = currencyEntities[1].body;
     const amount = from.match(/\d+/) ? +from.match(/\d+/)[0] : 1;
 
-    if(!icons[from] || !icons[to]) {
-        from = fuse.search(from.replace(/\d+/, ''))[0];
-        to = fuse.search(to)[0];
-        from = from ? from.item : null;
-        to = to ? to.item : null;
-        from = match[from];
-        to = match[to];
-    }
+    from = fuse.search(from.replace(/\d+/, ''))[0];
+    to = fuse.search(to)[0];
+    from = from ? from.item : null;
+    to = to ? to.item : null;
+    from = match[from];
+    to = match[to];
 
     let rates = await fetch(`https://api.exchangerate.host/latest?base=${from}`);
     rates = (await rates.json()).rates;
@@ -44,15 +42,25 @@ const currencyExchange = async function(ctx, witAns) {
 
 
 const data = [
+    'USD',
+    'UAH',
+    'RUB',
+    'EUR',
     'бакс',
     'доллар',
     'гривна',
     'рубль',
+    'dollar',
     'евро'
 ];
 const match = {
+    'USD': "USD",
+    'UAH': "UAH",
+    'RUB': "RUB",
+    'EUR': "EUR",
     'бакс': "USD",
     'доллар': "USD",
+    'dollar': "USD",
     'гривна': "UAH",
     'рубль': "RUB",
     'евро': "EUR"
@@ -73,7 +81,7 @@ currencyExchange({ reply: console.log }, { entities: {
             "role": "currency",
             "start": 11,
             "end": 14,
-            "body": "USD",
+            "body": "456677USD",
             "confidence": 1,
             "entities": [],
             "value": "usd",
