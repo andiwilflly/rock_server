@@ -95,8 +95,8 @@ async function getWeatherCity(city, timeMs=Date.now(), isFeature = false) {
     let result = await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&lang=ru&units=metric&dt=${Math.round(timeMs/1000)}&appid=e0ec6da3ca0381df4cc5564f7053ca85`)
     result = await result.json();
 
-    const dayNumber = new Date().getDate();
-    const hourly = result.hourly.filter(hour => hour.dt*1000 > new Date().getTime() && dayNumber === new Date(hour.dt *1000).getDate());
+    const dayNumber = new Date(timeMs).getDate();
+    const hourly = result.hourly.filter(hour => hour.dt*1000 > new Date(timeMs).getTime() && dayNumber === new Date(hour.dt *1000).getDate());
 
     function formatWeather(day, showDetails = true) {
         const pressure = Math.round(day.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
@@ -129,7 +129,7 @@ async function getWeatherCity(city, timeMs=Date.now(), isFeature = false) {
     return `
         🏠 ${city} (${result.current.weather[0].description})
         ${formatWeather(result.current)}
-        По часам:
+        По часам: ${isFeature}
         ${ isFeature ? '' : hourly.map(hour => formatWeather(hour, false)).join(' ')}
     `;
 }
