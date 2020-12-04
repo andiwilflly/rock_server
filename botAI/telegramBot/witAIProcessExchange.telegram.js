@@ -36,7 +36,7 @@ const currencyExchange = async function(ctx, witAns) {
     }, null, 3));
 
     ctx.reply(`
-        💰 ${formatter.format(amount)} ${icons[from]} ⇨ ${formatter.format(+result.toFixed(2))} ${icons[to]} 
+        💰 ${formatter.format(amount)} ${icons[from]} ⇨ ${formatter.format(+result.toFixed(0))} ${icons[to]} 
     `);
 }
 
