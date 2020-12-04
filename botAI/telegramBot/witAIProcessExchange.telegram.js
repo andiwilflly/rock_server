@@ -72,7 +72,7 @@ const icons = {
     "UAH": '₴'
 }
 
-const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const formatter = new Intl.NumberFormat();
 
 const fuse = new Fuse(data, { threshold: 0.3 });
 
