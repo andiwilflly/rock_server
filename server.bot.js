@@ -31,11 +31,14 @@ const AI = {
     userData: null
 }
 async function start() {
+    console.log(`🤖 BOT AI | Setup basicBot...`);
     AI.BOT = new BasicBot()
     await AI.BOT.initialize(conf)
 
     AI.userData = new UserData();
     AI.userData.initialize();
+
+    console.log(`🤖 BOT AI | BasicBot ready...`);
 
     const telegramBot = require('./botAI/telegramBot');
     telegramBot(AI);

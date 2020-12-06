@@ -17,10 +17,7 @@ const witAIProcessWeather = require('./telegramBot/witAIProcessWeather.telegram'
 const witAIProcessExchange = require('./telegramBot/witAIProcessExchange.telegram');
 
 
-const keyboard = Markup.inlineKeyboard([
-    Markup.locationRequestButton('Send location')
-])
-
+console.log(`🤖 BOT AI | Starting...`);
 
 // @SOURCE: https://telegraf.js.org
 // @SOURCE: https://cloud.google.com/natural-language/docs
@@ -28,6 +25,7 @@ const keyboard = Markup.inlineKeyboard([
 // TODO: https://github.com/dmtrbrl/BooksAndBot
 // TODO: https://github.com/RealSpeaker/telegraf-session-local
 async function start(AI) {
+    console.log(`🤖 BOT AI | Started telegram bot...`);
 
     bot.on('message', async (ctx) => {
         const witAns = await witAI.message(ctx.message.text);
@@ -41,7 +39,7 @@ async function start(AI) {
         // console.log('ans | ', ans);
 
         if(ans.confidence >= 0.60) {
-            //await ctx.reply(JSON.stringify(ans, null, 3));
+            await ctx.reply(JSON.stringify(ans, null, 3));
             try {
                 switch (true) {
                     case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
@@ -59,7 +57,7 @@ async function start(AI) {
                 await ctx.reply("Ошибка");
             }
         } else {
-            //await ctx.reply(JSON.stringify(witAns, null, 3))
+            await ctx.reply(JSON.stringify(witAns, null, 3))
 
             // Wit AI
             switch (true) {
