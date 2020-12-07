@@ -32,11 +32,11 @@ const AI = {
 }
 async function start() {
     console.log(`🤖 BOT AI | Setup basicBot...`);
-    AI.BOT = new BasicBot()
-    await AI.BOT.initialize(conf)
-
-    AI.userData = new UserData();
-    AI.userData.initialize();
+    // AI.BOT = new BasicBot()
+    // await AI.BOT.initialize(conf)
+    //
+    // AI.userData = new UserData();
+    // AI.userData.initialize();
 
     console.log(`🤖 BOT AI | BasicBot ready...`);
 
