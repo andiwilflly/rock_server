@@ -37,6 +37,7 @@ async function start(AI) {
                 case ans.confidence >= 0.60:
                     return await neuralAIProcessSpeak(ctx, ans);
                 case (witAns.intents[0] && witAns.intents[0].name === 'search'):
+                case !witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'] && !!witAns.entities['wit$location:location']:
                 case !!witAns.entities['wit$wikipedia_search_query:wikipedia_search_query']:
                     return await witAIProcessWikipedia(bot, ctx, witAns, wikiAPI);
                 case witAns.intents[0] && witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
