@@ -22,7 +22,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         if(!summary) {
             summary = 'Найдено несколько результатов: \n' + (await wikiAPI.search('Медведев', 3)).results.join('\n');
         } else {
-            img = await page.mainImage();
+            img = await wikiAPI.page(searchEntity.body) && await page.mainImage();
         }
 
         if(summary.length > 300) {
@@ -42,14 +42,14 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 }
 
 
-async function test() {
-    const WIKI = require('wikijs').default;
-    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
-
-    const page = await wikiAPI.search('Медведев', 3);
-
-    console.log('======');
-    console.log(page);
-}
-
-test();
+// async function test() {
+//     const WIKI = require('wikijs').default;
+//     const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+//
+//     const page = await wikiAPI.search('Медведев', 3);
+//
+//     console.log('======');
+//     console.log(page);
+// }
+//
+// test();
