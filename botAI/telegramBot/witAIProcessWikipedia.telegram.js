@@ -19,8 +19,8 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         summary = await page.summary();
         const { lat, lon} = await page.coordinates();
         await ctx.replyWithHTML(`
-            ${icon} ${summary} 
-            ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z}`: ''}
+            ${icon} ${summary}
+            ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: ''}
         `);
     } catch(e) {
         console.log(e);
