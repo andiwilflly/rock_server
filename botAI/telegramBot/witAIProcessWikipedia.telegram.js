@@ -26,10 +26,8 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         }
 
         if(summary.length > 300) {
-            console.log('=> 1', summary);
             summary = summary.slice(0, 300).split('.');
             summary = summary.length > 1 ? summary.filter((a,i)=> i+1 !== summary.length).join('.') : summary.join();
-            console.log('=> 2', summary);
         }
         const { lat, lon } = await page.coordinates();
         await ctx.replyWithHTML(`
