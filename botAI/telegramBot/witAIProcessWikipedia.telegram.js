@@ -20,7 +20,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         await ctx.replyWithHTML(`${icon} ${summary}`);
         if(witAns.entities['wit$location:location']) {
             const { lat, lon, } = await page.coordinates();
-            await ctx.replyWithLocation(lat, lon);
+            await ctx.replyWithHTML(`https://www.google.com.ua/maps/@${lat},${lon},11z`);
         }
     } catch(e) {
         console.log(e);
