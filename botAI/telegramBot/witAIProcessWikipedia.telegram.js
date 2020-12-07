@@ -22,8 +22,9 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
             summary = summary.length > 1 ? summary.filter((a,i)=> i+1 !== summary.length).join('.') : summary.join();
         }
         const { lat, lon } = await page.coordinates();
+        const img = await page.mainImage();
         await ctx.replyWithHTML(`
-            ${icon} ${summary} ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: '' }
+            ${icon} ${summary} ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: img }
         `);
     } catch(e) {
         console.log(e);
