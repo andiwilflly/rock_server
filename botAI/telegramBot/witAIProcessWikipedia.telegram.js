@@ -18,11 +18,13 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
 
-        await bot.telegram.sendMessage(
-            ctx.message.chat.id,
-            `${icon} ${summary}`,
-            { parse_mode: 'HTML' }
-        );
+        await ctx.replyWithPhoto(await page.mainImage());
+        await ctx.replyWithHTML(`${icon} ${summary}`);
+        // await bot.telegram.sendMessage(
+        //     ctx.message.chat.id,
+        //     `${icon} ${summary}`,
+        //     { parse_mode: 'HTML' }
+        // );
     } catch(e) {
         ctx.reply(`📖 + ${summary}`);
     }
