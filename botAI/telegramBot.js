@@ -77,6 +77,7 @@ async function start(AI) {
             }
         } catch(e) {
            await ctx.reply(e);
+            global.STATE = {};
         }
     })
 

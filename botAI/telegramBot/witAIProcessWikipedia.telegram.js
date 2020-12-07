@@ -1,6 +1,8 @@
 
 
 module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
+    global.STATE = {};
+
     const searchEntity = witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'] ?
         witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'][0]
         :

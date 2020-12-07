@@ -7,6 +7,8 @@ const fetch = require("node-fetch");
 
 // https://exchangerate.host/#/#docs
 const currencyExchange = async function(ctx, witAns) {
+    global.STATE = {};
+
     const currencyEntities = witAns.entities['currency:currency'];
 
     // ctx.reply(JSON.stringify(currencyEntities, null, 3));

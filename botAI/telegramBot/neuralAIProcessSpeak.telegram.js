@@ -4,6 +4,7 @@ const randomInt = require('./functions/randomInt.function');
 
 
 module.exports = async function neuralAIProcessSpeak(ctx, ans) {
+    global.STATE = {};
 
     await ctx.reply(JSON.stringify(ans, null, 3));
     try {
