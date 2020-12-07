@@ -30,7 +30,7 @@ module.exports = async function getWeatherCity(city, timeMs, isFeature = false) 
 💧 Влажность:  ${daily.humidity }%
 🌥 Облачность: ${daily.clouds}%
 
-${randomAnswer(getWeatherJokes(daily))}`
+🧐 ${randomAnswer(getWeatherJokes(daily))}`
 }
 
     const pressure = Math.round(result.current.pressure / 133.3224) * 100; // Pa -> мм. рт. ст.
@@ -42,7 +42,7 @@ ${randomAnswer(getWeatherJokes(daily))}`
 💧 Влажность:  ${result.current.humidity }%
 🌥 Облачность: ${result.current.clouds}% 
     
-${randomAnswer(getWeatherJokes(result.current))}`;
+🤔 ${randomAnswer(getWeatherJokes(result.current))}`;
 }
 
 // ${hourly.map(hour => {
