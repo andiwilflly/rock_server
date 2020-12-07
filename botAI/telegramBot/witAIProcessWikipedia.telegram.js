@@ -9,25 +9,27 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
     try {
         const page = await wikiAPI.find(searchEntity.body);
        summary = await page.summary();
+       const img = await page.mainImage();
 
-        await bot.telegram.sendMessage(
-            ctx.message.chat.id,
-            `📖 ${summary}`,
-            { parse_mode: 'HTML' }
-        );
+        await ctx.replyWithPhoto({ source: img },{ caption: summary });
+        // await bot.telegram.sendMessage(
+        //     ctx.message.chat.id,
+        //     `📖 ${summary}`,
+        //     { parse_mode: 'HTML' }
+        // );
     } catch(e) {
         ctx.reply(summary);
     }
 }
 
 
-// async function test() {
-//     const WIKI = require('wikijs').default;
-//     const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
-//
-//     const page = await wikiAPI.find('секс');
-//
-//     console.log(page,await page.summary(), 42);
-// }
-//
-// test();
+async function test() {
+    const WIKI = require('wikijs').default;
+    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+
+    const page = await wikiAPI.find('секс');
+
+    console.log(page,await page.mainImage(), 42);
+}
+
+test();
