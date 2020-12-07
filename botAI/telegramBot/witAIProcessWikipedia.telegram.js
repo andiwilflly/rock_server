@@ -18,7 +18,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
 
-        await ctx.replyWithPhoto(await page.mainImage());
+        await ctx.replyWithPhoto({ source: await page.mainImage() }, { caption: summary });
         await ctx.replyWithHTML(`${icon} ${summary}`);
         // await bot.telegram.sendMessage(
         //     ctx.message.chat.id,
@@ -26,6 +26,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         //     { parse_mode: 'HTML' }
         // );
     } catch(e) {
+        console.log(e);
         ctx.reply(`📖 + ${summary}`);
     }
 }
