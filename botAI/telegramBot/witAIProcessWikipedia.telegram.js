@@ -17,11 +17,11 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
     try {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
-        await ctx.replyWithHTML(`${icon} ${summary}`);
-        if(witAns.entities['wit$location:location']) {
-            const { lat, lon, } = await page.coordinates();
-            await ctx.replyWithHTML(`https://www.google.com.ua/maps/@${lat},${lon},11z`);
-        }
+        const { lat, lon} = await page.coordinates();
+        await ctx.replyWithHTML(`
+            ${icon} ${summary} 
+            ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z}`: ''}
+        `);
     } catch(e) {
         console.log(e);
         ctx.reply(`📖 ${summary}`);
@@ -29,15 +29,15 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 }
 
 
-async function test() {
-    const WIKI = require('wikijs').default;
-    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
-
-    const page = await wikiAPI.find('Новосибирск');
-
-    console.log(await page.summary());
-    console.log('======');
-    console.log(await page.coordinates());
-}
-
-test();
+// async function test() {
+//     const WIKI = require('wikijs').default;
+//     const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+//
+//     const page = await wikiAPI.find('Человек');
+//
+//     console.log(await page.summary());
+//     console.log('======');
+//     console.log(await page.coordinates());
+// }
+//
+// test();
