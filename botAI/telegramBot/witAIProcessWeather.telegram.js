@@ -1,5 +1,4 @@
 const Fuse = require('fuse.js');
-const WIKI = require('wikijs').default;
 const weather = require('openweather-apis');
 const randomAnswer = require('./functions/randomAnswer.function');
 const getWeatherCity = require('./functions/getWeatherCity.function');
@@ -11,7 +10,7 @@ const KEY = 'e0ec6da3ca0381df4cc5564f7053ca85';
 weather.setLang('ru');
 weather.setAPPID(KEY);
 
-module.exports = async function(ctx, witAns) {
+module.exports = async function(ctx, witAns, wikiAPI) {
     const locationEntity = witAns.entities['wit$location:location'] ? witAns.entities['wit$location:location'][0] : null;
     const dateEntity = witAns.entities['date_time:date_time'] ? witAns.entities['date_time:date_time'][0] : null;
 
@@ -23,18 +22,17 @@ module.exports = async function(ctx, witAns) {
         'Прогноз погоды в каком городе тебя интересует?'
     ]));
 
-    const result = await getAllWeather(locationEntity.value, dateEntity);
+    const result = await getAllWeather(locationEntity.value, dateEntity, wikiAPI);
 
     return ctx.reply(result);
 }
 
 
-async function getAllWeather(origCity, dateEntity = {}) {
+async function getAllWeather(origCity, dateEntity = {}, wikiAPI) {
 
     weather.setCity(origCity);
     return new Promise(async resolve => {
         try {
-            const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
             const page = await wikiAPI.search(origCity, 2);
 
             const city = page.results.sort((a,b)=> a.length - b.length)[0];

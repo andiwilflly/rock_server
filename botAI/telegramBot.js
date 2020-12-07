@@ -1,4 +1,5 @@
 const { Wit } = require('node-wit');
+const WIKI = require('wikijs').default;
 const { Telegraf } = require('telegraf');
 const bot = new Telegraf('1412547933:AAEMpG4QT-BRrnnd8g7R2cS7Gw-QYdvoTmw') //сюда помещается токен, который дал botFather
 
@@ -7,6 +8,7 @@ const witAI = new Wit({  accessToken: "SKFYG45FKJ2RSVJIXDITMVLOKBSRSLQZ" });
 const witAIProcessQuestion = require('./telegramBot/witAIProcessQuestion.telegram');
 const witAIProcessWeather = require('./telegramBot/witAIProcessWeather.telegram');
 const witAIProcessExchange = require('./telegramBot/witAIProcessExchange.telegram');
+const witAIProcessWikipedia = require('./telegramBot/witAIProcessWikipedia.telegram');
 const neuralAIProcessSpeak = require('./telegramBot/neuralAIProcessSpeak.telegram');
 
 
@@ -26,6 +28,8 @@ async function start(AI) {
 
         let ans = await AI.BOT.getResult(ctx.message.text, AI.userData);
 
+        const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+
         await ctx.reply(JSON.stringify(witAns, null, 3))
 
         switch (true) {
@@ -33,10 +37,12 @@ async function start(AI) {
                 return await neuralAIProcessSpeak(ctx, ans);
             case !witAns.intents[0]:
                 return null;
+            case witAns.intents[0].name === 'search':
+                return await witAIProcessWikipedia(ctx, witAns, wikiAPI);
             case witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
                 return await witAIProcessExchange(ctx, witAns);
             case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
-                return await witAIProcessWeather(ctx, witAns);
+                return await witAIProcessWeather(ctx, witAns, wikiAPI);
             case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
                 return await witAIProcessQuestion(witAns);
         }
