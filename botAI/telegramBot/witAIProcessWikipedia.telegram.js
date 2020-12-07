@@ -17,8 +17,9 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
     try {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
+        const img = await page.mainImage();
 
-        await ctx.replyWithPhoto({ source: await page.mainImage() }, { caption: summary });
+        await ctx.replyWithPhoto({ source: img }, { caption: summary });
         await ctx.replyWithHTML(`${icon} ${summary}`);
         // await bot.telegram.sendMessage(
         //     ctx.message.chat.id,
