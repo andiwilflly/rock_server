@@ -6,7 +6,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
     if(!searchEntity) return ctx.reply('Wikipedia ???');
 
     try {
-        const page = await wikiAPI.page(searchEntity.body);
+        const page = await wikiAPI.find(searchEntity.body);
 
         await bot.telegram.sendMessage(
             ctx.message.chat.id,
