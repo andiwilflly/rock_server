@@ -6,11 +6,10 @@ module.exports = async function witProcessWikipedia(ctx, witAns, wikiAPI) {
     if(searchEntity) return ctx.reply('Wikipedia ???');
 
     try {
-        const page = await wikiAPI.search(searchEntity.body, 2);
+        const page = await wikiAPI.page(searchEntity.body);
 
         ctx.reply(JSON.stringify(await page.summary(), null, 3));
     } catch(e) {
         ctx.reply(e);
     }
-
 }
