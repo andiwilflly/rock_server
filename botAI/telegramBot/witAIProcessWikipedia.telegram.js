@@ -18,6 +18,8 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
 
+        if(!summary) console.log(page);
+
         if(summary.length > 300) {
             console.log('=> 1', summary);
             summary = summary.slice(0, 300).split('.');
