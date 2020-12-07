@@ -21,13 +21,13 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 }
 
 
-async function test() {
-    const WIKI = require('wikijs').default;
-    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
-
-    const page = await wikiAPI.find('секс');
-
-    console.log(page,await page.summary(), 42);
-}
-
-test();
+// async function test() {
+//     const WIKI = require('wikijs').default;
+//     const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+//
+//     const page = await wikiAPI.find('секс');
+//
+//     console.log(page,await page.summary(), 42);
+// }
+//
+// test();

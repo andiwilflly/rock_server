@@ -32,19 +32,23 @@ async function start(AI) {
 
         await ctx.reply(JSON.stringify(witAns, null, 3))
 
-        switch (true) {
-            case ans.confidence >= 0.60:
-                return await neuralAIProcessSpeak(ctx, ans);
-            case !witAns.intents[0]:
-                return null;
-            case witAns.intents[0].name === 'search' || witAns.entities['wit$wikipedia_search_query:wikipedia_search_query']:
-                return await witAIProcessWikipedia(bot, ctx, witAns, wikiAPI);
-            case witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
-                return await witAIProcessExchange(ctx, witAns);
-            case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
-                return await witAIProcessWeather(ctx, witAns, wikiAPI);
-            case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
-                return await witAIProcessQuestion(witAns);
+        try {
+            switch (true) {
+                case ans.confidence >= 0.60:
+                    return await neuralAIProcessSpeak(ctx, ans);
+                case !witAns.intents[0]:
+                    return null;
+                case witAns.intents[0].name === 'search' || witAns.entities['wit$wikipedia_search_query:wikipedia_search_query']:
+                    return await witAIProcessWikipedia(bot, ctx, witAns, wikiAPI);
+                case witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
+                    return await witAIProcessExchange(ctx, witAns);
+                case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
+                    return await witAIProcessWeather(ctx, witAns, wikiAPI);
+                case witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
+                    return await witAIProcessQuestion(witAns);
+            }
+        } catch(e) {
+           await ctx.reply(e);
         }
     })
 
