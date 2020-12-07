@@ -32,30 +32,30 @@
 // }
 
 console.log(`🤖 BOT AI | Start`);
-async function start() {
-    console.log(`🤖 BOT AI | Setup basicBot...`);
-    // AI.BOT = new BasicBot()
-    // await AI.BOT.initialize(conf)
-    //
-    // AI.userData = new UserData();
-    // AI.userData.initialize();
-
-    console.log(`🤖 BOT AI | BasicBot ready...`);
-
-    const telegramBot = require('./botAI/telegramBot');
-    telegramBot(AI);
-}
-
-start();
-
-const express = require('express');
-const app = express()
-const port = 3001
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+// async function start() {
+//     console.log(`🤖 BOT AI | Setup basicBot...`);
+//     // AI.BOT = new BasicBot()
+//     // await AI.BOT.initialize(conf)
+//     //
+//     // AI.userData = new UserData();
+//     // AI.userData.initialize();
+//
+//     console.log(`🤖 BOT AI | BasicBot ready...`);
+//
+//     const telegramBot = require('./botAI/telegramBot');
+//     telegramBot(AI);
+// }
+//
+// start();
+//
+// const express = require('express');
+// const app = express()
+// const port = 3001
+//
+// app.get('/', (req, res) => {
+//     res.send('Hello World!')
+// })
+//
+// app.listen(port, () => {
+//     console.log(`Example app listening at http://localhost:${port}`)
+// })
