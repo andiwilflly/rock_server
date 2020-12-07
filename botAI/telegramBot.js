@@ -38,7 +38,7 @@ async function start(AI) {
             case !witAns.intents[0]:
                 return null;
             case witAns.intents[0].name === 'search':
-                return await witAIProcessWikipedia(ctx, witAns, wikiAPI);
+                return await witAIProcessWikipedia(bot, ctx, witAns, wikiAPI);
             case witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
                 return await witAIProcessExchange(ctx, witAns);
             case witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
