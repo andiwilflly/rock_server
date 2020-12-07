@@ -18,8 +18,11 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
 
+        let img = '';
         if(!summary) {
             summary = 'Найдено несколько результатов: \n' + (await wikiAPI.search('Медведев', 3)).results.join('\n');
+        } else {
+            img = await page.mainImage();
         }
 
         if(summary.length > 300) {
@@ -30,7 +33,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         }
         const { lat, lon } = await page.coordinates();
         await ctx.replyWithHTML(`
-            ${icon} ${summary} ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: '' }
+            ${icon} ${summary} ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: img }
         `);
     } catch(e) {
         console.log(e);
