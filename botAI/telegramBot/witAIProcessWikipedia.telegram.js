@@ -7,10 +7,11 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 
     try {
         const page = await wikiAPI.find(searchEntity.body);
+        const summary = await page.summary();
 
         await bot.telegram.sendMessage(
             ctx.message.chat.id,
-            await page.summary(),
+            `<b>📖</b> ${summary}`,
             { parse_mode: 'HTML' }
         );
         //ctx.reply(JSON.stringify(await page.summary(), null, 3));
