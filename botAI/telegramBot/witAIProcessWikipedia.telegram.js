@@ -18,7 +18,9 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
 
-        if(!summary) summary = await page.fullInfo();
+        if(!summary) {
+            summary = 'Найдено несколько результатов: \n' + (await wikiAPI.search('Медведев', 3)).results.join('\n');
+        }
 
         if(summary.length > 300) {
             console.log('=> 1', summary);
@@ -37,15 +39,14 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 }
 
 
-// async function test() {
-//     const WIKI = require('wikijs').default;
-//     const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
-//
-//     const page = await wikiAPI.find('Человек');
-//
-//     console.log(await page.summary());
-//     console.log('======');
-//     console.log(await page.coordinates());
-// }
-//
-// test();
+async function test() {
+    const WIKI = require('wikijs').default;
+    const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
+
+    const page = await wikiAPI.search('Медведев', 3);
+
+    console.log('======');
+    console.log(page);
+}
+
+test();
