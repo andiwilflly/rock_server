@@ -1,35 +1,35 @@
-const path = require('path');
+// const path = require('path');
+//
+//
+// const DB = {
+//     "data": [
+//         ...require(path.resolve(__dirname, 'botAI/data/main.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/questions.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/greetings.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/interests.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/komrad.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/jokes.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/animals.json')),
+//         // ...require(path.resolve(__dirname, 'botAI/data/responses.json'))
+//     ]
+// };
+//
+// let { BasicBot } = require('neural-chatbot');
+// let { UserData } = require('neural-phrasex');
+//
+// let conf = {
+//     database: DB,
+//     doc: {
+//         description: {
+//             name: "jimmy",
+//         },
+//     },
+// }
 
-
-const DB = {
-    "data": [
-        ...require(path.resolve(__dirname, 'botAI/data/main.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/questions.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/greetings.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/interests.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/komrad.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/jokes.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/animals.json')),
-        // ...require(path.resolve(__dirname, 'botAI/data/responses.json'))
-    ]
-};
-
-let { BasicBot } = require('neural-chatbot');
-let { UserData } = require('neural-phrasex');
-
-let conf = {
-    database: DB,
-    doc: {
-        description: {
-            name: "jimmy",
-        },
-    },
-}
-
-const AI = {
-    BOT: null,
-    userData: null
-}
+// const AI = {
+//     BOT: null,
+//     userData: null
+// }
 
 console.log(`🤖 BOT AI | Start`);
 async function start() {
