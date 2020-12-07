@@ -5,18 +5,18 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 
     if(!searchEntity) return ctx.reply('Wikipedia ???');
 
+    let summary = 'Not found [summary]';
     try {
         const page = await wikiAPI.find(searchEntity.body);
-        const summary = await page.summary();
+       summary = await page.summary();
 
         await bot.telegram.sendMessage(
             ctx.message.chat.id,
             `📖 ${summary}`,
             { parse_mode: 'HTML' }
         );
-        //ctx.reply(JSON.stringify(await page.summary(), null, 3));
     } catch(e) {
-        ctx.reply(e);
+        ctx.reply(summary);
     }
 }
 
