@@ -11,14 +11,16 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
 
     if(!searchEntity) return ctx.reply('Wikipedia ???');
 
+    const icon = witAns.entities['wit$location:location'] ? '🏠' : '📖';
     let summary = 'Not found [summary]';
+
     try {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
 
         await bot.telegram.sendMessage(
             ctx.message.chat.id,
-            `📖 ${summary}`,
+            `${icon} ${summary}`,
             { parse_mode: 'HTML' }
         );
     } catch(e) {
