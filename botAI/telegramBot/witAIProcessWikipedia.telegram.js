@@ -19,7 +19,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         summary = await page.summary();
         if(summary.length > 300) {
             summary = summary.slice(0, 300).split('.');
-            summary = summary.filter((a,i)=> i+1 !== summary.length).join('.');
+            summary = summary.length > 1 ? summary.filter((a,i)=> i+1 !== summary.length).join('.') : summary.join();
         }
         const { lat, lon } = await page.coordinates();
         await ctx.replyWithHTML(`
