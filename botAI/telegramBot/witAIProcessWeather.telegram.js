@@ -14,6 +14,14 @@ module.exports = async function(ctx, witAns, wikiAPI) {
     const locationEntity = witAns.entities['wit$location:location'] ? witAns.entities['wit$location:location'][0] : null;
     const dateEntity = witAns.entities['date_time:date_time'] ? witAns.entities['date_time:date_time'][0] : null;
 
+    global.STATE = {
+        subject: 'weather',
+        isFinished: false,
+        text: witAns.text,
+        location: locationEntity ? locationEntity.value : null,
+        date: dateEntity ? dateEntity.value : null
+    };
+
     if(!locationEntity) return ctx.reply(randomAnswer([
         'Какой город?',
         'В каком городе ты живешь?',
@@ -33,18 +41,29 @@ async function getAllWeather(origCity, dateEntity = {}, wikiAPI) {
     weather.setCity(origCity);
     return new Promise(async resolve => {
         try {
-            const page = await wikiAPI.search(origCity, 2);
-
-            const city = page.results.sort((a,b)=> a.length - b.length)[0];
-
             if(dateEntity) {
-                await getDateForecastWeather(city, dateEntity, resolve);
+                await getDateForecastWeather(origCity, dateEntity, resolve);
             } else {
-                resolve(await getWeatherCity(city, Date.now()));
+                resolve(await getWeatherCity(origCity, Date.now()));
             }
         } catch(e) {
-            resolve('error: ' + e);
+            try {
+                const page = await wikiAPI.search(origCity, 2);
+
+                const city = page.results.sort((a,b)=> a.length - b.length)[0];
+
+                if(dateEntity) {
+                    await getDateForecastWeather(city, dateEntity, resolve);
+                } else {
+                    resolve(await getWeatherCity(city, Date.now()));
+                }
+            } catch(e) {
+                resolve('error: ' + e);
+            }
         }
+
+        // Restore STATE to default
+        global.STATE = {};
     })
 }
 
@@ -70,7 +89,7 @@ async function getDateForecastWeather(city, dateEntity, resolve) {
             weekDay = weekDays[weekDaysRus.indexOf(dateType)];
     }
 
-    console.log('nextDate:', nextDate(weekDays.indexOf(weekDay)));
+    console.log('nextDate:', city, nextDate(weekDays.indexOf(weekDay)));
 
     resolve(await getWeatherCity(city, nextDate(weekDays.indexOf(weekDay)), true));
 }

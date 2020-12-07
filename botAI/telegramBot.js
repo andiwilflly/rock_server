@@ -11,6 +11,7 @@ const witAIProcessExchange = require('./telegramBot/witAIProcessExchange.telegra
 const witAIProcessWikipedia = require('./telegramBot/witAIProcessWikipedia.telegram');
 const neuralAIProcessSpeak = require('./telegramBot/neuralAIProcessSpeak.telegram');
 
+global.STATE = {};
 
 // @SOURCE: https://telegraf.js.org
 // @SOURCE: https://cloud.google.com/natural-language/docs
@@ -30,23 +31,48 @@ async function start(AI) {
 
         const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
 
-        await ctx.reply(JSON.stringify(ans, null, 3));
+        //await ctx.reply(JSON.stringify(ans, null, 3));
         await ctx.reply(JSON.stringify(witAns, null, 3));
+        await ctx.reply(JSON.stringify(global.STATE, null, 3));
+
+        const searchEntity = witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'];
+        const locationEntity = witAns.entities['wit$location:location'];
+        const isSearch = witAns.intents[0] && witAns.intents[0].name === 'search';
+        const isExchange = witAns.intents[0] && witAns.intents[0].name === "currency_exchange";
+        const isWeather = witAns.intents[0] && witAns.intents[0].name === "weather";
 
         try {
             switch (true) {
+                // Restore context for weather w.o. [location] provided
+                case global.STATE.isFinished === false && global.STATE.subject === 'weather' && !!locationEntity:
+                    await ctx.reply(`RESTORE weather context: '${global.STATE.text} ${locationEntity[0].body}'`);
+                    return await witAIProcessWeather(ctx, await witAI.message(`${global.STATE.text} ${locationEntity[0].body}`), wikiAPI);
+
+                // Final check for STATE to prevent requests spam
+                case global.STATE.isFinished === false:
+                    return ctx.replyWithHTML(`<b>не все сразу! Дай расчелиться Комраду</b>`);
+
+                // Speaking
                 case ans.confidence >= 0.60:
                     return await neuralAIProcessSpeak(ctx, ans);
-                case (witAns.intents[0] && witAns.intents[0].name === 'search'):
-                case !witAns.intents && !witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'] && !!witAns.entities['wit$location:location']:
-                case !!witAns.entities['wit$wikipedia_search_query:wikipedia_search_query']:
+
+                // Wikipedia search
+                case isSearch:
+                case !witAns.intents && !searchEntity && !!locationEntity: // Search location (Wikipedia)
                     return await witAIProcessWikipedia(bot, ctx, witAns, wikiAPI);
-                case witAns.intents[0] && witAns.intents[0].name === "currency_exchange" && witAns.intents[0].confidence > 0.5:
+
+               // Currency exchange
+                case isExchange:
                     return await witAIProcessExchange(ctx, witAns);
-                case witAns.intents[0] && witAns.intents[0].name === "weather" && witAns.intents[0].confidence > 0.5:
+
+                // Weather
+                case isWeather:
                     return await witAIProcessWeather(ctx, witAns, wikiAPI);
-                case witAns.intents[0] && witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
-                    return await witAIProcessQuestion(witAns);
+
+                // TODO: ?
+                // case witAns.intents[0] && witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
+                //     return await witAIProcessQuestion(witAns);
+
                 default: await ctx.reply('Not found');
             }
         } catch(e) {
