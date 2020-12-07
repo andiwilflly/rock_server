@@ -15,7 +15,7 @@ const DB = {
 };
 
 let { BasicBot } = require('neural-chatbot');
-let { UserData } = require('neural-phrasex')
+let { UserData } = require('neural-phrasex');
 
 let conf = {
     database: DB,
@@ -40,8 +40,8 @@ async function start() {
 
     console.log(`🤖 BOT AI | BasicBot ready...`);
 
-    const telegramBot = require('./botAI/telegramBot');
-    telegramBot(AI);
+    // const telegramBot = require('./botAI/telegramBot');
+    // telegramBot(AI);
 }
 
 start();
