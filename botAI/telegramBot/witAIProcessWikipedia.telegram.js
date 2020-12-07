@@ -17,10 +17,13 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
     try {
         const page = await wikiAPI.find(searchEntity.body);
         summary = await page.summary();
-        const { lat, lon} = await page.coordinates();
+        if(summary.length > 300) {
+            summary = summary.slice(0, 300).split('.');
+            summary = summary.filter((a,i)=> i+1 !== summary.length).join('.');
+        }
+        const { lat, lon } = await page.coordinates();
         await ctx.replyWithHTML(`
-            ${icon} ${summary}
-            ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: ''}
+            ${icon} ${summary} ${lat ? `https://www.google.com.ua/maps/@${lat},${lon},11z`: '' }
         `);
     } catch(e) {
         console.log(e);
