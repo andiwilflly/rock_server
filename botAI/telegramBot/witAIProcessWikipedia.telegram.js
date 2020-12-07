@@ -3,7 +3,7 @@
 module.exports = async function witProcessWikipedia(ctx, witAns, wikiAPI) {
     const searchEntity = witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'] ? witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'][0] : null;
 
-    if(searchEntity) return ctx.reply('Wikipedia ???');
+    if(!searchEntity) return ctx.reply('Wikipedia ???');
 
     try {
         const page = await wikiAPI.page(searchEntity.body);
