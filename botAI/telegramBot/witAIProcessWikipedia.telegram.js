@@ -1,3 +1,4 @@
+const fs = require('fs');
 
 
 module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
@@ -19,7 +20,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         summary = await page.summary();
         const img = await page.mainImage();
 
-        await ctx.replyWithPhoto({ source: img }, { caption: summary });
+        await ctx.replyWithPhoto({ source: fs.createReadStream(img) }, { caption: summary });
         await ctx.replyWithHTML(`${icon} ${summary}`);
         // await bot.telegram.sendMessage(
         //     ctx.message.chat.id,
@@ -28,7 +29,7 @@ module.exports = async function witProcessWikipedia(bot, ctx, witAns, wikiAPI) {
         // );
     } catch(e) {
         console.log(e);
-        ctx.reply(`📖 + ${summary}`);
+        ctx.reply(`📖 ${summary}`);
     }
 }
 
