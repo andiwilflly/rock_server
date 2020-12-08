@@ -3,7 +3,9 @@ const path = require('path');
 
 const DB = {
     "data": [
-        ...require(path.resolve(__dirname, 'botAI/data/main.json')),
+        // ...require(path.resolve(__dirname, 'botAI/data/main.json')),
+        ...require(path.resolve(__dirname, 'botAI/data/confirmations.json')),
+        ...require(path.resolve(__dirname, 'botAI/data/gameOfThrones.json')),
         // ...require(path.resolve(__dirname, 'botAI/data/questions.json')),
         // ...require(path.resolve(__dirname, 'botAI/data/greetings.json')),
         // ...require(path.resolve(__dirname, 'botAI/data/interests.json')),

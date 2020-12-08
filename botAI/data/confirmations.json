@@ -1,0 +1,50 @@
+[
+	{
+		"phraseType": "confirm",
+		"implies": ["confirm"],
+		"phrase": [
+			"ok",
+			"okay",
+			"yes",
+			"окей",
+			"da",
+			"ок",
+			"horosho",
+			"да",
+			"продолжаем",
+			"нужен",
+			"нужно",
+			"хорошо",
+			"согласен",
+			"оки"
+		],
+		"response": [
+			"[confirm]"
+		],
+		"meta": {
+			"style": ["nosearch"]
+		}
+	},
+	{
+		"phraseType": "decline",
+		"implies": ["decline"],
+		"phrase": [
+			"no",
+			"net",
+			"не",
+			"нет",
+			"отказываюсь",
+			"не нужен",
+			"уже не нужно",
+			"низачто",
+			"не согласен",
+			"нетушки"
+		],
+		"response": [
+			"[decline]"
+		],
+		"meta": {
+			"style": ["nosearch"]
+		}
+	}
+]

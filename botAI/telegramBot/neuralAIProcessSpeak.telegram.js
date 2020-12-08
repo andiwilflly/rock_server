@@ -1,6 +1,7 @@
 const animals = require('random-animals-api');
 const getRandomJoke = require('./functions/joke.functions');
 const randomInt = require('./functions/randomInt.function');
+const witAIProcessGameOfThrones = require('./witAIProcessGameOfThrones.telegram');
 
 
 module.exports = async function neuralAIProcessSpeak(ctx, ans) {
@@ -9,6 +10,7 @@ module.exports = async function neuralAIProcessSpeak(ctx, ans) {
     await ctx.reply(JSON.stringify(ans, null, 3));
     try {
         switch (true) {
+            case ans.response === '[gameOfThrones]': return await witAIProcessGameOfThrones(ctx);
             case ans.response === '[animal]': return ctx.replyWithPhoto(await animals[_getRandomAnimal()]());
             case ans.response === '[cat]':    return ctx.replyWithPhoto(await animals.cat());
             case ans.response === '[dog]':    return ctx.replyWithPhoto(await animals.dog());

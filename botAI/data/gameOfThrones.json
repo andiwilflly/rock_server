@@ -1,0 +1,24 @@
+[
+	{
+		"phraseType": "gameOfThrones",
+		"implies": ["gameOfThrones"],
+		"phrase": [
+			"Сиськи и драконы",
+			"игра престолов",
+			"игра престолов цитата",
+			"Game of thrones",
+			"winter is coming",
+			"зима близко",
+			"Вован моргулис",
+			"Дейнерис",
+			"берерожденная",
+			"Game of thrones"
+		],
+		"response": [
+			"[gameOfThrones]"
+		],
+		"meta": {
+			"style": ["nosearch"]
+		}
+	}
+]

@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vitalets/google-translate-api": "^4.0.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
     "billboard-top-100": "^2.5.9",
