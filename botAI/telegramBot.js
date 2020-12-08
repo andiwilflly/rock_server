@@ -71,7 +71,7 @@ async function start(AI) {
                 //     return ctx.replyWithHTML(`<b>не все сразу! Дай расчелиться Комраду</b>`);
 
                 // Speaking
-                case ans.confidence >= 0.60:
+                case ans.confidence >= 0.50:
                     return await neuralAIProcessSpeak(ctx, ans);
 
                 // Wikipedia search
@@ -91,7 +91,7 @@ async function start(AI) {
                 // case witAns.intents[0] && witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
                 //     return await witAIProcessQuestion(witAns);
 
-                default: await ctx.reply('Not found');
+                default: await ctx.reply('Not found' + ans.response);
             }
         } catch(e) {
            await ctx.reply(e);
