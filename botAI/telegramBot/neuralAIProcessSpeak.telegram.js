@@ -20,6 +20,7 @@ module.exports = async function neuralAIProcessSpeak(ctx, ans) {
             case ans.response === '[lizard]': return ctx.replyWithPhoto(await animals.lizard());
 
             case ans.response === '[joke]':   return ctx.reply(await getRandomJoke());
+            default: return ctx.reply(ans.response);
         }
     } catch(e) {
         console.log(e);

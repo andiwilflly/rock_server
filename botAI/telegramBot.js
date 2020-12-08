@@ -31,9 +31,8 @@ async function start(AI) {
 
         const wikiAPI = await WIKI({ apiUrl: 'https://ru.wikipedia.org/w/api.php' });
 
-        //await ctx.reply(JSON.stringify(ans, null, 3));
-        await ctx.reply(JSON.stringify(witAns, null, 3));
-        await ctx.reply(JSON.stringify(ans, null, 3));
+        // await ctx.reply(JSON.stringify(witAns, null, 3));
+        // await ctx.reply(JSON.stringify(ans, null, 3));
         await ctx.reply(JSON.stringify(global.STATE, null, 3));
 
         const searchEntity = witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'];
