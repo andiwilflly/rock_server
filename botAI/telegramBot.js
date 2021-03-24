@@ -71,27 +71,34 @@ async function start(AI) {
                 //     return ctx.replyWithHTML(`<b>не все сразу! Дай расчелиться Комраду</b>`);
 
                 // Speaking
-                case ans.confidence >= 0.50:
+                case ans.confidence >= 0.55:
+                    await ctx.reply('neuralAIProcessSpeak | confidence: ' + ans.confidence);
                     return await neuralAIProcessSpeak(ctx, ans);
 
                 // Wikipedia search
                 case isSearch:
                 case !witAns.intents && !searchEntity && !!locationEntity: // Search location (Wikipedia)
+                    await ctx.reply('witAIProcessWikipedia');
                     return await witAIProcessWikipedia(bot, ctx, witAns, wikiAPI);
 
                // Currency exchange
                 case isExchange:
+                    await ctx.reply('witAIProcessExchange');
                     return await witAIProcessExchange(ctx, witAns);
 
                 // Weather
                 case isWeather:
+                    await ctx.reply('witAIProcessWeather');
                     return await witAIProcessWeather(ctx, witAns, wikiAPI);
 
                 // TODO: ?
                 // case witAns.intents[0] && witAns.intents[0].name === "questions" && witAns.intents[0].confidence > 0.5:
                 //     return await witAIProcessQuestion(witAns);
 
-                default: await ctx.reply('Not found' + ans.response);
+                default:
+                   await ctx.reply('Not found');
+                   await ctx.reply(JSON.stringify(ans, null, 4));
+
             }
         } catch(e) {
            await ctx.reply(e);
