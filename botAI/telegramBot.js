@@ -33,7 +33,7 @@ async function start(AI) {
 
         // await ctx.reply(JSON.stringify(witAns, null, 3));
         // await ctx.reply(JSON.stringify(ans, null, 3));
-        await ctx.reply(JSON.stringify(global.STATE, null, 3));
+        // await ctx.reply(JSON.stringify(global.STATE, null, 3));
 
         const searchEntity = witAns.entities['wit$wikipedia_search_query:wikipedia_search_query'];
         const locationEntity = witAns.entities['wit$location:location'];
@@ -44,27 +44,27 @@ async function start(AI) {
         try {
             switch (true) {
                 // Clear STATE when user [decline] confirmation message about previous context
-                case global.STATE.confirmtion === true &&
-                     ans.response === '[decline]':
-                    return global.STATE = {};
+                // case global.STATE.confirmtion === true &&
+                //      ans.response === '[decline]':
+                //     return global.STATE = {};
 
                 // Continue [weather] after user [confirm] prev context
-                case global.STATE.confirmtion === true &&
-                     global.STATE.subject === 'weather' &&
-                     ans.response === '[confirm]':
-                    global.STATE.confirmtion = false;
-                    return ctx.reply('Прогноз погоды в каком городе инетесует?');
+                // case global.STATE.confirmtion === true &&
+                //      global.STATE.subject === 'weather' &&
+                //      ans.response === '[confirm]':
+                //     global.STATE.confirmtion = false;
+                //     return ctx.reply('Прогноз погоды в каком городе инетесует?');
 
                 // Restore context for weather w.o. [location] provided
-                case global.STATE.isFinished === false && global.STATE.subject === 'weather' && !!locationEntity:
-                    await ctx.reply(`RESTORE weather context: '${global.STATE.text} ${locationEntity[0].body}'`);
-                    return await witAIProcessWeather(ctx, await witAI.message(`${global.STATE.text} ${locationEntity[0].body}`), wikiAPI);
+                // case global.STATE.isFinished === false && global.STATE.subject === 'weather' && !!locationEntity:
+                //     await ctx.reply(`RESTORE weather context: '${global.STATE.text} ${locationEntity[0].body}'`);
+                //     return await witAIProcessWeather(ctx, await witAI.message(`${global.STATE.text} ${locationEntity[0].body}`), wikiAPI);
 
-                case global.STATE.isFinished === false &&
-                     global.STATE.subject === 'weather' &&
-                     !isWeather:
-                    global.STATE.confirmtion = true;
-                    return ctx.reply('Прогноз погоды больше не нужен?');
+                // case global.STATE.isFinished === false &&
+                //      global.STATE.subject === 'weather' &&
+                //      !isWeather:
+                //     global.STATE.confirmtion = true;
+                //     return ctx.reply('Прогноз погоды больше не нужен?');
 
                 // Final check for STATE to prevent requests spam
                 // case global.STATE.isFinished === false:

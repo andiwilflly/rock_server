@@ -1,5 +1,9 @@
 const express = require('express');
 
+const nodeFetch = require('node-fetch');
+global.fetch = nodeFetch;
+
+
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
@@ -23,17 +27,16 @@ async function init(CLIENT) {
     let { UserData } = require('neural-phrasex');
     const DB = {
         "data": [
-            ...require('./DB/main.json'),
-            ...require('./DB/questions.json'),
-            ...require('./DB/greetings.json'),
-            ...require('./DB/interests.json'),
-            ...require('./DB/komrad.json'),
-            ...require('./DB/jokes.json'),
-            ...require('./DB/animals.json'),
-            ...require('./DB/weather.json'),
-            ...require('./DB/responses.json')
+            ...require('./data/questions.json'),
+            ...require('./data/greetings.json'),
+            ...require('./data/interests.json'),
+            ...require('./data/komrad.json'),
+            ...require('./data/jokes.json'),
+            ...require('./data/animals.json')
         ]
     };
+
+    console.log(DB);
 
     let conf = {
         database: DB,
@@ -49,8 +52,8 @@ async function init(CLIENT) {
 
     await AI.BOT.initialize(conf);
     CLIENT.emit('AI.BOT:msg', '🤖 BOT AI | Ready');
-    // AI.userData = new UserData();
-    // AI.userData.initialize();
+    AI.userData = new UserData();
+    AI.userData.initialize();
     CLIENT.emit('AI.BOT:msg', '🤖 BOT AI | userData initialized');
     console.log(`🤖 BOT AI | userData initialized`);
     AI.ready = true;
@@ -74,12 +77,16 @@ io.on('connection', async function(CLIENT) {
 
     CLIENT.on('AI.BOT:ask', async function(phrase) {
         console.log('AI.BOT:ask |', phrase);
+
+        let ans2 = await AI.BOT.getResult(phrase, AI.userData);
+
+
         const ans = await client.message(phrase);
         console.log('AI.BOT:ans |', ans);
 
         //if(!AI.BOT) return CLIENT.emit('AI.BOT:answer', '🤖 BOT AI | Not ready yet...');
         // let ans = await AI.BOT.getResult(phrase, AI.userData);
-        CLIENT.emit('AI.BOT:answer', JSON.stringify(ans, null, 4));
+        CLIENT.emit('AI.BOT:answer', JSON.stringify(ans2, null, 4));
     });
 });
 
