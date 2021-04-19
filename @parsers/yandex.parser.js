@@ -76,7 +76,7 @@ async function parsePage(browser, group, album) {
         console.log(`✨ YANDEX PARSER | RUN OLD PARSER...`);
 
 
-        await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
+        await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)}`, {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(1000);
