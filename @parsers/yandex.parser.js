@@ -68,7 +68,6 @@ async function parsePage(browser, group, album) {
         // await page.waitFor(1000);
         //
         // console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group} - ${album}`);
-
         // Try new parser first...
         //const result = await newParser(page, group, album);
         //if(!result.error) return result;
