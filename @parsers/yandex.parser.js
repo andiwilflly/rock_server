@@ -62,16 +62,16 @@ async function parsePage(browser, group, album) {
     try {
         const page = await setupPage(browser);
 
-        await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
-            waitUntil: 'networkidle2'
-        });
-        await page.waitFor(1000);
-
-        console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group} - ${album}`);
+        // await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
+        //     waitUntil: 'networkidle2'
+        // });
+        // await page.waitFor(1000);
+        //
+        // console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group} - ${album}`);
 
         // Try new parser first...
-        const result = await newParser(page, group, album);
-        if(!result.error) return result;
+        //const result = await newParser(page, group, album);
+        //if(!result.error) return result;
 
         console.log(`✨ YANDEX PARSER | RUN OLD PARSER...`);
 
