@@ -56,10 +56,24 @@ async function parsePage(browser, group, album) {
         const albumLink = await findAlbum(page, group, album);
 
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
-        if(albumLink) return {
-            source: 'deezer',
-            type: 'album',
-            link: `https://www.deezer.com${albumLink}`
+        if(albumLink) {
+            await page.goto(`https://www.deezer.com${albumLink}`, {
+                waitUntil: 'networkidle2'
+            });
+            await page.waitFor(100);
+            let img = '';
+            try {
+                img = await page.evaluate(() => {
+                    return document.querySelector('img._1--3Z._2Ozg2').getAttribute('src');
+                });
+            } catch {}
+
+            return {
+                source: 'deezer',
+                type: 'album',
+                link: `https://www.deezer.com${albumLink}`,
+                image: img.replace(/\d+x\d+/, '800x800'),
+            }
         }
 
         await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
@@ -71,10 +85,25 @@ async function parsePage(browser, group, album) {
         console.log(`✨ DEZZER PARSER | track page loaded... (https://www.deezer.com/search/${group} - ${album}/track)`);
 
         const trackLink = await findTrack(page, group, album);
-        if(trackLink) return {
-            source: 'deezer',
-            type: 'track',
-            link: `https://www.deezer.com${trackLink}`
+        if(trackLink) {
+            await page.goto(`https://www.deezer.com${trackLink}`, {
+                waitUntil: 'networkidle2'
+            });
+            await page.waitFor(100);
+
+            let img = '';
+            try {
+                img = await page.evaluate(() => {
+                    return document.querySelector('img._1--3Z._2Ozg2').getAttribute('src');
+                });
+            } catch {}
+
+            return {
+                source: 'deezer',
+                type: 'track',
+                link: `https://www.deezer.com${trackLink}`,
+                image: img.replace(/\d+x\d+/, '800x800'),
+            }
         }
 
         return {
