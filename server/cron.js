@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 const request = require('request');
 const firebase = require('firebase');
 // Routes
-const releasesDaysRoute = require('../server/routes/releases[:days].get.route');
+const releasesDaysRoute = require('../server/routes/releases[days].get.route');
 // Parts
 const newReleasesCreateNotifications = require('./parts/newReleasesCreateNotifications');
 

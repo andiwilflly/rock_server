@@ -14,18 +14,18 @@ require('./server/utils/extendJs.utils');
 // DB
 const connectMongoDB = require('./server/utils/mongoDB/MongoDB.connect');
 // Routes
-const releasesDaysRoute = require('./server/routes/releases[:days].get.route');
-const releasesArtistDaysRoute = require('./server/routes/releases[:artist][:days].get.route');
-const findGroupAlbumRoute = require('./server/routes/find[:group][:album].get.route');
-const FCMSubscribe = require('./server/routes/FCM/fcm.subscribe[:token][:topic]route');
-const FCMUnsubscribe = require('./server/routes/FCM/fcm.unsubscribe[:token][:topic]route');
-const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[:collection].route');
-const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[:collection][:_id].route');
-const mongoGetCollection = require('./server/routes/mongo/mongo.get[:collection][:uid].route');
-const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[:collection][:uid].route');
-const sokkerPlayer = require('./server/routes/sokker/player[:id].get.route');
-const sokkerTeam = require('./server/routes/sokker/team[:id].get.route');
-const findConcerts = require('./server/routes/concerts[:artist].get.route');
+const releasesDaysRoute = require('./server/routes/releases[days].get.route');
+const releasesArtistDaysRoute = require('./server/routes/releases[artist][days].get.route');
+const findGroupAlbumRoute = require('./server/routes/find[group][album].get.route');
+const FCMSubscribe = require('./server/routes/FCM/fcm.subscribe[token][topic]route');
+const FCMUnsubscribe = require('./server/routes/FCM/fcm.unsubscribe[token][topic]route');
+const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[collection].route');
+const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[collection][_id].route');
+const mongoGetCollection = require('./server/routes/mongo/mongo.get[collection][uid].route');
+const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[collection][uid].route');
+const sokkerPlayer = require('./server/routes/sokker/player[id].get.route');
+const sokkerTeam = require('./server/routes/sokker/team[id].get.route');
+const findConcerts = require('./server/routes/concerts[artist].get.route');
 
 
 
