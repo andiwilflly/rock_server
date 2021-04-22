@@ -124,7 +124,7 @@ async function parsePage(browser, group, album) {
         await page.close();
         return {
             source: 'yandex',
-            link: `https://music.yandex.ua${albumLink}`,
+            link: `https://music.yandex.ru${albumLink}`,
             image: albumImg.replace('//', 'https://')
         };
 
@@ -136,6 +136,11 @@ async function parsePage(browser, group, album) {
 
 async function start(browser, group, album) {
     console.log('✨ YANDEX PARSER:START...');
+    return {
+        source: 'yandex',
+        link: `https://music.yandex.ru/search?text=${encodeURIComponent(group)}%20${encodeURIComponent(album)}&type=albums`,
+        image: ''
+    };
 
     // Cache
     const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `yandex | ${group} | ${album}` });

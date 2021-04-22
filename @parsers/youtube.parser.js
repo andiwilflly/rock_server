@@ -60,8 +60,8 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
         let artistPageLink = await page.evaluate((_album)=> {
             const $link = [
+                ...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer'),
                 ...document.querySelectorAll('.yt-simple-endpoint.yt-formatted-string'),
-                ...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')
             ]
                 .find($el =>
                     $el.innerText.toLowerCase() === _album ||
