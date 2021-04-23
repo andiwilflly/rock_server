@@ -38,7 +38,7 @@ module.exports = async function (req, res) {
     await Promise.all([
         !resources.length || resources.includes('deezer') ? deezerParser(browser, group, album) : null,
 
-        !resources.length || resources.includes('spotify') ? spotifyParser(group, album) : null,
+        !resources.length || resources.includes('spotify') ? spotifyParser(browser, group, album) : null,
         !resources.length || resources.includes('soundcloud') ? soundCloudParser(browser, group, album) : null,
 
         !resources.length || resources.includes('lastfm') ? lastFmParser(browser, group, album) : null,

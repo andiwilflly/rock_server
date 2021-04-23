@@ -107,6 +107,7 @@ async function parsePage(browser, group, album) {
         }
 
         return {
+            source: 'deezer',
             error: `Album not found ${group} - ${album}`
         };
     } catch(e) {

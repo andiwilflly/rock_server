@@ -3,7 +3,7 @@ const login =  'andiwillfly@gmail.com';
 const pass =  '121314ward';
 
 
-async function parsePage(browser, group, album) {
+async function parsePageOld(browser, group, album) {
     try {
         const page = await browser.newPage();
 
@@ -56,8 +56,61 @@ async function parsePage(browser, group, album) {
     }
 }
 
+async function parsePage(browser, group, album) {
+    try {
+        const page = await browser.newPage();
 
-async function start(group, album) {
+        await page.goto(`https://open.spotify.com/search/${group}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(500);
+
+        const artistLink = await page.evaluate((_group)=> {
+            const artistEl = [...document.querySelectorAll('a.f7ebc3d96230ee12a84a9b0b4b81bb8f-scss')]
+                .find($el =>
+                    ($el.innerText.toLowerCase() === _group ||
+                    $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
+                    && $el.getAttribute('href') && $el.getAttribute('href').includes('artist/')
+                );
+            if(!artistEl) return null;
+            return artistEl.getAttribute('href');
+        }, group);
+        if (!artistLink) {
+            return {
+                source: 'spotify',
+                error: `Group not found: ${group}`
+            };
+        }
+
+        await page.goto(`https://open.spotify.com${artistLink}`, {
+            waitUntil: 'networkidle2'
+        });
+        await page.waitFor(500);
+
+        const albumLink = await page.evaluate((_album)=> {
+            const albumtEl = [...document.querySelectorAll('a.f7ebc3d96230ee12a84a9b0b4b81bb8f-scss')]
+                .find($el =>
+                    ($el.innerText.toLowerCase().includes(_album) ||
+                    $el.getAttribute('title') && $el.getAttribute('title').toLowerCase().includes(_album))
+                    && $el.getAttribute('href') && $el.getAttribute('href').includes('album/')
+                );
+
+            if(!albumtEl) return null;
+            return albumtEl.getAttribute('href');
+        }, album);
+
+        if(!albumLink) return { source: 'youtube', error: `Album not found:  ${group} -  ${album}` };
+
+        return {
+            source: 'spotify',
+            link: `https://open.spotify.com${albumLink}`
+        };
+    } catch(e) {
+        return { source: 'spotify', error: e.toString() };
+    }
+}
+
+async function start(browser, group, album) {
     console.log('✨ SPOTIFY PARSER:START...');
 
     // Cache
@@ -65,8 +118,8 @@ async function start(group, album) {
     if(prevResult) console.log('🌼 MONGO DB | SPOTIFY PARSER: return prev result...');
     if(prevResult) return prevResult;
 
-
-    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album,track&limit=1`, {
+    //type=album,track
+    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
         headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
     });
     matchedAlbum = await matchedAlbum.json();
@@ -79,13 +132,15 @@ async function start(group, album) {
     }
 
     console.log('✨ SPOTIFY PARSER:END');
+
+    if(!matchedAlbum) return await parsePage(browser, group, album);
     return {
         link: matchedAlbum.external_urls.spotify,
         name: matchedAlbum.name,
         artistName: matchedAlbum.artists[0].name,
         artistLink: matchedAlbum.artists[0].external_urls.spotify,
         albumId: matchedAlbum.id,
-        image: matchedAlbum.images ? matchedAlbum.images[0].url : '[No track image]',
+        image: matchedAlbum.images ? matchedAlbum.images[0].url : '[No track image]',//or matchedAlbum.album.images[0].url
         directTrackLink: matchedAlbum.preview_url,
         releaseDate: matchedAlbum.release_date,
         totalTracks: matchedAlbum.total_tracks,
