@@ -1,5 +1,5 @@
 const setupPage = require('../server/utils/setupPage.utils');
-
+const translit = require("../server/utils/translit");
 
 async function waitForPage(page, iteration) {
     if(iteration > 5) return;
@@ -19,14 +19,16 @@ async function parsePage(browser, group, album) {
         await page.waitFor(1000);
         console.log(`✨ APPLE PARSER | page loaded...`, `https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`);
 
-
-        const isFound = await page.evaluate((_group, _album)=> {
+        const trGroup = translit(group);
+        const isFound = await page.evaluate((_group, _album, _trGroup)=> {
             const $albumOrSongEl = [...document.querySelectorAll('.shelf-grid__list .shelf-grid__list-item .linkable')]
-                .find($el => $el.innerText.toLowerCase().includes(_group) && $el.innerText.toLowerCase().startsWith(_album))
+                .find($el =>
+                    ($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup)) && $el.innerText.toLowerCase().startsWith(_album)
+                );
             const isFound = !!$albumOrSongEl;
             if($albumOrSongEl) $albumOrSongEl.click();
             return isFound;
-        }, group, album);
+        }, group, album, trGroup);
 
         await waitForPage(page, 1);
 
