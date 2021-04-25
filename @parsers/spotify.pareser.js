@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const login =  'andiwillfly@gmail.com';
 const pass =  '121314ward';
+const translit = require("../server/utils/translit");
 
 
 async function parsePageOld(browser, group, album) {
@@ -64,17 +65,17 @@ async function parsePage(browser, group, album) {
             waitUntil: 'networkidle2'
         });
         await page.waitFor(500);
-
-        const artistLink = await page.evaluate((_group)=> {
+        const trGroup = translit(group);
+        const artistLink = await page.evaluate((_group, _trGroup)=> {
             const artistEl = [...document.querySelectorAll('a.f7ebc3d96230ee12a84a9b0b4b81bb8f-scss')]
                 .find($el =>
-                    ($el.innerText.toLowerCase() === _group ||
-                    $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
+                    (($el.innerText.toLowerCase() === _group || $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
+                    || ($el.innerText.toLowerCase() == _trGroup || $el.getAttribute('title').toLowerCase() == _trGroup))
                     && $el.getAttribute('href') && $el.getAttribute('href').includes('artist/')
                 );
             if(!artistEl) return null;
             return artistEl.getAttribute('href');
-        }, group);
+        }, group, trGroup);
         if (!artistLink) {
             return {
                 source: 'spotify',
@@ -124,7 +125,7 @@ async function start(browser, group, album) {
     });
     matchedAlbum = await matchedAlbum.json();
 
-    matchedAlbum = (matchedAlbum.albums.items[0] || matchedAlbum.tracks.items[0]);
+    matchedAlbum = matchedAlbum.albums.items[0];// || matchedAlbum.tracks.items[0]);
 
     console.log('✨ SPOTIFY PARSER:END');
 
