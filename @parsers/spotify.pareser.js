@@ -126,11 +126,6 @@ async function start(browser, group, album) {
 
     matchedAlbum = (matchedAlbum.albums.items[0] || matchedAlbum.tracks.items[0]);
 
-    if(!matchedAlbum) return {
-        error: `Album [${group} - ${album}] not found`,
-        source: 'spotify'
-    }
-
     console.log('✨ SPOTIFY PARSER:END');
 
     if(!matchedAlbum) return await parsePage(browser, group, album);
