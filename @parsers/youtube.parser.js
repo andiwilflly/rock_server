@@ -64,8 +64,8 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
                 ...document.querySelectorAll('.yt-simple-endpoint.yt-formatted-string'),
             ]
                 .find($el =>
-                    $el.innerText.toLowerCase() === _album ||
-                    $el.getAttribute('aria-label') && $el.getAttribute('aria-label').toLowerCase() === _album);
+                    ($el.innerText.toLowerCase() === _album || $el.getAttribute('aria-label') && $el.getAttribute('aria-label').toLowerCase() === _album)
+                    && $el.getAttribute('href') && !$el.getAttribute('href').includes('watch?'));
             if(!$link) return null;
             return $link.getAttribute('href');
         }, album);
@@ -74,7 +74,10 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
         if(!artistPageLink) artistPageLink = await page.evaluate((_album)=> {
             const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]
-                .find($link => $link.getAttribute('aria-label').toLowerCase().includes(_album));
+                .find($link =>
+                    $link.getAttribute('aria-label').toLowerCase().includes(_album)
+                    && $link.getAttribute('href') && !$link.getAttribute('href').includes('watch?')
+                );
 
             return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, album);
