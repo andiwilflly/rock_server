@@ -100,7 +100,7 @@ async function parsePage(browser, group, album) {
             return albumtEl.getAttribute('href');
         }, album);
 
-        if(!albumLink) return { source: 'youtube', error: `Album not found:  ${group} -  ${album}` };
+        if(!albumLink) return { source: 'spotify', error: `Album not found:  ${group} -  ${album}` };
 
         return {
             source: 'spotify',
