@@ -58,7 +58,21 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
         await page.waitFor(1000);
 
-        let artistPageLink = await page.evaluate((_album)=> {
+        let artistPageLink = await page.evaluate((_group, _album)=> {
+            const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]
+                .find($link =>
+                    $link.getAttribute('aria-label').toLowerCase().includes(_album)
+                    && $link.getAttribute('href') && !$link.getAttribute('href').includes('watch?')
+                    && $link.parentNode.querySelector('.yt-simple-endpoint.yt-formatted-string')
+                    && $link.parentNode.querySelector('.yt-simple-endpoint.yt-formatted-string').innerHTML.toLowerCase() == _group
+                );
+
+            return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
+        }, group, album);
+
+        console.log(artistPageLink, 1);
+
+        if (!artistPageLink) artistPageLink = await page.evaluate((_album)=> {
             const $link = [
                 ...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer'),
                 ...document.querySelectorAll('.yt-simple-endpoint.yt-formatted-string'),
@@ -68,18 +82,6 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
                     && $el.getAttribute('href') && !$el.getAttribute('href').includes('watch?'));
             if(!$link) return null;
             return $link.getAttribute('href');
-        }, album);
-
-        console.log(artistPageLink, 1);
-
-        if(!artistPageLink) artistPageLink = await page.evaluate((_album)=> {
-            const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]
-                .find($link =>
-                    $link.getAttribute('aria-label').toLowerCase().includes(_album)
-                    && $link.getAttribute('href') && !$link.getAttribute('href').includes('watch?')
-                );
-
-            return $artistPageLink ? $artistPageLink.getAttribute('href') : null;
         }, album);
 
         console.log(artistPageLink, 2);
