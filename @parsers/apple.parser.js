@@ -23,7 +23,7 @@ async function parsePage(browser, group, album) {
         const isFound = await page.evaluate((_group, _album, _trGroup)=> {
             const $albumOrSongEl = [...document.querySelectorAll('.shelf-grid__list .shelf-grid__list-item .linkable')]
                 .find($el =>
-                    ($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup)) && $el.innerText.toLowerCase().startsWith(_album)
+                    /*($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup)) && */$el.innerText.toLowerCase().startsWith(_album)
                 );
             const isFound = !!$albumOrSongEl;
             if($albumOrSongEl) $albumOrSongEl.click();
