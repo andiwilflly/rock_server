@@ -37,6 +37,16 @@ async function parsePage(browser, group, album) {
             error: `Not found ${group} - ${album}`
         }
 
+        const isFoundArtist = await page.evaluate((_group, _trGroup)=> {
+            const $artistEl = document.querySelector('div.product-creator.typography-large-title').innerText.toLowerCase().trim();
+            return ($artistEl == _group || $artistEl == _trGroup);
+        }, group, trGroup);
+
+        if(!isFoundArtist) return {
+            source: 'apple',
+            error: `Not found Artist: ${group}, BUT Album: ${album} is found`
+        }
+
         return {
             source: 'apple',
             link: `${page.url()}`.replace('beta.', '')
