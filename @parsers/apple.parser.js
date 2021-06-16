@@ -23,7 +23,7 @@ async function parsePage(browser, group, album) {
         const isFound = await page.evaluate((_group, _album, _trGroup)=> {
             const $albumOrSongEl = [...document.querySelectorAll('.shelf-grid__list .shelf-grid__list-item .linkable')]
                 .find($el =>
-                    $el.innerText.toLowerCase().startsWith(_album) && !$el.className.includes('artist')/* && ($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup))*/
+                    $el.innerText.toLowerCase().startsWith(_album) && !$el.className.includes('artist') && ($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup))
                 );
             const isFound = !!$albumOrSongEl;
             if($albumOrSongEl) $albumOrSongEl.click();
@@ -37,7 +37,7 @@ async function parsePage(browser, group, album) {
             error: `Not found ${group} - ${album}`
         }
 
-        const isFoundArtist = await page.evaluate((_group, _trGroup)=> {
+        /*const isFoundArtist = await page.evaluate((_group, _trGroup)=> {
             const $artistEl = document.querySelector('div.product-creator.typography-large-title').innerText.toLowerCase().trim();
             return ($artistEl.startsWith(_group) || $artistEl.startsWith(_trGroup));
         }, group, trGroup);
@@ -45,7 +45,7 @@ async function parsePage(browser, group, album) {
         if(!isFoundArtist) return {
             source: 'apple',
             error: `Not found Artist: ${group}, BUT Album: ${album} is found`
-        }
+        }*/
 
         return {
             source: 'apple',
