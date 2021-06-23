@@ -2,13 +2,11 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const admin = require("firebase-admin");
 const request = require('request');
+const cors = require('cors');
 const express = require('express');
-const SSE = require('express-sse');
 // Logger
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
-// Parts
-//require('./server/parts/initializeFirebase');
 // Utils
 require('./server/utils/extendJs.utils');
 // DB
@@ -51,6 +49,9 @@ global.authOptions = {
 let spotifyTokenLifetime = 0;
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.static('public'))
 app.use(bodyParser.json());     // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({   // to support URL-encoded bodies
