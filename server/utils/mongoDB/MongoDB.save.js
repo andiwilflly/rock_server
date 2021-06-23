@@ -4,12 +4,12 @@ module.exports = async function(collectionName, collection, data) {
 
         if(data.uid) {
             const userDocuments = await collection.find({ uid: data.uid }).toArray();
-            global.SSE.send(JSON.stringify({
-                    [data.uid]: {
-                        [collectionName]: userDocuments
-                    }
-                }
-            ));
+            // global.SSE.send(JSON.stringify({
+            //         [data.uid]: {
+            //             [collectionName]: userDocuments
+            //         }
+            //     }
+            // ));
         } else {
             console.log(`🌼 MONGO DB | can't send SSE because no data.uid`, data);
         }

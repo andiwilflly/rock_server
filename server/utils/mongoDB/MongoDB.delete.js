@@ -9,9 +9,9 @@ module.exports = async function(collectionName, collection, _id) {
         if(document.uid) {
             const userDocuments = await collection.find({ uid: document.uid }).toArray();
 
-            global.SSE.send(JSON.stringify([{
-                [collectionName]: userDocuments
-            }]));
+            // global.SSE.send(JSON.stringify([{
+            //     [collectionName]: userDocuments
+            // }]));
         } else {
             console.log(`🌼 MONGO DB | can't send SSE because no document.uid`, document);
         }

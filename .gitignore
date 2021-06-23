@@ -1,3 +1,5 @@
+server/routes/study-ua/serviceAccountKey.json
+
 # Logs
 logs
 *.log

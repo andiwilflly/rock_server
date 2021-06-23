@@ -8,7 +8,7 @@ const SSE = require('express-sse');
 try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
 // Parts
-require('./server/parts/initializeFirebase');
+//require('./server/parts/initializeFirebase');
 // Utils
 require('./server/utils/extendJs.utils');
 // DB
@@ -26,10 +26,11 @@ const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[collec
 const sokkerPlayer = require('./server/routes/sokker/player[id].get.route');
 const sokkerTeam = require('./server/routes/sokker/team[id].get.route');
 const findConcerts = require('./server/routes/concerts[artist].get.route');
+const usersDocsList = require('./server/routes/study-ua/usersDocsList.get.route');
 
 
 
-global.SSE = new SSE(['initialize']);
+//global.SSE = new SSE(['initialize']);
 global.SPOTIFY_TOKEN = null;
 global.BASE_URL = 'https://newrockbot.herokuapp.com';
 global.YOUTUBE_API = 'AIzaSyDwtT9D89yM6-MOo7AkYX3D2Zz4r0Hr-bI';
@@ -75,10 +76,10 @@ app.use(async function (req, res, next) {
 
         // Sending data to each connected SSE client
         console.error(`SERVER | SSE: start polling data to client...`);
-        global.SSE.send(JSON.stringify({
-            notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
-            subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
-        }));
+        // global.SSE.send(JSON.stringify({
+        //     notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
+        //     subscriptions: await global[`MONGO_COLLECTION_SUBSCRIPTIONS`].find().toArray()
+        // }));
         // setInterval(async ()=> {
         //     global.SSE.send(JSON.stringify([{
         //         notifications: await global[`MONGO_COLLECTION_NOTIFICATIONS`].find().toArray(),
@@ -153,7 +154,7 @@ app.get('/send', async (req, res)=> {
 } );
 
 
-app.get('/stream', global.SSE.init)
+//app.get('/stream', global.SSE.init)
 app.get('/spotify/token', (req, res)=> res.send({ token: global.SPOTIFY_TOKEN }));
 app.get('/releases/:days', releasesDaysRoute);
 app.get('/releases/:artist/:days', releasesArtistDaysRoute);
@@ -172,9 +173,12 @@ app.post('/mongo/save/:collection', mongoSaveCollection);
 app.post('/mongo/delete/:collection/:_id', mongoDeleteCollection);
 app.get('/mongo/remove/:collection', mongoRemoveCollection);
 
+// // Sokker
+// app.get('/sokker/player/:pid', sokkerPlayer);
+// app.get('/sokker/team/:teamID', sokkerTeam);
 
-app.get('/sokker/player/:pid', sokkerPlayer);
-app.get('/sokker/team/:teamID', sokkerTeam);
+// study-ua
+app.get('/study-ua/users-docs', usersDocsList);
 
 
 app.listen(process.env.PORT || 3000, function() {
