@@ -20,6 +20,7 @@
     "billboard-top-100": "^2.5.9",
     "body-parser": "^1.19.0",
     "brain.js": "^2.0.0-beta.2",
+    "cors": "^2.8.5",
     "details": "^1.0.0",
     "eurobank-converter": "^0.1.1",
     "express": "^4.17.1",

@@ -24,7 +24,7 @@ const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[collec
 const sokkerPlayer = require('./server/routes/sokker/player[id].get.route');
 const sokkerTeam = require('./server/routes/sokker/team[id].get.route');
 const findConcerts = require('./server/routes/concerts[artist].get.route');
-const usersDocsList = require('./server/routes/study-ua/usersDocsList.get.route');
+//const usersDocsList = require('./server/routes/study-ua/usersDocsList.get.route');
 
 
 
@@ -179,7 +179,7 @@ app.get('/mongo/remove/:collection', mongoRemoveCollection);
 // app.get('/sokker/team/:teamID', sokkerTeam);
 
 // study-ua
-app.get('/study-ua/users-docs', usersDocsList);
+//app.get('/study-ua/users-docs', usersDocsList);
 
 
 app.listen(process.env.PORT || 3000, function() {
