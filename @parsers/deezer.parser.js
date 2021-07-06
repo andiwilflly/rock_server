@@ -64,7 +64,7 @@ async function parsePage(browser, group, album) {
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img._1--3Z._2Ozg2').getAttribute('src');
+                    return document.querySelector('img.sk__sc-10y8cfp-0.jVfwJN').getAttribute('src');
                 });
             } catch {}
 
@@ -120,9 +120,9 @@ async function start(browser, group, album) {
     console.log('✨ DEZZER PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `deezer | ${group} | ${album}` });
+    /*const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `deezer | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | DEEZER PARSER: return prev result...');
-    if(prevResult && !prevResult.link.includes('search?')) return prevResult;
+    if(prevResult && !prevResult.link.includes('search?')) return prevResult;*/
 
     const response = await parsePage(browser, group, album);
 
