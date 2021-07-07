@@ -66,14 +66,14 @@ module.exports = async function(NEW_RELEASES = {}) {
 
             // Send a message to the device corresponding to the provided
             // registration token.
-            admin.messaging().send(message)
-                .then((response) => {
-                    // Response is a message ID string.
-                    console.log('Successfully sent message:', response);
-                })
-                .catch((error) => {
-                    console.log('Error sending message:', error);
-                });
+            // admin.messaging().send(message)
+            //     .then((response) => {
+            //         // Response is a message ID string.
+            //         console.log('Successfully sent message:', response);
+            //     })
+            //     .catch((error) => {
+            //         console.log('Error sending message:', error);
+            //     });
         } catch(e) {
             console.log('ERROR | ' + e);
         }

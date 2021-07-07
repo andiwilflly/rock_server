@@ -121,15 +121,15 @@ app.get('/send', async (req, res)=> {
 
     // Send a message to the device corresponding to the provided
     // registration token.
-    admin.messaging().send(message)
-        .then((response) => {
-            // Response is a message ID string.
-            console.log('Successfully sent message:', response);
-            // res.send('Hello World!');
-        })
-        .catch((error) => {
-            console.log('Error sending message:', error);
-        });
+    // admin.messaging().send(message)
+    //     .then((response) => {
+    //         // Response is a message ID string.
+    //         console.log('Successfully sent message:', response);
+    //         // res.send('Hello World!');
+    //     })
+    //     .catch((error) => {
+    //         console.log('Error sending message:', error);
+    //     });
 
     const message2 = {
         notification: {
@@ -141,17 +141,17 @@ app.get('/send', async (req, res)=> {
 
     // Send a message to the device corresponding to the provided
     // registration token.
-    admin.messaging().send(message2)
-        .then((response) => {
-            // Response is a message ID string.
-            console.log('Successfully sent message2:', response);
-            res.send('sended');
-            // res.send('Hello World!');
-        })
-        .catch((error) => {
-            console.log('Error sending message2:', error);
-            res.send("Not Hello World!");
-        });
+    // admin.messaging().send(message2)
+    //     .then((response) => {
+    //         // Response is a message ID string.
+    //         console.log('Successfully sent message2:', response);
+    //         res.send('sended');
+    //         // res.send('Hello World!');
+    //     })
+    //     .catch((error) => {
+    //         console.log('Error sending message2:', error);
+    //         res.send("Not Hello World!");
+    //     });
 } );
 
 
