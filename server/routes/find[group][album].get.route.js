@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const admin = require("firebase-admin");
+//const admin = require("firebase-admin");
 
 const yandexParser = require('../../@parsers/yandex.parser');
 const deezerParser = require('../../@parsers/deezer.parser');
@@ -81,7 +81,7 @@ module.exports = async function (req, res) {
         res.send(results);
 
 
-        const message2 = {
+        /*const message2 = {
             notification: {
                 title: `${group} - ${album}`,
                 body: `(${Object.keys(results).join(',')})`
@@ -99,7 +99,7 @@ module.exports = async function (req, res) {
             })
             .catch((error) => {
                 console.log('Error sending message2:', error);
-            });
+            });*/
 
 
         if(callback) {
