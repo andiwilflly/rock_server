@@ -64,7 +64,7 @@ async function parsePage(browser, group, album) {
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img._1--3Z._2Ozg2').getAttribute('src');
+                    return document.querySelector('img.sk__sc-10y8cfp-0.jVfwJN').getAttribute('src');
                 });
             } catch {}
 
