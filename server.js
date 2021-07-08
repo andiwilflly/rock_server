@@ -174,6 +174,11 @@ app.post('/mongo/save/:collection', mongoSaveCollection);
 app.post('/mongo/delete/:collection/:_id', mongoDeleteCollection);
 app.get('/mongo/remove/:collection', mongoRemoveCollection);
 
+
+app.get(`/queue_bot/redirect`, (req, res)=> {
+    res.redirect(req.query.to);
+});
+
 // // Sokker
 // app.get('/sokker/player/:pid', sokkerPlayer);
 // app.get('/sokker/team/:teamID', sokkerTeam);
