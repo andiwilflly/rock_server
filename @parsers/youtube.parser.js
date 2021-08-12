@@ -39,7 +39,7 @@ async function findInSongs(page, group, album) {
     }, group, album);
 
     if(!isFound) return null;
-    await page.waitFor(2500);
+    await page.waitForTimeout(2500);
     return page.url();
 }
 
@@ -53,10 +53,10 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
         await page.goto(`https://music.youtube.com/search?q=${q}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${q}`);
 
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
 
         let artistPageLink = await page.evaluate((_group, _album)=> {
             const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]

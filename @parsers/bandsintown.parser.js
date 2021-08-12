@@ -56,7 +56,7 @@ async function parsePage(browser, artist) {
         await page.focus('._30CmZ8MOAaWycuClF-jU6d');
         await page.keyboard.type(artist);
 
-        await page.waitFor(500);
+        await page.waitForTimeout(500);
 
         const firstResultUrl = await page.evaluate((_artist)=> {
             const firstResult = document.querySelector('._19JBZBd19dn8PF0B4MjSaX').children;
@@ -68,7 +68,7 @@ async function parsePage(browser, artist) {
         console.log(`✨ BANDSINTOWN PARSER | firstResultUrl loaded...`, firstResultUrl);
 
         await page.goto(firstResultUrl);
-        await page.waitFor(500);
+        await page.waitForTimeout(500);
 
         const concertsUrls = await page.evaluate(()=> {
             const $el = document.querySelector('._2jeHbgNeqh7EbnCEJRiwHL');

@@ -107,7 +107,7 @@ module.exports = async function (req, res) {
                 group,
                 album,
                 results
-            }))}`, {  method: "POST" });
+            }))}`, {  method: "POST" }).catch(console.log);
 
             console.log(`👮 POST results to 'rockbot.pixis.com.ua'`);
         }

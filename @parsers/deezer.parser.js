@@ -48,7 +48,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://www.deezer.com/search/${group} - ${album}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitForTimeout(100);
         console.log(`✨ DEZZER PARSER | page loaded...`);
 
         try { await page.click('.cookie-btn'); } catch {}
@@ -60,7 +60,7 @@ async function parsePage(browser, group, album) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
                 waitUntil: 'networkidle2'
             });
-            await page.waitFor(100);
+            await page.waitForTimeout(100);
             let img = '';
             try {
                 img = await page.evaluate(() => {
@@ -79,7 +79,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitForTimeout(100);
 
         await page.screenshot({ path: 'deezer1.jpg' });
         console.log(`✨ DEZZER PARSER | track page loaded... (https://www.deezer.com/search/${group} - ${album}/track)`);
@@ -89,7 +89,7 @@ async function parsePage(browser, group, album) {
             await page.goto(`https://www.deezer.com${trackLink}`, {
                 waitUntil: 'networkidle2'
             });
-            await page.waitFor(100);
+            await page.waitForTimeout(100);
 
             let img = '';
             try {

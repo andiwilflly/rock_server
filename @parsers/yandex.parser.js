@@ -39,7 +39,7 @@ async function newParser(page, group, album) {
         await page.goto(`https://music.yandex.ua${link}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         await page.$eval('.entity-cover__image', ($el)=> $el.click());
 
         let albumImg = '';
@@ -65,7 +65,7 @@ async function parsePage(browser, group, album) {
         // await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)} - ${encodeURIComponent(album)}`, {
         //     waitUntil: 'networkidle2'
         // });
-        // await page.waitFor(1000);
+        // await page.waitForTimeout(1000);
         //
         // console.log(`✨ YANDEX PARSER | search groups page loaded...`, `https://music.yandex.ua/search?text=${group} - ${album}`);
         // Try new parser first...
@@ -78,7 +78,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua/search?text=${encodeURIComponent(group)}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
 
 
         const artistLink = await page.evaluate((_group)=> {
@@ -96,7 +96,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua${artistLink}/albums`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
 
 
         const albumLink = await page.evaluate((_album)=> {
@@ -116,7 +116,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.yandex.ua${albumLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         await page.$eval('.entity-cover__image', ($el)=> $el.click());
         const albumImg = await page.evaluate(()=> document.querySelector('.cover-popup__item.cover-popup__cover').getAttribute('src'));
 

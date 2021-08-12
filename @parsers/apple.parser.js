@@ -4,7 +4,7 @@ const translit = require("../server/utils/translit");
 async function waitForPage(page, iteration) {
     if(iteration > 5) return;
     console.log('APPLE PARSER | waiting page... ', iteration, page.url());
-    await page.waitFor(1500);
+    await page.waitForTimeout(1500);
     return page.url().includes('search?') ? await waitForPage(page, iteration+1) : page.url();
 }
 
@@ -16,7 +16,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         console.log(`✨ APPLE PARSER | page loaded...`, `https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`);
 
         const trGroup = translit(group);

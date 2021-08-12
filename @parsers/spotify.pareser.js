@@ -11,7 +11,7 @@ async function parsePageOld(browser, group, album) {
         await page.goto(`https://accounts.spotify.com/en/login`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitForTimeout(100);
         console.log(`✨ SPOTIFY PARSER | LOGIN page loaded...`);
 
 
@@ -21,16 +21,16 @@ async function parsePageOld(browser, group, album) {
         await page.focus('#login-password')
         await page.keyboard.type(pass);
 
-        await page.waitFor(3000);
+        await page.waitForTimeout(3000);
         // await page.click('#login_form_submit');
         await page.evaluate(()=> document.querySelector('#login-button').click());
-        await page.waitFor(2000);
+        await page.waitForTimeout(2000);
 
 
         await page.goto(`https://open.spotify.com/search/${group}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         console.log(`✨ SPOTIFY PARSER | search page loaded...`);
 
 
@@ -45,7 +45,7 @@ async function parsePageOld(browser, group, album) {
         await page.goto(`https://open.spotify.com${groupLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitForTimeout(100);
         console.log(`✨ SPOTIFY PARSER | GROUP '${group}' page loaded...`);
 
         return {
@@ -64,7 +64,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://open.spotify.com/search/${group}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(500);
+        await page.waitForTimeout(500);
         const trGroup = translit(group);
         const artistLink = await page.evaluate((_group, _trGroup)=> {
             const artistEl = [...document.querySelectorAll('a.f7ebc3d96230ee12a84a9b0b4b81bb8f-scss')]
@@ -86,7 +86,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://open.spotify.com${artistLink}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(500);
+        await page.waitForTimeout(500);
 
         const albumLink = await page.evaluate((_album)=> {
             const albumtEl = [...document.querySelectorAll('a.f7ebc3d96230ee12a84a9b0b4b81bb8f-scss')]

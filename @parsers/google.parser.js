@@ -8,7 +8,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://play.google.com/store/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)}&c=music`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitForTimeout(100);
         console.log(`✨ GOOGLE PARSER | page loaded...`, `https://play.google.com/store/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)}&c=music`);
 
         // Link
@@ -27,7 +27,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://play.google.com${link}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitFor(100);
+        await page.waitForTimeout(100);
 
         const copyright = await page.evaluate(()=> document.querySelectorAll('.ZVWMWc .UAO9ie')[3].innerText);
         await page.close();
@@ -57,7 +57,7 @@ async function parsePage(browser, group, album) {
         // await page.goto(`https://play.google.com${albumsPageLink}`, {
         //     waitUntil: 'networkidle2'
         // });
-        // await page.waitFor(100);
+        // await page.waitForTimeout(100);
         // console.log(`✨ GOOGLE PARSER | albums page loaded...`);
         //
         // const albumLink = await page.evaluate((_album)=> {
@@ -74,7 +74,7 @@ async function parsePage(browser, group, album) {
         // await page.goto(`https://play.google.com${albumLink}`, {
         //     waitUntil: 'networkidle2'
         // });
-        // await page.waitFor(100);
+        // await page.waitForTimeout(100);
         // console.log(`✨ GOOGLE PARSER | album page loaded...`);
         //
         // const copyright = await page.evaluate(()=> document.querySelectorAll('.ZVWMWc .UAO9ie')[3].innerText);
