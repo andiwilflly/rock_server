@@ -87,7 +87,7 @@ async function parsePage(browser, group, album) {
         });
         await page.waitForTimeout(100);
 
-        await page.screenshot({ path: 'deezer1.jpg' });
+        //await page.screenshot({ path: 'deezer1.jpg' });
         console.log(`✨ DEZZER PARSER | track page loaded... (https://www.deezer.com/search/${group} - ${album}/track)`);
 
         const trackLink = await findTrack(page, group, album);
@@ -126,9 +126,9 @@ async function start(browser, group, album) {
     console.log('✨ DEZZER PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `deezer | ${group} | ${album}` });
+    /*const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `deezer | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | DEEZER PARSER: return prev result...');
-    if(prevResult && !prevResult.link.includes('search?')) return prevResult;
+    if(prevResult && !prevResult.link.includes('search?')) return prevResult;*/
 
     const response = await parsePage(browser, group, album);
 
