@@ -2,13 +2,16 @@
 
 async function findAlbum(page, group, album) {
     return await page.evaluate((_group, _album)=> {
-        const $albumTitle = [...document.querySelectorAll('.heading-2.search-title')].find($title =>  $title.innerText.includes('Albums'));
+        let $albumTitle = [...document.querySelectorAll('.heading-2.search-title')].find($title =>  $title.innerText.includes('Albums'));
+        if (!$albumTitle)
+            $albumTitle = [...document.querySelectorAll('.thumbnail-grid-title.heading-1 ')].find($title =>  $title.innerText.includes('album'));
+
         if(!$albumTitle) return null;
 
         const $albums = [...$albumTitle.parentElement.querySelectorAll('.thumbnail-col')];
         if(!$albums.length) return null;
 
-        return $albums.find($album => {
+        const $album = $albums.find($album => {
             const albumName = $album.querySelector('.heading-4').innerText.toLowerCase();
             const groupName = $album.querySelector('.heading-4-sub a').innerText.toLowerCase();
 
@@ -16,7 +19,10 @@ async function findAlbum(page, group, album) {
             if(!groupName.includes(_group)) return null;
 
             return true;
-        }).querySelector('.heading-4 a').getAttribute('href');
+        });
+
+        if (!$album) return null
+        return $album.querySelector('.heading-4 a').getAttribute('href')
     }, group, album);
 }
 
