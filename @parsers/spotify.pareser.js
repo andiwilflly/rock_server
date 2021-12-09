@@ -67,7 +67,7 @@ async function parsePage(browser, group, album) {
         await page.waitForTimeout(500);
         const trGroup = translit(group);
         const artistLink = await page.evaluate((_group, _trGroup)=> {
-            const artistEl = [...document.querySelectorAll('a._bjcti2dbGjtjcbe676J')]
+            const artistEl = [...document.querySelectorAll('a.Nqa6Cw3RkDMV8QnYreTr')]
                 .find($el =>
                     (($el.innerText.toLowerCase() === _group || $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
                     || ($el.innerText.toLowerCase() == _trGroup || $el.getAttribute('title').toLowerCase() == _trGroup))
@@ -89,7 +89,7 @@ async function parsePage(browser, group, album) {
         await page.waitForTimeout(500);
 
         const albumLink = await page.evaluate((_album)=> {
-            const albumtEl = [...document.querySelectorAll('a._bjcti2dbGjtjcbe676J')]
+            const albumtEl = [...document.querySelectorAll('a.Nqa6Cw3RkDMV8QnYreTr')]
                 .find($el =>
                     ($el.innerText.toLowerCase().includes(_album) ||
                     $el.getAttribute('title') && $el.getAttribute('title').toLowerCase().includes(_album))
