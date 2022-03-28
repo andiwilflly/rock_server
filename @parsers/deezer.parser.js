@@ -46,7 +46,6 @@ async function findTrack(page, group, album) {
     }, group, album);
 }
 
-
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
