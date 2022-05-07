@@ -53,7 +53,7 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
         await page.goto(`https://music.youtube.com/search?q=${q}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(2000);
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${q}`);
 
         await page.waitForTimeout(1000);
@@ -109,9 +109,9 @@ async function start(browser, group, album, originalGroupName, originalAlbumName
     console.log('✨ YOUTUBE PARSER:START...');
 
     // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube | ${group} | ${album}` });
+    /*todo const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | YOUTUBE PARSER: return prev result...');
-    if(prevResult) return prevResult;
+    if(prevResult) return prevResult;*/
 
     const response = await parsePage(browser, group, album, originalGroupName, originalAlbumName);
 

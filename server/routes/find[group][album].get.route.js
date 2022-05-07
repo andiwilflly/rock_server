@@ -30,8 +30,8 @@ module.exports = async function (req, res) {
             res.status(500).send('Browser flushed');
         } else {
             res.status(500).send('Another parser in progress...');
+            return;
         }
-        return;
     }
 
     browser = await setupBrowser();

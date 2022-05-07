@@ -79,7 +79,7 @@ async function parsePage(browser, group, album) {
         if (!artistLink) {
             return {
                 source: 'spotify',
-                error: `Group not found: ${group}`
+                error: `Group not found: https://open.spotify.com/search/${group}`
             };
         }
 
@@ -100,7 +100,7 @@ async function parsePage(browser, group, album) {
             return albumtEl.getAttribute('href');
         }, album);
 
-        if(!albumLink) return { source: 'spotify', error: `Album not found:  ${group} -  ${album}` };
+        if(!albumLink) return { source: 'spotify', error: `Album not found:  https://open.spotify.com/search/${group}` };
 
         return {
             source: 'spotify',

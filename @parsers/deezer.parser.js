@@ -114,7 +114,7 @@ async function parsePage(browser, group, album) {
 
         return {
             source: 'deezer',
-            error: `Album not found ${group} - ${album}`
+            error: `Album not found https://www.deezer.com/search/${encodeURIComponent(`${group} - ${album}`)}`
         };
     } catch(e) {
         return { source: 'deezer', error: e.toString() };

@@ -34,7 +34,7 @@ async function parsePage(browser, group, album) {
 
         if(!isFound) return {
             source: 'apple',
-            error: `Not found ${group} - ${album}`
+            error: `Not found https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`
         }
 
         /*const isFoundArtist = await page.evaluate((_group, _trGroup)=> {
