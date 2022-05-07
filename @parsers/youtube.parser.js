@@ -100,7 +100,10 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
             return bb;
         });
-        if(!artistPageLink) return { source: 'youtube', aa: document.querySelector('body').innerText, error: `Can't find (https://music.youtube.com/search?q=${q})` };
+        let dd = await page.evaluate(()=> {
+            return  document.querySelector('body').innerText;
+        });
+        if(!artistPageLink) return { source: 'youtube', aa: dd, error: `Can't find (https://music.youtube.com/search?q=${q})` };
 
         await page.close();
         return {
