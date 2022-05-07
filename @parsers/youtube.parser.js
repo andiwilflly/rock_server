@@ -78,8 +78,8 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
                 ...document.querySelectorAll('.yt-simple-endpoint.yt-formatted-string'),
             ]
                 .find($el =>
-                    ($el.innerText.toLowerCase() === _album || $el.getAttribute('aria-label') && $el.getAttribute('aria-label').toLowerCase() === _album)
-                    && $el.getAttribute('href') && !$el.getAttribute('href').includes('watch?'));
+                    ($el.innerText.toLowerCase() === _album || ($el.getAttribute('aria-label') && $el.getAttribute('aria-label').toLowerCase() === _album))
+                    && $el.getAttribute('href')/*todo && !$el.getAttribute('href').includes('watch?')*/);
             if(!$link) return null;
             return $link.getAttribute('href');
         }, album);
