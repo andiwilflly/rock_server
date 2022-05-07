@@ -91,11 +91,21 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
         console.log(artistPageLink, 4);
 
-        if(!artistPageLink) return { source: 'youtube', error: `Can't find (https://music.youtube.com/search?q=${q})` };
+        let aa = await page.evaluate(()=> {
+            let bb = '';
+            [...document.querySelectorAll('.ytmusic-section-list-renderer')]
+                .forEach($link =>
+                    bb += $link.innerText
+                );
+
+            return bb;
+        });
+        if(!artistPageLink) return { source: 'youtube', aa: aa, error: `Can't find (https://music.youtube.com/search?q=${q})` };
 
         await page.close();
         return {
             source: 'youtube',
+            aa: aa,
             link: artistPageLink.includes('https') ? artistPageLink : `https://music.youtube.com/${artistPageLink}`
         };
     } catch(e) {
