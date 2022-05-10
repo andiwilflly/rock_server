@@ -53,8 +53,13 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
         await page.goto(`https://music.youtube.com/search?q=${q}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(1000);
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${q}`);
+
+        try {
+            await page.click('button[aria-label="Accept all"]');
+            await page.waitForNavigation({waitUntil: 'networkidle2'});
+        } catch {}
 
         await page.waitForTimeout(1000);
 
@@ -79,7 +84,7 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
             ]
                 .find($el =>
                     ($el.innerText.toLowerCase().includes(_album) || ($el.getAttribute('aria-label') && $el.getAttribute('aria-label').toLowerCase().includes(_album)))
-                    && $el.getAttribute('href')/*todo && !$el.getAttribute('href').includes('watch?')*/);
+                    && $el.getAttribute('href') && !$el.getAttribute('href').includes('watch?'));
             if(!$link) return null;
             return $link.getAttribute('href');
         }, album);
@@ -88,27 +93,13 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
         if(!artistPageLink) artistPageLink = await findInSongs(page, group, album);
 
-
         console.log(artistPageLink, 4);
 
-        let aa = await page.evaluate(()=> {
-            let bb = '';
-            [...document.querySelectorAll('.ytmusic-section-list-renderer')]
-                .forEach($link =>
-                    bb += $link.innerText
-                );
-
-            return bb;
-        });
-        let dd = await page.evaluate(()=> {
-            return  document.querySelector('body').innerText;
-        });
-        if(!artistPageLink) return { source: 'youtube', aa: dd, error: `Can't find (https://music.youtube.com/search?q=${q})` };
+        if(!artistPageLink) return { source: 'youtube', error: `Can't find (https://music.youtube.com/search?q=${q})` };
 
         await page.close();
         return {
             source: 'youtube',
-            aa: aa,
             link: artistPageLink.includes('https') ? artistPageLink : `https://music.youtube.com/${artistPageLink}`
         };
     } catch(e) {
@@ -122,9 +113,9 @@ async function start(browser, group, album, originalGroupName, originalAlbumName
     console.log('✨ YOUTUBE PARSER:START...');
 
     // Cache
-    /*todo const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube | ${group} | ${album}` });
+    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube | ${group} | ${album}` });
     if(prevResult) console.log('🌼 MONGO DB | YOUTUBE PARSER: return prev result...');
-    if(prevResult) return prevResult;*/
+    if(prevResult) return prevResult;
 
     const response = await parsePage(browser, group, album, originalGroupName, originalAlbumName);
 
