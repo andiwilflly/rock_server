@@ -187,6 +187,6 @@ app.get(`/queue_bot/redirect`, (req, res)=> {
 //app.get('/study-ua/users-docs', usersDocsList);
 
 
-app.listen(process.env.PORT || 3000, function() {
-    global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3000}!`);
+app.listen(process.env.PORT || 3001, function() {
+    global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3001}!`);
 });
