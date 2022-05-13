@@ -27,7 +27,6 @@ module.exports = async function (req, res) {
         if (req.query.flush) {
             browser.close();
             browser = null;
-            res.status(500).send('Browser flushed');
         } else {
             res.status(500).send('Another parser in progress...');
             return;
