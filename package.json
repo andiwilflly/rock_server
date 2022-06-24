@@ -32,7 +32,7 @@
     "google-auth-library": "^6.0.0",
     "googleapis": "^51.0.0",
     "intelligo": "^1.3.0",
-    "jsdom": "^16.4.0",
+    "jsdom": "^16.5.0",
     "live-currency-exchange": "^1.0.2",
     "mongodb": "^3.5.8",
     "neural-chatbot": "^2.0.18",
