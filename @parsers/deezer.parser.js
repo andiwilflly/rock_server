@@ -66,7 +66,7 @@ async function parsePage(browser, group, album) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
                 waitUntil: 'networkidle2'
             });
-            await page.waitForTimeout(100);
+            await page.waitForTimeout(500);
             let img = '';
             try {
                 img = await page.evaluate(() => {
