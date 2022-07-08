@@ -54,7 +54,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://www.deezer.com/search/${group} - ${album}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(2000);
         console.log(`✨ DEZZER PARSER | page loaded...`);
 
         try { await page.click('.cookie-btn'); } catch {}
