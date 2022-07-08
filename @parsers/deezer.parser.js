@@ -59,14 +59,14 @@ async function parsePage(browser, group, album) {
 
         try { await page.click('.cookie-btn'); } catch {}
         try { await page.click('#gdpr-btn-accept-all'); } catch {}
-        await page.waitForTimeout(4000);
+        await page.waitForTimeout(2000);
         const albumLink = await findAlbum(page, group, album);
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
                 waitUntil: 'networkidle2'
             });
-            await page.waitForTimeout(2000);
+            await page.waitForTimeout(3000);
             let img = '';
             try {
                 img = await page.evaluate(() => {
