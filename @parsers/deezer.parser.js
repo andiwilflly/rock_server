@@ -112,9 +112,12 @@ async function parsePage(browser, group, album) {
                 image: img.replace(/\d+x\d+/, '800x800'),
             }
         }
-
+        let dd = await page.evaluate(()=> {
+            return  document.querySelector('body').innerText;
+        });
         return {
             source: 'deezer',
+            dd: dd,
             error: `Album not found https://www.deezer.com/search/${encodeURIComponent(`${group} - ${album}`)}`
         };
     } catch(e) {
