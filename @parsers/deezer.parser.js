@@ -59,8 +59,13 @@ async function parsePage(browser, group, album) {
 
         try { await page.click('.cookie-btn'); } catch {}
         try { await page.click('#gdpr-btn-accept-all'); } catch {}
-        await page.waitForTimeout(1000);
+await page.waitForTimeout(2000);
         const albumLink = await findAlbum(page, group, album);
+        let dd = await page.evaluate(()=> {
+            return  document.querySelector('body').innerText;
+        });
+        console.log(`✨ DEZZER PARSER | albumLink: https://www.deezer.com/search/${group} - ${album}`);
+        console.log(`dd: ${dd}`);
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
@@ -76,6 +81,7 @@ async function parsePage(browser, group, album) {
 
             return {
                 source: 'deezer',
+                dd: dd,
                 type: 'album',
                 link: `https://www.deezer.com${albumLink}`,
                 image: img.replace(/\d+x\d+/, '800x800'),
@@ -113,6 +119,7 @@ async function parsePage(browser, group, album) {
         }
         return {
             source: 'deezer',
+            dd: dd,
             error: `Album not found https://www.deezer.com/search/${encodeURIComponent(`${group} - ${album}`)}`
         };
     } catch(e) {
