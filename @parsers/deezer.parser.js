@@ -29,14 +29,13 @@ async function findAlbum(page, group, album) {
 
 async function findTrack(page, group, album) {
     return await page.evaluate((_group, _album)=> {
-        const $rows = [...document.querySelectorAll('.datagrid-row')];
+        const $rows = [...document.querySelectorAll('._2OACy')];
 
         const rows = $rows.map($row => {
-            const $cells = [...$row.querySelectorAll('.datagrid-label.datagrid-label-main')];
-            const $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()))
+            const $cells = [...$row.querySelectorAll('._1R22u')];
+            const $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()));
             if(!$trackCell) return null;
-
-            return $trackCell.getAttribute('href');
+            return ($row.querySelector('.jYj4D a')) ? $row.querySelector('.jYj4D a').getAttribute('href') : null;
         }).filter(Boolean);
 
         if(!rows.length) return null;
@@ -85,7 +84,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(2000);
 
         //await page.screenshot({ path: 'deezer1.jpg' });
         console.log(`✨ DEZZER PARSER | track page loaded... (https://www.deezer.com/search/${group} - ${album}/track)`);
@@ -95,7 +94,7 @@ async function parsePage(browser, group, album) {
             await page.goto(`https://www.deezer.com${trackLink}`, {
                 waitUntil: 'networkidle2'
             });
-            await page.waitForTimeout(100);
+            await page.waitForTimeout(3000);
 
             let img = '';
             try {
