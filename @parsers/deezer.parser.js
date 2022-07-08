@@ -58,6 +58,7 @@ async function parsePage(browser, group, album) {
         console.log(`✨ DEZZER PARSER | page loaded...`);
 
         try { await page.click('.cookie-btn'); } catch {}
+        try { await page.click('#gdpr-btn-accept-all'); } catch {}
 
         const albumLink = await findAlbum(page, group, album);
 
