@@ -64,6 +64,8 @@ await page.waitForTimeout(2000);
         let dd = await page.evaluate(()=> {
             return  document.querySelector('body').innerText;
         });
+        console.log(`✨ DEZZER PARSER | albumLink: https://www.deezer.com/search/${group} - ${album}`);
+        console.log(`dd: ${dd}`);
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
