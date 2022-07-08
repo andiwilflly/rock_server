@@ -83,7 +83,7 @@ async function parsePage(browser, group, album) {
             }
         }
 
-        await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
+        /*await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
             waitUntil: 'networkidle2'
         });
         await page.waitForTimeout(100);
@@ -111,7 +111,7 @@ async function parsePage(browser, group, album) {
                 link: `https://www.deezer.com${trackLink}`,
                 image: img.replace(/\d+x\d+/, '800x800'),
             }
-        }
+        }*/
         let dd = await page.evaluate(()=> {
             return  document.querySelector('body').innerText;
         });
