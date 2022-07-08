@@ -54,14 +54,16 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://www.deezer.com/search/${group} - ${album}`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(2000);
         console.log(`✨ DEZZER PARSER | page loaded...`);
 
         try { await page.click('.cookie-btn'); } catch {}
         try { await page.click('#gdpr-btn-accept-all'); } catch {}
-
+await page.waitForTimeout(2000);
         const albumLink = await findAlbum(page, group, album);
-
+        let dd = await page.evaluate(()=> {
+            return  document.querySelector('body').innerText;
+        });
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
@@ -77,6 +79,7 @@ async function parsePage(browser, group, album) {
 
             return {
                 source: 'deezer',
+                dd: dd,
                 type: 'album',
                 link: `https://www.deezer.com${albumLink}`,
                 image: img.replace(/\d+x\d+/, '800x800'),
@@ -101,7 +104,7 @@ async function parsePage(browser, group, album) {
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img.sk__sc-10y8cfp-0').getAttribute('src');
+                    return document.querySelector('img.css-1phd9a0').getAttribute('src');
                 });
             } catch {}
 
@@ -112,9 +115,6 @@ async function parsePage(browser, group, album) {
                 image: img.replace(/\d+x\d+/, '800x800'),
             }
         }*/
-        let dd = await page.evaluate(()=> {
-            return  document.querySelector('body').innerText;
-        });
         return {
             source: 'deezer',
             dd: dd,
