@@ -58,14 +58,14 @@ async function parsePage(browser, group, album) {
 
         try { await page.click('.cookie-btn'); } catch {}
         try { await page.click('#gdpr-btn-accept-all'); } catch {}
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(3000);
         const albumLink = await findAlbum(page, group, album);
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
                 waitUntil: 'networkidle2'
             });
-            await page.waitForTimeout(3000);
+            await page.waitForTimeout(4000);
             let img = '';
             try {
                 img = await page.evaluate(() => {
@@ -84,7 +84,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
             waitUntil: 'networkidle2'
         });
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(3000);
 
         //await page.screenshot({ path: 'deezer1.jpg' });
         console.log(`✨ DEZZER PARSER | track page loaded... (https://www.deezer.com/search/${group} - ${album}/track)`);
