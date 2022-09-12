@@ -43,6 +43,7 @@ async function search(page, group, song, url) {
 async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
+        await page.setDefaultNavigationTimeout(50000);
 
         let songLink = await newSearch(page, group, song, 'https://soundcloud.com/search/albums');
         if(!songLink) songLink = await newSearch(page, group, song, 'https://soundcloud.com/search');

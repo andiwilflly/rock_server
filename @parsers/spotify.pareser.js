@@ -60,6 +60,7 @@ async function parsePageOld(browser, group, album) {
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
+        await page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://open.spotify.com/search/${group}`, {
             waitUntil: 'networkidle2'

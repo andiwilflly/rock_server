@@ -12,6 +12,7 @@ async function waitForPage(page, iteration) {
 async function parsePage(browser, group, album) {
     try {
         const page = await setupPage(browser);
+        await page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`, {
             waitUntil: 'networkidle2'
