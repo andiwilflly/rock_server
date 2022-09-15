@@ -47,7 +47,6 @@ async function findInSongs(page, group, album) {
 async function parsePage(browser, group, album, originalGroupName, originalAlbumName) {
     try {
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(50000);
 
         const q = `${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`;
 

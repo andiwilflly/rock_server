@@ -4,7 +4,6 @@
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(50000);
         await page.goto(`https://www.last.fm/music/${`${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`}`, {
             waitUntil: 'networkidle2'
         });

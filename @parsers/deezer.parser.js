@@ -49,7 +49,6 @@ async function findTrack(page, group, album) {
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://www.deezer.com/search/${group} - ${album}`, {
             waitUntil: 'networkidle2'
