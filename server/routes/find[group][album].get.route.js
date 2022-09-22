@@ -1,9 +1,9 @@
 const fetch = require("node-fetch");
 //const admin = require("firebase-admin");
 
-const yandexParser = require('../../@parsers/yandex.parser');
+//const yandexParser = require('../../@parsers/yandex.parser');
 const deezerParser = require('../../@parsers/deezer.parser');
-const googleParser = require('../../@parsers/google.parser');
+//const googleParser = require('../../@parsers/google.parser');
 const appleParser = require('../../@parsers/apple.parser');
 const youTubeParser = require('../../@parsers/youtube.parser');
 const soundCloudParser = require('../../@parsers/soundcloud.parser');
@@ -48,7 +48,7 @@ module.exports = async function (req, res) {
 
         !resources.length || resources.includes('lastfm') ? lastFmParser(browser, group, album) : null,
         !resources.length || resources.includes('youtube') ? youTubeParser(browser, group, album, req.params.group, req.params.album) : null,
-        !resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
+        //!resources.length || resources.includes('yandex') ? yandexParser(browser, group, album) : null,
         // !resources.length || resources.includes('google') ? googleParser(browser, group, album) : null,
         !resources.length || resources.includes('apple') ? appleParser(browser, group, album) : null,
     ]).then(async (results)=> {
