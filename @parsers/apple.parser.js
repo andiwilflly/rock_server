@@ -21,12 +21,21 @@ async function parsePage(browser, group, album) {
 
         const trGroup = translit(group);
         const isFound = await page.evaluate((_group, _album, _trGroup)=> {
-            const $albumOrSongEl = [...document.querySelectorAll('.shelf-grid__list .shelf-grid__list-item .linkable')]
+            const $albumEl = [...document.querySelectorAll('.shelf-grid__list .shelf-grid__list-item .product-lockup')]
                 .find($el =>
                     $el.innerText.toLowerCase().startsWith(_album) && !$el.className.includes('artist') && ($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup))
                 );
-            const isFound = !!$albumOrSongEl;
-            if($albumOrSongEl) $albumOrSongEl.click();
+            let isFound = !!$albumEl;
+            if($albumEl) $albumEl.click();
+            if (isFound) {
+                return isFound;
+            }
+            const $songEl = [...document.querySelectorAll('.shelf-grid__list .shelf-grid__list-item .track-lockup')]
+                .find($el =>
+                    $el.innerText.toLowerCase().startsWith(_album) && !$el.className.includes('artist') && ($el.innerText.toLowerCase().includes(_group) || $el.innerText.toLowerCase().includes(_trGroup))
+                );
+            isFound = !!$songEl;
+            if($songEl) $songEl.click();
             return isFound;
         }, group, album, trGroup);
 
