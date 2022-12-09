@@ -76,7 +76,7 @@ async function parsePage(browser, group, album) {
             if(!artistEl) return null;
             return artistEl.getAttribute('href');
         }, group, trGroup);
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(5000);
         if (!artistLink) {
             return {
                 source: 'spotify',
