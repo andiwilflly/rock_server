@@ -76,7 +76,6 @@ async function parsePage(browser, group, album) {
             if(!artistEl) return null;
             return artistEl.getAttribute('href');
         }, group, trGroup);
-        await page.waitForTimeout(500);
 
         if (!artistLink) {
             //todo remove
