@@ -137,7 +137,9 @@ async function start(browser, group, album) {
 
     console.log('✨ SPOTIFY PARSER:END');
 
-    if(!matchedAlbum) return await parsePage(browser, group, album);
+    if (!matchedAlbum || matchedAlbum.artists[0].name.toLowerCase() != group.toLowerCase() || !matchedAlbum.name.toLowerCase().includes(album)) {
+        return await parsePage(browser, group, album);
+    }
     return {
         link: matchedAlbum.external_urls.spotify,
         name: matchedAlbum.name,
