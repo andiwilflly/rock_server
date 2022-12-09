@@ -76,14 +76,17 @@ async function parsePage(browser, group, album) {
             if(!artistEl) return null;
             return artistEl.getAttribute('href');
         }, group, trGroup);
-        await page.waitForTimeout(2000);
-        let dd = await page.evaluate(()=> {
-            return  document.querySelector('body').innerText;
-        });
+        await page.waitForTimeout(500);
+
         if (!artistLink) {
+            //todo remove
+            let debug = await page.evaluate(()=> {
+                return  document.querySelector('body').innerText;
+            });
+
             return {
                 source: 'spotify',
-                dd: dd,
+                debug: debug,
                 error: `Group not found: https://open.spotify.com/search/${group}`
             };
         }
