@@ -127,15 +127,15 @@ async function start(browser, group, album) {
     if(prevResult) return prevResult;
 
     //type=album,track
-    let matchedAlbum = false;
-    /*let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
+    //let matchedAlbum = false;
+    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
         headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
     });
     matchedAlbum = await matchedAlbum.json();
 
     matchedAlbum = matchedAlbum.albums.items[0];// || matchedAlbum.tracks.items[0]);
 
-    console.log('✨ SPOTIFY PARSER:END');*/
+    console.log('✨ SPOTIFY PARSER:END');
 
     if(!matchedAlbum) return await parsePage(browser, group, album);
     return {
