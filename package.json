@@ -23,7 +23,7 @@
     "cors": "^2.8.5",
     "details": "^1.0.0",
     "eurobank-converter": "^0.1.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-sse": "^0.5.3",
     "firebase": "^7.14.3",
     "firebase-admin": "^8.13.0",
