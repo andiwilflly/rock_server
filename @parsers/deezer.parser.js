@@ -12,11 +12,18 @@ async function findAlbum(page, group, album) {
         if(!$albums.length) return null;
 
         const $album = $albums.find($album => {
-            const albumName = $album.querySelector('.heading-4').innerText.toLowerCase();
-            const groupName = $album.querySelector('.heading-4-sub a').innerText.toLowerCase();
+            //TODO there are no these selectors anymore .heading-4 and .heading-4-sub
+            let albumName = $album.querySelector('.heading-4');
+            let groupName = $album.querySelector('.heading-4-sub a');
+            if (albumName) {
+                albumName = albumName.innerText.toLowerCase();
+            }
+            if (groupName) {
+                groupName = albumName.innerText.toLowerCase();
+            }
 
-            if(!albumName.includes(_album)) return null;
-            if(!groupName.includes(_group)) return null;
+            if(!albumName || !albumName.includes(_album)) return null;
+            if(!groupName || !groupName.includes(_group)) return null;
 
             return true;
         });
@@ -32,8 +39,12 @@ async function findTrack(page, group, album) {
         const $rows = [...document.querySelectorAll('._2OACy')];
 
         const rows = $rows.map($row => {
-            const $cells = [...$row.querySelectorAll('._1R22u')];
-            const $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()));
+            let $cells = [...$row.querySelectorAll('._1R22u')];
+            let $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()));
+            if(!$trackCell) {
+                $cells = [...$row.querySelectorAll('.jYj4D')];
+                $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()));
+            }
             if(!$trackCell) return null;
             return ($row.querySelector('.jYj4D a')) ? $row.querySelector('.jYj4D a').getAttribute('href') : null;
         }).filter(Boolean);
