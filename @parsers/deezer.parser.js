@@ -19,7 +19,7 @@ async function findAlbum(page, group, album) {
                 albumName = albumName.innerText.toLowerCase();
             }
             if (groupName) {
-                groupName = albumName.innerText.toLowerCase();
+                groupName = groupName.innerText.toLowerCase();
             }
 
             if(!albumName || !albumName.includes(_album)) return null;
