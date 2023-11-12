@@ -2,8 +2,8 @@
 
 async function findAlbum(page, group, album) {
     return await page.evaluate((_group, _album)=> {
-        let $albumTitle = [...document.querySelectorAll('.heading-2.search-title')].find($title =>  $title.innerText.includes('Albums'));
-        if (!$albumTitle)
+        let $albumTitle = [...document.querySelectorAll('.container .chakra-heading.css-169w1st')].find($title =>  $title.innerText.includes('Albums'));
+        if (!$albumTitle)//todo maybe do not need anymore
             $albumTitle = [...document.querySelectorAll('.thumbnail-grid-title.heading-1 ')].find($title =>  $title.innerText.includes('album'));
 
         if(!$albumTitle) return null;
@@ -12,9 +12,8 @@ async function findAlbum(page, group, album) {
         if(!$albums.length) return null;
 
         const $album = $albums.find($album => {
-            //TODO there are no these selectors anymore .heading-4 and .heading-4-sub
             let albumName = $album.querySelector('.heading-4');
-            let groupName = $album.querySelector('.heading-4-sub a');
+            let groupName = $album.querySelector('.heading-4-sub');
             if (albumName) {
                 albumName = albumName.innerText.toLowerCase();
             }
@@ -36,17 +35,17 @@ async function findAlbum(page, group, album) {
 
 async function findTrack(page, group, album) {
     return await page.evaluate((_group, _album)=> {
-        const $rows = [...document.querySelectorAll('._2OACy')];
+        const $rows = [...document.querySelectorAll('.JR0qJ')];
 
         const rows = $rows.map($row => {
-            let $cells = [...$row.querySelectorAll('._1R22u')];
+            let $cells = [...$row.querySelectorAll('.UUNcG')];
             let $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()));
             if(!$trackCell) {
-                $cells = [...$row.querySelectorAll('.jYj4D')];
+                $cells = [...$row.querySelectorAll('.twUvF')];
                 $trackCell = $cells.find($cell => $cell.innerText.toLowerCase().includes(_album.toLowerCase()));
             }
             if(!$trackCell) return null;
-            return ($row.querySelector('.jYj4D a')) ? $row.querySelector('.jYj4D a').getAttribute('href') : null;
+            return ($row.querySelector('.twUvF a')) ? $row.querySelector('.twUvF a').getAttribute('href') : null;
         }).filter(Boolean);
 
         if(!rows.length) return null;
@@ -80,7 +79,7 @@ async function parsePage(browser, group, album) {
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img.css-1phd9a0').getAttribute('src');
+                    return document.querySelector('img.css-13ca24n').getAttribute('src');
                 });
             } catch {}
 
@@ -110,7 +109,7 @@ async function parsePage(browser, group, album) {
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img.css-1phd9a0').getAttribute('src');
+                    return document.querySelector('img.css-13ca24n').getAttribute('src');
                 });
             } catch {}
 
