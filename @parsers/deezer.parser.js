@@ -2,13 +2,13 @@
 
 async function findAlbum(page, group, album) {
     return await page.evaluate((_group, _album)=> {
-        let $albumTitle = [...document.querySelectorAll('.container .chakra-heading.css-169w1st')].find($title =>  $title.innerText.includes('Albums'));
+        let $albumTitle = [...document.querySelectorAll('.container .chakra-heading.css-uae1qr')].find($title =>  $title.innerText.toLowerCase().includes('album'));
         if (!$albumTitle)//todo maybe do not need anymore
-            $albumTitle = [...document.querySelectorAll('.thumbnail-grid-title.heading-1 ')].find($title =>  $title.innerText.includes('album'));
+            $albumTitle = [...document.querySelectorAll('.thumbnail-grid-title.heading-1 ')].find($title =>  $title.innerText.toLowerCase().includes('album'));
 
         if(!$albumTitle) return null;
 
-        const $albums = [...$albumTitle.parentElement.querySelectorAll('.thumbnail-col')];
+        const $albums = [...$albumTitle.parentElement.parentElement.querySelectorAll('.thumbnail-col')];
         if(!$albums.length) return null;
 
         const $album = $albums.find($album => {
