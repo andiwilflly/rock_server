@@ -5,7 +5,7 @@ async function parseConcerts(browser, concertsUrls = []) {
         return new Promise(async resolve => {
             const page = await browser.newPage();
             await page.goto(url, {
-                waitUntil: 'networkidle2'
+                waitUntil: 'networkidle0'
             });
 
             const concertDetails = await page.evaluate(()=> {
@@ -48,7 +48,7 @@ async function parsePage(browser, artist) {
         const page = await browser.newPage();
 
         await page.goto(`https://www.bandsintown.com`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
 
         console.log(`✨ BANDSINTOWN PARSER | login page loaded...`);

@@ -14,7 +14,7 @@ async function parsePage(browser, group, album) {
         const page = await setupPage(browser);
 
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(1000);
         console.log(`✨ APPLE PARSER | page loaded...`, `https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`);

@@ -3,7 +3,7 @@
 
 async function newSearch(page, group, song, url) {
     await page.goto(`${url}?q=${encodeURIComponent(`${group} - ${song}`)}`, {
-        waitUntil: 'networkidle2'
+        waitUntil: 'networkidle0'
     });
     await page.waitForTimeout(100);
     console.log(`✨ SOUNDCLOUD PARSER | new search...`, `https://soundcloud.com/search?q=${encodeURIComponent(`${group} - ${song}`)}`);
@@ -23,7 +23,7 @@ async function newSearch(page, group, song, url) {
 
 async function search(page, group, song, url) {
     await page.goto(`${url}?q=${encodeURIComponent(`${group} - ${song}`)}`, {
-        waitUntil: 'networkidle2'
+        waitUntil: 'networkidle0'
     });
     await page.waitForTimeout(100);
     console.log(`✨ SOUNDCLOUD PARSER | page loaded...`, `https://soundcloud.com/search?q=${encodeURIComponent(`${group} - ${song}`)}`);

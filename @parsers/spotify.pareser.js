@@ -9,7 +9,7 @@ async function parsePageOld(browser, group, album) {
         const page = await browser.newPage();
 
         await page.goto(`https://accounts.spotify.com/en/login`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(100);
         console.log(`✨ SPOTIFY PARSER | LOGIN page loaded...`);
@@ -28,7 +28,7 @@ async function parsePageOld(browser, group, album) {
 
 
         await page.goto(`https://open.spotify.com/search/${group}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(1000);
         console.log(`✨ SPOTIFY PARSER | search page loaded...`);
@@ -43,7 +43,7 @@ async function parsePageOld(browser, group, album) {
 
 
         await page.goto(`https://open.spotify.com${groupLink}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(100);
         console.log(`✨ SPOTIFY PARSER | GROUP '${group}' page loaded...`);
@@ -61,16 +61,16 @@ async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
 
-        await page.goto(`https://open.spotify.com/search/${group}`, {
-            waitUntil: 'networkidle2'
+        await page.goto(`https://open.spotify.com/search/${group}/artists`, {
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(500);
         const trGroup = translit(group);
         const artistLink = await page.evaluate((_group, _trGroup)=> {
-            const artistEl = [...document.querySelectorAll('a.Nqa6Cw3RkDMV8QnYreTr')]
+            const artistEl = [...document.querySelectorAll('a.Gi6Lr1whYBA2jutvHvjQ')]
                 .find($el =>
-                    (($el.innerText.toLowerCase() === _group || $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
-                    || ($el.innerText.toLowerCase() == _trGroup || $el.getAttribute('title').toLowerCase() == _trGroup))
+                    (($el.innerText && $el.innerText.toLowerCase() === _group || $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
+                    || ($el.innerText && $el.innerText.toLowerCase() == _trGroup || $el.getAttribute('title').toLowerCase() == _trGroup))
                     && $el.getAttribute('href') && $el.getAttribute('href').includes('artist/')
                 );
             if(!artistEl) return null;
@@ -91,12 +91,12 @@ async function parsePage(browser, group, album) {
         }
 
         await page.goto(`https://open.spotify.com${artistLink}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(500);
 
         const albumLink = await page.evaluate((_album)=> {
-            const albumtEl = [...document.querySelectorAll('a.Nqa6Cw3RkDMV8QnYreTr')]
+            const albumtEl = [...document.querySelectorAll('a.Gi6Lr1whYBA2jutvHvjQ')]
                 .find($el =>
                     ($el.innerText.toLowerCase().includes(_album) ||
                     $el.getAttribute('title') && $el.getAttribute('title').toLowerCase().includes(_album))

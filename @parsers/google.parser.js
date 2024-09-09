@@ -6,7 +6,7 @@ async function parsePage(browser, group, album) {
         const page = await setupPage(browser);
 
         await page.goto(`https://play.google.com/store/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)}&c=music`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(100);
         console.log(`✨ GOOGLE PARSER | page loaded...`, `https://play.google.com/store/search?q=${encodeURIComponent(group)} - ${encodeURIComponent(album)}&c=music`);
@@ -25,7 +25,7 @@ async function parsePage(browser, group, album) {
 
         // Copyright
         await page.goto(`https://play.google.com${link}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(100);
 

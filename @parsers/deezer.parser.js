@@ -61,7 +61,7 @@ async function parsePage(browser, group, album) {
         const page = await browser.newPage();
 
         await page.goto(`https://www.deezer.com/search/${group} - ${album}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(3000);
         console.log(`✨ DEZZER PARSER | page loaded...`);
@@ -73,13 +73,13 @@ async function parsePage(browser, group, album) {
         console.log(`✨ DEZZER PARSER | albumLink: ${albumLink}`);
         if(albumLink) {
             await page.goto(`https://www.deezer.com${albumLink}`, {
-                waitUntil: 'networkidle2'
+                waitUntil: 'networkidle0'
             });
             await page.waitForTimeout(4000);
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img.css-13ca24n').getAttribute('src');
+                    return document.querySelector('img.css-b87eug').getAttribute('src');
                 });
             } catch {}
 
@@ -92,7 +92,7 @@ async function parsePage(browser, group, album) {
         }
 
         await page.goto(`https://www.deezer.com/search/${group} - ${album}/track`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(3000);
 
@@ -102,14 +102,14 @@ async function parsePage(browser, group, album) {
         const trackLink = await findTrack(page, group, album);
         if(trackLink) {
             await page.goto(`https://www.deezer.com${trackLink}`, {
-                waitUntil: 'networkidle2'
+                waitUntil: 'networkidle0'
             });
             await page.waitForTimeout(3000);
 
             let img = '';
             try {
                 img = await page.evaluate(() => {
-                    return document.querySelector('img.css-13ca24n').getAttribute('src');
+                    return document.querySelector('img.css-b87eug').getAttribute('src');
                 });
             } catch {}
 

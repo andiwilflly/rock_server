@@ -51,14 +51,14 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
         const q = `${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`;
 
         await page.goto(`https://music.youtube.com/search?q=${q}`, {
-            waitUntil: 'networkidle2'
+            waitUntil: 'networkidle0'
         });
         await page.waitForTimeout(1000);
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${q}`);
 
         try {
             await page.click('button[aria-label="Accept all"]');
-            await page.waitForNavigation({waitUntil: 'networkidle2'});
+            await page.waitForNavigation({waitUntil: 'networkidle0'});
         } catch {}
 
         await page.waitForTimeout(1000);
