@@ -38,7 +38,7 @@ global.authOptions = {
     headers: {
         Authorization:
             'Basic ' +
-            new Buffer('33607ef442574fad9b2dc7c9cf21a5cd' + ':' + '165ea32793f747b0a0ceed2d7a6ec240').toString('base64')
+            Buffer.from('33607ef442574fad9b2dc7c9cf21a5cd' + ':' + '165ea32793f747b0a0ceed2d7a6ec240').toString('base64')
     },
     form: {
         grant_type: 'client_credentials'
