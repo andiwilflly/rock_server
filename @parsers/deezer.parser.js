@@ -2,18 +2,18 @@
 
 async function findAlbum(page, group, album) {
     return await page.evaluate((_group, _album)=> {
-        let $albumTitle = [...document.querySelectorAll('.container .chakra-heading.css-uae1qr')].find($title =>  $title.innerText.toLowerCase().includes('album'));
+        let $albumTitle = [...document.querySelectorAll('.css-vvpl1d .chakra-heading.css-uae1qr')].find($title =>  $title.innerText.toLowerCase().includes('album'));
         if (!$albumTitle)//todo maybe do not need anymore
             $albumTitle = [...document.querySelectorAll('.thumbnail-grid-title.heading-1 ')].find($title =>  $title.innerText.toLowerCase().includes('album'));
 
         if(!$albumTitle) return null;
 
-        const $albums = [...$albumTitle.parentElement.parentElement.querySelectorAll('.thumbnail-col')];
+        const $albums = [...$albumTitle.parentElement.parentElement.querySelectorAll('.css-1igp4d3')];
         if(!$albums.length) return null;
 
         const $album = $albums.find($album => {
-            let albumName = $album.querySelector('.heading-4');
-            let groupName = $album.querySelector('.heading-4-sub');
+            let albumName = $album.querySelector('.css-d8h2n7');
+            let groupName = $album.querySelector('.css-1sqnq31');
             if (albumName) {
                 albumName = albumName.innerText.toLowerCase();
             }
@@ -28,7 +28,7 @@ async function findAlbum(page, group, album) {
         });
 
         if (!$album) return null
-        return $album.querySelector('.heading-4 a').getAttribute('href')
+        return $album.querySelector('.css-d8h2n7 a').getAttribute('href')
     }, group, album);
 }
 
