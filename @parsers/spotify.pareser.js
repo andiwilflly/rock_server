@@ -67,12 +67,14 @@ async function parsePage(browser, group, album) {
         await page.waitForTimeout(500);
         const trGroup = translit(group);
         const artistLink = await page.evaluate((_group, _trGroup)=> {
-            const artistEl = [...document.querySelectorAll('a.Gi6Lr1whYBA2jutvHvjQ')]
-                .find($el =>
-                    (($el.innerText && $el.innerText.toLowerCase() === _group || $el.getAttribute('title') && $el.getAttribute('title').toLowerCase() === _group)
-                    || ($el.innerText && $el.innerText.toLowerCase() == _trGroup || $el.getAttribute('title').toLowerCase() == _trGroup))
-                    && $el.getAttribute('href') && $el.getAttribute('href').includes('artist/')
-                );
+            const artistEl = [...document.querySelectorAll('a[href*="artist/"]')]
+                .find($el => {
+                    const cardTitle = $el.querySelector('[data-encore-id="cardTitle"]');
+                    const name = (cardTitle ? cardTitle.getAttribute('title') || cardTitle.innerText : null)
+                        || $el.innerText || $el.getAttribute('title') || '';
+                    const nameLower = name.toLowerCase().trim();
+                    return nameLower === _group.toLowerCase() || nameLower === _trGroup.toLowerCase();
+                });
             if(!artistEl) return null;
             return artistEl.getAttribute('href');
         }, group, trGroup);
@@ -95,23 +97,34 @@ async function parsePage(browser, group, album) {
         });
         await page.waitForTimeout(500);
 
-        const albumLink = await page.evaluate((_album)=> {
-            const albumtEl = [...document.querySelectorAll('a.Gi6Lr1whYBA2jutvHvjQ')]
-                .find($el =>
-                    ($el.innerText.toLowerCase().includes(_album) ||
-                    $el.getAttribute('title') && $el.getAttribute('title').toLowerCase().includes(_album))
-                    && $el.getAttribute('href') && $el.getAttribute('href').includes('album/')
-                );
+        const albumResult = await page.evaluate((_album)=> {
+            const albumtEl = [...document.querySelectorAll('a[href*="album/"]')]
+                .find($el => {
+                    const cardTitle = $el.querySelector('[data-encore-id="cardTitle"]');
+                    const name = (cardTitle ? cardTitle.getAttribute('title') || cardTitle.innerText : null)
+                        || $el.innerText || $el.getAttribute('title') || '';
+                    return name.toLowerCase().includes(_album.toLowerCase());
+                });
 
             if(!albumtEl) return null;
-            return albumtEl.getAttribute('href');
+
+            let imgSrc = null;
+            let parent = albumtEl.parentElement;
+            for (let i = 0; i < 5; i++) {
+                const img = parent.querySelector('img');
+                if (img) { imgSrc = img.getAttribute('src'); break; }
+                parent = parent.parentElement;
+            }
+
+            return { href: albumtEl.getAttribute('href'), image: imgSrc ? imgSrc.replace('00001e02', '0000b273') : null };
         }, album);
 
-        if(!albumLink) return { source: 'spotify', error: `Album not found:  https://open.spotify.com/search/${group}` };
+        if(!albumResult) return { source: 'spotify', error: `Album not found:  https://open.spotify.com/search/${group}` };
 
         return {
             source: 'spotify',
-            link: `https://open.spotify.com${albumLink}`
+            link: `https://open.spotify.com${albumResult.href}`,
+            image: albumResult.image,
         };
     } catch(e) {
         return { source: 'spotify', error: e.toString() };
@@ -128,10 +141,20 @@ async function start(browser, group, album) {
 
     //type=album,track
     //let matchedAlbum = false;
-    let matchedAlbum = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
+    const spotifyResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
         headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
     });
-    matchedAlbum = await matchedAlbum.json();
+
+    const response = await parsePage(browser, group, album);
+
+    console.log('✨ SPOTIFY PARSER:END');
+    return response;
+    /*if (!spotifyResponse.ok) {
+        const errorText = await spotifyResponse.text();
+        console.error(`✨ SPOTIFY PARSER: API error ${spotifyResponse.status}: ${errorText}`);
+        return await parsePage(browser, group, album);
+    }
+    let matchedAlbum = await spotifyResponse.json();
 
     matchedAlbum = matchedAlbum.albums.items[0];// || matchedAlbum.tracks.items[0]);
 
@@ -152,7 +175,7 @@ async function start(browser, group, album) {
         totalTracks: matchedAlbum.total_tracks,
         type: matchedAlbum.type,
         source: 'spotify'
-    };
+    };*/
 }
 
 module.exports = start;
