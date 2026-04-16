@@ -108,13 +108,9 @@ async function parsePage(browser, group, album) {
 
             if(!albumtEl) return null;
 
-            let imgSrc = null;
-            let parent = albumtEl.parentElement;
-            for (let i = 0; i < 5; i++) {
-                const img = parent.querySelector('img');
-                if (img) { imgSrc = img.getAttribute('src'); break; }
-                parent = parent.parentElement;
-            }
+            const cardEl = albumtEl.parentElement.parentElement.parentElement;
+            const img = cardEl ? cardEl.querySelector('img') : null;
+            const imgSrc = img ? img.getAttribute('src') : null;
 
             return { href: albumtEl.getAttribute('href'), image: imgSrc ? imgSrc.replace('00001e02', '0000b273') : null };
         }, album);
