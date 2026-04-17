@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 // Utils
 const spotifyGetArtistId = require('../../utils/spotify.getArtistId.util');
 const daysFromNowUtil = require('../../utils/daysFromNow.util');

@@ -1,5 +1,4 @@
 const WIKI = require('wikijs').default;
-const fetch = require("node-fetch");
 
 
 async function getWeatherCity(city, timeMs=Date.now()) {

@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const login =  'andiwillfly@gmail.com';
 const pass =  '121314ward';
 const translit = require("../server/utils/translit");

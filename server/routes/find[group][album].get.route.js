@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 //const admin = require("firebase-admin");
 
 const deezerParser = require('../../@parsers/deezer.parser');
@@ -59,7 +58,7 @@ module.exports = async function (req, res) {
             if(resource.link) {
                 const prevResource = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `${resource.source} | ${group} | ${album}` });
                 if(!prevResource) {
-                    global.MONGO_COLLECTION_PARSER.insertOne({
+                    await global.MONGO_COLLECTION_PARSER.insertOne({
                         ...resource,
                         _id: `${resource.source} | ${group} | ${album}`
                     });

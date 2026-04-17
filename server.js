@@ -1,7 +1,5 @@
 const fs = require('fs');
-const bodyParser = require('body-parser');
 const admin = require("firebase-admin");
-const request = require('request');
 const cors = require('cors');
 const express = require('express');
 // Logger
@@ -21,8 +19,8 @@ const mongoSaveCollection = require('./server/routes/mongo/post.mongo.save[colle
 const mongoDeleteCollection = require('./server/routes/mongo/post.mongo.delete[collection][_id].route');
 const mongoGetCollection = require('./server/routes/mongo/mongo.get[collection][uid].route');
 const mongoRemoveCollection = require('./server/routes/mongo/mongo.remove[collection][uid].route');
-const sokkerPlayer = require('./server/routes/sokker/player[id].get.route');
-const sokkerTeam = require('./server/routes/sokker/team[id].get.route');
+// const sokkerPlayer = require('./server/routes/sokker/player[id].get.route');
+// const sokkerTeam = require('./server/routes/sokker/team[id].get.route');
 const findConcerts = require('./server/routes/concerts[artist].get.route');
 //const usersDocsList = require('./server/routes/study-ua/usersDocsList.get.route');
 
@@ -53,10 +51,8 @@ const app = express();
 app.use(cors());
 
 app.use(express.static('public'))
-app.use(bodyParser.json());     // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({   // to support URL-encoded bodies
-    extended: true
-}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(async function (req, res, next) {
 
@@ -91,12 +87,16 @@ app.use(async function (req, res, next) {
 
     // 1hr lifetime
     if(Date.now() - spotifyTokenLifetime > 3500000) {
-        request.post(global.authOptions, function(error, response, body) {
-            spotifyTokenLifetime = Date.now();
-            global.LOG.info('SERVER | Get [spotify] token');
-            global.SPOTIFY_TOKEN = body.access_token;
-            next();
+        const response = await fetch(global.authOptions.url, {
+            method: 'POST',
+            headers: global.authOptions.headers,
+            body: new URLSearchParams(global.authOptions.form)
         });
+        const body = await response.json();
+        spotifyTokenLifetime = Date.now();
+        global.LOG.info('SERVER | Get [spotify] token');
+        global.SPOTIFY_TOKEN = body.access_token;
+        next();
     } else {
         global.LOG.info('SERVER | Get cached [spotify] token: ' + ((Date.now() - spotifyTokenLifetime) / 1000 / 60 / 24).toFixed(3) + ' hr');
         next();

@@ -6,7 +6,7 @@ module.exports = async function(req, res) {
     if(!collection) return res.status(500).send({ error: `🌼 MONGO DB | No such collection: ${req.params.collection}`})
 
     try {
-        await collection.remove({});
+        await collection.deleteMany({});
         res.status(200).send({ success: `🌼 MONGO DB | removed collection '${req.params.collection}'` });
     } catch(error) {
         console.log(`🌼 MONGO DB | remove collection error '${error}'`);

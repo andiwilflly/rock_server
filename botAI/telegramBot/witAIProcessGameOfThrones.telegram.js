@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const translate = require('@vitalets/google-translate-api');
 
 

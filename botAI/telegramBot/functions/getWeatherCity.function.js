@@ -1,5 +1,4 @@
 const randomAnswer = require('./randomAnswer.function');
-const fetch = require("node-fetch");
 const WIKI = require('wikijs').default;
 
 

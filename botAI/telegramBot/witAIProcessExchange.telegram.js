@@ -1,5 +1,4 @@
 const Fuse = require('fuse.js');
-const fetch = require("node-fetch");
 
 // TODO: обмен 0.5$ на грн
 // TODO: 0.5 евро в гривне

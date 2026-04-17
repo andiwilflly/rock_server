@@ -1,7 +1,5 @@
 const express = require('express');
 
-const nodeFetch = require('node-fetch');
-global.fetch = nodeFetch;
 
 
 const app = express();
