@@ -81,17 +81,15 @@ async function start(browser, group, album) {
     if(prevResult) console.log('🌼 MONGO DB | SPOTIFY PARSER: return prev result...');
     if(prevResult) return prevResult;
 
-    //type=album,track
-    //let matchedAlbum = false;
-    const spotifyResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
-        headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
-    });
 
     const response = await parsePage(browser, group, album);
 
     console.log('✨ SPOTIFY PARSER:END');
     return response;
-    /*if (!spotifyResponse.ok) {
+    /*const spotifyResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${group} - ${album}`)}&type=album&limit=1`, {
+        headers: { 'Authorization': `Bearer ${global.SPOTIFY_TOKEN}` }
+    });
+    if (!spotifyResponse.ok) {
         const errorText = await spotifyResponse.text();
         console.error(`✨ SPOTIFY PARSER: API error ${spotifyResponse.status}: ${errorText}`);
         return await parsePage(browser, group, album);
