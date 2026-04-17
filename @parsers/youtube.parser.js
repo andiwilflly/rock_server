@@ -39,7 +39,7 @@ async function findInSongs(page, group, album) {
     }, group, album);
 
     if(!isFound) return null;
-    await page.waitForTimeout(2500);
+    await new Promise(r => setTimeout(r, 2500));
     return page.url();
 }
 
@@ -53,7 +53,7 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
         await page.goto(`https://music.youtube.com/search?q=${q}`, {
             waitUntil: 'networkidle0'
         });
-        await page.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
         console.log(`✨ YOUTUBE PARSER | page loaded...`, `https://music.youtube.com/search?q=${q}`);
 
         try {
@@ -61,7 +61,7 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
             await page.waitForNavigation({waitUntil: 'networkidle0'});
         } catch {}
 
-        await page.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
 
         let artistPageLink = await page.evaluate((_group, _album)=> {
             const $artistPageLink = [...document.querySelectorAll('.yt-simple-endpoint.style-scope.ytmusic-responsive-list-item-renderer')]

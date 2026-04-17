@@ -5,9 +5,7 @@ const MongoDBSave = require('../utils/mongoDB/MongoDB.save');
 // Parts
 const searchAlbumYouTube = require('./youtube/searchAlbum.youtube.api');
 const lastFmParser = require('../../@parsers/last.fm.parser');
-const yandexParser = require('../../@parsers/yandex.parser');
 const soundcloudParser = require('../../@parsers/soundcloud.parser');
-const googleParser = require('../../@parsers/google.parser');
 const appleParser = require('../../@parsers/apple.parser');
 
 
@@ -32,9 +30,7 @@ module.exports = async function(NEW_RELEASES = {}) {
 
         let youtube = await searchAlbumYouTube(group, album);
         let lastfm = await lastFmParser(browser, group, album);
-        let yandex = await yandexParser(browser, group, album);
         let soundcloud = await soundcloudParser(browser, group, album);
-        let google = await googleParser(browser, group, album);
         let apple = await appleParser(browser, group, album);
 
         try {
@@ -48,9 +44,7 @@ module.exports = async function(NEW_RELEASES = {}) {
                     },
                     youtube,
                     lastfm,
-                    yandex,
                     soundcloud,
-                    google,
                     apple
                 }
             });

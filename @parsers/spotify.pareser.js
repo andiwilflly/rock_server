@@ -4,59 +4,6 @@ const pass =  '121314ward';
 const translit = require("../server/utils/translit");
 
 
-async function parsePageOld(browser, group, album) {
-    try {
-        const page = await browser.newPage();
-
-        await page.goto(`https://accounts.spotify.com/en/login`, {
-            waitUntil: 'networkidle0'
-        });
-        await page.waitForTimeout(100);
-        console.log(`✨ SPOTIFY PARSER | LOGIN page loaded...`);
-
-
-        await page.focus('#login-username')
-        await page.keyboard.type(login);
-
-        await page.focus('#login-password')
-        await page.keyboard.type(pass);
-
-        await page.waitForTimeout(3000);
-        // await page.click('#login_form_submit');
-        await page.evaluate(()=> document.querySelector('#login-button').click());
-        await page.waitForTimeout(2000);
-
-
-        await page.goto(`https://open.spotify.com/search/${group}`, {
-            waitUntil: 'networkidle0'
-        });
-        await page.waitForTimeout(1000);
-        console.log(`✨ SPOTIFY PARSER | search page loaded...`);
-
-
-        const groupLink = await page.evaluate((_group)=> {
-            const $groupLink = [...document.querySelector('[aria-label="Artists"]').querySelectorAll('a')]
-                .find($link => $link.innerText.toLowerCase().includes(group));
-            return $groupLink ? $groupLink.getAttribute('href') : null;
-        }, group);
-        if(!groupLink) return { source: 'https://open.spotify.com', error: `Can't find group ${group}` };
-
-
-        await page.goto(`https://open.spotify.com${groupLink}`, {
-            waitUntil: 'networkidle0'
-        });
-        await page.waitForTimeout(100);
-        console.log(`✨ SPOTIFY PARSER | GROUP '${group}' page loaded...`);
-
-        return {
-            source: 'https://play.google.com',
-            link: `https://play.google.com${"groupLink"}`
-        };
-    } catch(e) {
-        return { source: 'https://play.google.com', error: e.toString() };
-    }
-}
-
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
@@ -64,7 +11,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://open.spotify.com/search/${group}/artists`, {
             waitUntil: 'networkidle0'
         });
-        await page.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
         const trGroup = translit(group);
         const artistLink = await page.evaluate((_group, _trGroup)=> {
             const artistEl = [...document.querySelectorAll('a[href*="artist/"]')]
@@ -95,7 +42,7 @@ async function parsePage(browser, group, album) {
         await page.goto(`https://open.spotify.com${artistLink}`, {
             waitUntil: 'networkidle0'
         });
-        await page.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
 
         const albumResult = await page.evaluate((_album)=> {
             const albumtEl = [...document.querySelectorAll('a[href*="album/"]')]

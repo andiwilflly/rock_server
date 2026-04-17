@@ -8,7 +8,7 @@ async function parsePage(browser, group, album) {
             waitUntil: 'networkidle0'
         });
         console.log(`✨ LAST.FM PARSER | page loaded...`, `https://www.last.fm/music/${`${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`}`);
-        await page.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
 
         let isFound = await page.evaluate(() => document.querySelector('.header-new-title').innerText);
         isFound = isFound.toLowerCase().includes(album);

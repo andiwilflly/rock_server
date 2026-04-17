@@ -5,7 +5,7 @@ const request = require('request');
 const cors = require('cors');
 const express = require('express');
 // Logger
-try {  fs.unlinkSync('./server/project.log'); } catch(err) { console.error(err); }
+try {  fs.unlinkSync('./server/project.log'); } catch(err) { if (err.code !== 'ENOENT') console.error(err); }
 global.LOG = require('simple-node-logger').createSimpleLogger('./server/project.log');
 // Utils
 require('./server/utils/extendJs.utils');
@@ -187,6 +187,6 @@ app.get(`/queue_bot/redirect`, (req, res)=> {
 //app.get('/study-ua/users-docs', usersDocsList);
 
 
-app.listen(process.env.PORT || 3001, function() {
-    global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3001}!`);
+app.listen(process.env.PORT || 3002, function() {
+    global.LOG.info(`SERVER app listening on port ${process.env.PORT || 3002}!`);
 });
