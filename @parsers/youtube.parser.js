@@ -1,28 +1,3 @@
-
-
-// const searchAlbum = require('../server/parts/youtube/searchAlbum.youtube.api');
-//
-//
-// // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-// async function start(artistName, albumName) {
-//     console.log('✨ YOUTUBE PARSER:START...');
-//
-//     const matchedAlbum = await searchAlbum(artistName, albumName).catch(e => console.log(e));
-//
-//     if(!matchedAlbum) return {
-//         error: `Album [${artistName} - ${albumName}] not found`,
-//         source: 'youtube'
-//     }
-//
-//     console.log('✨ YOUTUBE PARSER:END');
-//     return {
-//         source: 'youtube',
-//         ...matchedAlbum
-//     };
-// }
-//
-// module.exports = start;
-
 async function findInSongs(page, group, album) {
 
     const isFound = await page.evaluate((_group, _album)=> {
@@ -44,9 +19,10 @@ async function findInSongs(page, group, album) {
 }
 
 
-async function parsePage(browser, group, album, originalGroupName, originalAlbumName) {
+async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(50000);
 
         const q = `${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`;
 
@@ -109,16 +85,9 @@ async function parsePage(browser, group, album, originalGroupName, originalAlbum
 
 
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-async function start(browser, group, album, originalGroupName, originalAlbumName) {
+async function start(browser, group, album) {
     console.log('✨ YOUTUBE PARSER:START...');
-
-    // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `youtube | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | YOUTUBE PARSER: return prev result...');
-    if(prevResult) return prevResult;
-
-    const response = await parsePage(browser, group, album, originalGroupName, originalAlbumName);
-
+    const response = await parsePage(browser, group, album);
     console.log('✨ YOUTUBE PARSER:END', response);
     return response;
 }

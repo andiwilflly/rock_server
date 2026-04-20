@@ -43,6 +43,7 @@ async function search(page, group, song, url) {
 async function parsePage(browser, group, song) {
     try {
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(50000);
 
         let songLink = await newSearch(page, group, song, 'https://soundcloud.com/search/albums');
         if(!songLink) songLink = await newSearch(page, group, song, 'https://soundcloud.com/search');
@@ -64,12 +65,6 @@ async function parsePage(browser, group, song) {
 
 async function start(browser, group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
-
-    // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `soundcloud | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | SOUNDCLOUD PARSER: return prev result...');
-    if(prevResult) return prevResult;
-
     return await parsePage(browser, group, album);
 }
 

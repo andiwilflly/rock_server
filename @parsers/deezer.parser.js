@@ -59,6 +59,7 @@ async function findTrack(page, group, album) {
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://www.deezer.com/search/${group} - ${album}`, {
             waitUntil: 'networkidle0'
@@ -132,14 +133,7 @@ async function parsePage(browser, group, album) {
 
 async function start(browser, group, album) {
     console.log('✨ DEZZER PARSER:START...');
-
-    // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `deezer | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | DEEZER PARSER: return prev result...');
-    if(prevResult && !prevResult.link.includes('search?')) return prevResult;
-
     const response = await parsePage(browser, group, album);
-
     console.log('✨ DEZZER PARSER:END', response);
     return response;
 }

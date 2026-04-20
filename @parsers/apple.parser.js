@@ -11,6 +11,7 @@ async function waitForPage(page, iteration) {
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`, {
             waitUntil: 'networkidle0'
@@ -69,14 +70,7 @@ async function parsePage(browser, group, album) {
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(browser, group, album) {
     console.log('✨ APPLE PARSER:START...');
-
-    // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `apple | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | APPLE PARSER: return prev result...');
-    if(prevResult && !prevResult.link.includes('search?')) return prevResult;
-
     const response = await parsePage(browser, group, album);
-
     console.log('✨ APPLE PARSER:END', response);
     return response;
 }

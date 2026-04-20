@@ -6,6 +6,7 @@ const translit = require("../server/utils/translit");
 async function parsePage(browser, group, album) {
     try {
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://open.spotify.com/search/${group}/artists`, {
             waitUntil: 'networkidle0'
@@ -75,13 +76,6 @@ async function parsePage(browser, group, album) {
 
 async function start(browser, group, album) {
     console.log('✨ SPOTIFY PARSER:START...');
-
-    // Cache
-    const prevResult = await global.MONGO_COLLECTION_PARSER.findOne({ _id: `spotify | ${group} | ${album}` });
-    if(prevResult) console.log('🌼 MONGO DB | SPOTIFY PARSER: return prev result...');
-    if(prevResult) return prevResult;
-
-
     const response = await parsePage(browser, group, album);
 
     console.log('✨ SPOTIFY PARSER:END');

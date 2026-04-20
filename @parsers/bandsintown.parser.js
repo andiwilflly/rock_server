@@ -4,6 +4,7 @@ async function parseConcerts(browser, concertsUrls = []) {
     const promises = concertsUrls.map(url => {
         return new Promise(async resolve => {
             const page = await browser.newPage();
+            page.setDefaultNavigationTimeout(50000);
             await page.goto(url, {
                 waitUntil: 'networkidle0'
             });
@@ -46,6 +47,7 @@ async function parseConcerts(browser, concertsUrls = []) {
 async function parsePage(browser, artist) {
     try {
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://www.bandsintown.com`, {
             waitUntil: 'networkidle0'
