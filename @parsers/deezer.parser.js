@@ -133,9 +133,47 @@ async function parsePage(browser, group, album) {
 }
 
 
-async function start(browser, group, album) {
+async function fetchFromApi(group, album) {
+    const url = `https://api.deezer.com/search/album?q=${encodeURIComponent(`${group} - ${album}`)}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.error) {
+        return { source: 'deezer', error: `Deezer API: ${data.error.message}` };
+    }
+
+    const items = data.data || [];
+    const groupLower = group.toLowerCase();
+    const albumLower = album.toLowerCase();
+
+    const match =
+        items.find(item =>
+            item.title?.toLowerCase() === albumLower &&
+            item.artist?.name?.toLowerCase() === groupLower
+        ) ||
+        items.find(item =>
+            item.title?.toLowerCase().includes(albumLower) &&
+            item.artist?.name?.toLowerCase() === groupLower
+        );
+
+    if (!match) {
+        return { source: 'deezer', error: `Album not found: ${group} - ${album}` };
+    }
+
+    const image = match.cover_xl?.replace(/\d+x\d+/, '800x800');
+
+    return {
+        source: 'deezer',
+        type: 'album',
+        link: match.link,
+        ...(image && { image }),
+    };
+}
+
+
+async function start(_browser, group, album) {
     console.log('✨ DEZZER PARSER:START...');
-    const response = await parsePage(browser, group, album);
+    const response = await fetchFromApi(group, album);
     console.log('✨ DEZZER PARSER:END', response);
     return response;
 }
