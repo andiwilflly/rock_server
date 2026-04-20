@@ -1,5 +1,22 @@
 // const Fuse = require('fuse.js');
 
+const LASTFM_API_KEY = '8ecb1efa682d2b9fb834f9e757e4fc0b';
+
+async function fetchFromApi(group, album) {
+    const url = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=${encodeURIComponent(group)}&album=${encodeURIComponent(album)}&api_key=${LASTFM_API_KEY}&format=json`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.error) {
+        return { source: 'lastfm', error: `Last.fm API: ${data.message}` };
+    }
+
+    const images = data.album.image || [];
+    const image = ([...images].reverse().find(img => img['#text'])?.['#text'] || null)?.replace(/\/\d+x\d+\//, '/800x800/');
+
+    return { source: 'lastfm', link: data.album.url, ...(image && { image }) };
+}
+
 
 async function parsePage(browser, group, album) {
     try {
@@ -10,10 +27,6 @@ async function parsePage(browser, group, album) {
         });
         console.log(`✨ LAST.FM PARSER | page loaded...`, `https://www.last.fm/music/${`${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`}`);
         await new Promise(r => setTimeout(r, 1000));
-
-        console.log('LAST.FM URL after load:', page.url());
-        const bodyText = await page.evaluate(() => document.body.innerText.slice(0, 300));
-        console.log('LAST.FM BODY:', bodyText);
 
         let headerText = await page.evaluate(() => {
             const el = document.querySelector('.header-new-title');
@@ -50,7 +63,7 @@ async function parsePage(browser, group, album) {
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(browser, group, album) {
     console.log('✨ LAST.FM PARSER:START...');
-    const response = await parsePage(browser, group, album);
+    const response = await fetchFromApi(group, album);
     console.log('✨ LAST.FM PARSER:END');
     return response;
 }

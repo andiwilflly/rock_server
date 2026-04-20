@@ -20,8 +20,8 @@ async function findInSongs(page, group, album) {
 
 
 async function parsePage(browser, group, album) {
+    const page = await browser.newPage();
     try {
-        const page = await browser.newPage();
         page.setDefaultNavigationTimeout(50000);
 
         const q = `${encodeURIComponent(group.split(' ').join('+'))}+-+${encodeURIComponent(album.split(' ').join('+'))}`;
@@ -73,13 +73,14 @@ async function parsePage(browser, group, album) {
 
         if(!artistPageLink) return { source: 'youtube', error: `Can't find (https://music.youtube.com/search?q=${q})` };
 
-        await page.close();
         return {
             source: 'youtube',
             link: artistPageLink.includes('https') ? artistPageLink : `https://music.youtube.com/${artistPageLink}`
         };
     } catch(e) {
         return { source: 'youtube', error: e.toString() };
+    } finally {
+        await page.close();
     }
 }
 

@@ -9,8 +9,8 @@ async function waitForPage(page, iteration) {
 
 
 async function parsePage(browser, group, album) {
+    const page = await browser.newPage();
     try {
-        const page = await browser.newPage();
         page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://music.apple.com/us/search?term=${encodeURIComponent(`${group.replace(/'/g, '')} - ${album.replace(/'/g, '')}`)}`, {
@@ -63,6 +63,8 @@ async function parsePage(browser, group, album) {
 
     } catch(e) {
         return { source: 'apple', error: e.toString() };
+    } finally {
+        await page.close();
     }
 }
 

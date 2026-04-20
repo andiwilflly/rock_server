@@ -41,8 +41,8 @@ async function search(page, group, song, url) {
 }
 
 async function parsePage(browser, group, song) {
+    const page = await browser.newPage();
     try {
-        const page = await browser.newPage();
         page.setDefaultNavigationTimeout(50000);
 
         let songLink = await newSearch(page, group, song, 'https://soundcloud.com/search/albums');
@@ -59,6 +59,8 @@ async function parsePage(browser, group, song) {
         };
     } catch(e) {
         return { source: 'soundcloud', error: e.toString() };
+    } finally {
+        await page.close();
     }
 }
 

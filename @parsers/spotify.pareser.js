@@ -4,8 +4,8 @@ const translit = require("../server/utils/translit");
 
 
 async function parsePage(browser, group, album) {
+    const page = await browser.newPage();
     try {
-        const page = await browser.newPage();
         page.setDefaultNavigationTimeout(50000);
 
         await page.goto(`https://open.spotify.com/search/${group}/artists`, {
@@ -71,6 +71,8 @@ async function parsePage(browser, group, album) {
         };
     } catch(e) {
         return { source: 'spotify', error: e.toString() };
+    } finally {
+        await page.close();
     }
 }
 
