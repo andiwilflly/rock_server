@@ -11,8 +11,21 @@ async function parsePage(browser, group, album) {
         console.log(`✨ LAST.FM PARSER | page loaded...`, `https://www.last.fm/music/${`${group.replace(/ /g, '+')}/${album.replace(/ /g, '+')}`}`);
         await new Promise(r => setTimeout(r, 1000));
 
-        let isFound = await page.evaluate(() => document.querySelector('.header-new-title').innerText);
-        isFound = isFound.toLowerCase().includes(album);
+        console.log('LAST.FM URL after load:', page.url());
+        const bodyText = await page.evaluate(() => document.body.innerText.slice(0, 300));
+        console.log('LAST.FM BODY:', bodyText);
+
+        let headerText = await page.evaluate(() => {
+            const el = document.querySelector('.header-new-title');
+            return el ? el.innerText : null;
+        });
+
+        if (!headerText) {
+            await page.close();
+            return { source: 'lastfm', error: `Page structure not found or blocked: ${group} - ${album}` };
+        }
+
+        const isFound = headerText.toLowerCase().includes(album);
 
         if (!isFound) {
             await page.close();
