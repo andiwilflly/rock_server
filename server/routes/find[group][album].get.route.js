@@ -107,6 +107,6 @@ module.exports = async function (req, res) {
     } finally {
         if(browser) await browser.close();
         browser = null;
-        console.timeEnd(`👮 TIME FIND ALBUM |${group} - ${album} | ${resources.join(',')}`);
+        console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
     }
 };

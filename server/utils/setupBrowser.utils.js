@@ -21,6 +21,7 @@ module.exports = async function setupBrowser() {
             '--disable-dev-shm-usage', // use /tmp instead of /dev/shm (64MB on cheap VPS)
             '--disable-gpu',           // no GPU process in headless
             '--disable-extensions',
+            '--single-process',
         ]
     });
     global.LOG.info('BROWSER | SETUP: success');
