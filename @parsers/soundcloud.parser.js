@@ -60,7 +60,7 @@ async function parsePage(browser, group, song) {
     } catch(e) {
         return { source: 'soundcloud', error: e.toString() };
     } finally {
-        await page.close();
+        await page.close().catch(() => {});
     }
 }
 

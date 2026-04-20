@@ -72,7 +72,7 @@ async function parsePage(browser, group, album) {
     } catch(e) {
         return { source: 'spotify', error: e.toString() };
     } finally {
-        await page.close();
+        await page.close().catch(() => {});
     }
 }
 
