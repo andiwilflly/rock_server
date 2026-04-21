@@ -18,6 +18,16 @@ const ALL_SOURCES = ['deezer', 'spotify', 'soundcloud', 'lastfm', 'youtube', 'ap
 
 let browser = null;
 
+async function postCallback(callback, group, album, results) {
+    if (!callback) return;
+    await fetch(`https://rockbot.pixis.com.ua/index.php?save_links=1&results=${encodeURIComponent(JSON.stringify({
+        group,
+        album,
+        results
+    }))}`, { method: "POST" }).catch(console.log);
+    console.log(`👮 POST results to 'rockbot.pixis.com.ua'`);
+}
+
 module.exports = async function (req, res) {
     const resources = req.query.q ? req.query.q.toLowerCase().split(',').filter(s => ALL_SOURCES.includes(s)) : [];
     const callback = req.query.callback;
@@ -55,7 +65,9 @@ module.exports = async function (req, res) {
 
     if (!sourcesToParse.length) {
         console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
-        return res.send(cachedResults);
+        res.send(cachedResults);
+        await postCallback(callback, group, album, cachedResults);
+        return;
     }
 
     browser = await setupBrowser();
@@ -94,16 +106,7 @@ module.exports = async function (req, res) {
         };
 
         res.send(results);
-
-        if(callback) {
-            await fetch(`https://rockbot.pixis.com.ua/index.php?save_links=1&results=${encodeURIComponent(JSON.stringify({
-                group,
-                album,
-                results
-            }))}`, { method: "POST" }).catch(console.log);
-
-            console.log(`👮 POST results to 'rockbot.pixis.com.ua'`);
-        }
+        await postCallback(callback, group, album, results);
     } finally {
         if(browser) await browser.close();
         browser = null;
