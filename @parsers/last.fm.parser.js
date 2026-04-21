@@ -61,7 +61,7 @@ async function parsePage(browser, group, album) {
 
 
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-async function start(browser, group, album) {
+async function start(_browser, group, album) {
     console.log('✨ LAST.FM PARSER:START...');
     const response = await fetchFromApi(group, album);
     console.log('✨ LAST.FM PARSER:END');

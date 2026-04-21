@@ -1,3 +1,57 @@
+const YTMusic = require('ytmusic-api');
+
+async function fetchFromApi(group, album) {
+    const ytmusic = new YTMusic();
+    await ytmusic.initialize();
+
+    const groupLower = group.toLowerCase();
+    const albumLower = album.toLowerCase();
+
+    const albumResults = await ytmusic.searchAlbums(`${group} ${album}`);
+    const albumMatch =
+        albumResults.find(item =>
+            item.name?.toLowerCase() === albumLower &&
+            item.artist?.name?.toLowerCase() === groupLower
+        ) ||
+        albumResults.find(item =>
+            item.name?.toLowerCase().includes(albumLower) &&
+            item.artist?.name?.toLowerCase().includes(groupLower)
+        );
+
+    if (albumMatch?.albumId) {
+        const image = albumMatch.thumbnails?.at(-1)?.url?.replace(/=w\d+-h\d+/, '=w800-h800') || null;
+        return {
+            source: 'youtube',
+            link: `https://music.youtube.com/browse/${albumMatch.albumId}`,
+            ...(image && { image }),
+        };
+    }
+
+    const songResults = await ytmusic.searchSongs(`${group} ${album}`);
+    const songMatch =
+        songResults.find(item =>
+            item.name?.toLowerCase() === albumLower &&
+            item.artist?.name?.toLowerCase() === groupLower
+        ) ||
+        songResults.find(item =>
+            item.name?.toLowerCase().includes(albumLower) &&
+            item.artist?.name?.toLowerCase().includes(groupLower)
+        );
+
+    const albumId = songMatch?.album?.albumId;
+    if (!albumId) {
+        return { source: 'youtube', error: `Not found via API: ${group} - ${album}` };
+    }
+
+    const image = songMatch.thumbnails?.at(-1)?.url?.replace(/=w\d+-h\d+/, '=w800-h800') || null;
+    return {
+        source: 'youtube',
+        link: `https://music.youtube.com/browse/${albumId}`,
+        ...(image && { image }),
+    };
+}
+
+
 async function findInSongs(page, group, album) {
 
     const isFound = await page.evaluate((_group, _album)=> {
@@ -86,9 +140,9 @@ async function parsePage(browser, group, album) {
 
 
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
-async function start(browser, group, album) {
+async function start(_browser, group, album) {
     console.log('✨ YOUTUBE PARSER:START...');
-    const response = await parsePage(browser, group, album);
+    const response = await fetchFromApi(group, album);
     console.log('✨ YOUTUBE PARSER:END', response);
     return response;
 }

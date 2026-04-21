@@ -15,6 +15,10 @@ There is also a secondary Telegram chatbot (`server.bot.js`) powered by a neural
 node server.js
 ```
 
+## Package Manager
+
+Use **yarn** (not npm) for installing dependencies.
+
 No build step — pure Node.js/CommonJS. No test suite exists in this project.
 
 ## Architecture
