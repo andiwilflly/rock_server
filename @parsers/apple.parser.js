@@ -1,5 +1,64 @@
 const translit = require("../server/utils/translit");
 
+
+async function fetchFromApi(group, album) {
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(`${group} ${album}`)}&media=music&entity=album&limit=10`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const items = data.results || [];
+    const groupLower = group.toLowerCase();
+    const albumLower = album.toLowerCase();
+
+    const match =
+        items.find(item =>
+            item.collectionName?.toLowerCase() === albumLower &&
+            item.artistName?.toLowerCase() === groupLower
+        ) ||
+        items.find(item =>
+            item.collectionName?.toLowerCase().includes(albumLower) &&
+            item.artistName?.toLowerCase() === groupLower
+        );
+
+    if (match) {
+        const image = match.artworkUrl100?.replace('100x100bb', '800x800bb') || null;
+        const link = match.collectionViewUrl?.replace(/\?.*$/, '') || null;
+        return {
+            source: 'apple',
+            link,
+            ...(image && { image }),
+        };
+    }
+
+    const songResponse = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(`${group} ${album}`)}&media=music&entity=song&limit=10`);
+    const songData = await songResponse.json();
+    const songs = songData.results || [];
+
+    const songMatch =
+        songs.find(item =>
+            item.trackName?.toLowerCase() === albumLower &&
+            item.artistName?.toLowerCase() === groupLower
+        ) ||
+        songs.find(item =>
+            item.trackName?.toLowerCase().includes(albumLower) &&
+            item.artistName?.toLowerCase() === groupLower
+        );
+
+    if (!songMatch) {
+        return { source: 'apple', error: `Not found via API: ${group} - ${album}` };
+    }
+
+    const image = songMatch.artworkUrl100?.replace('100x100bb', '800x800bb') || null;
+    const link = songMatch.trackViewUrl?.replace(/[?&]uo=\d+/g, '').replace(/[?&]$/, '') || null;
+
+    return {
+        source: 'apple',
+        link,
+        ...(image && { image }),
+    };
+}
+
+
 async function waitForPage(page, iteration) {
     if(iteration > 5) return;
     console.log('APPLE PARSER | waiting page... ', iteration, page.url());
@@ -72,7 +131,7 @@ async function parsePage(browser, group, album) {
 // https://stackoverflow.com/questions/52225461/puppeteer-unable-to-run-on-heroku
 async function start(browser, group, album) {
     console.log('✨ APPLE PARSER:START...');
-    const response = await parsePage(browser, group, album);
+    const response = await fetchFromApi(group, album);
     console.log('✨ APPLE PARSER:END', response);
     return response;
 }
