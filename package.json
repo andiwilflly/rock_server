@@ -17,32 +17,34 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@vitalets/google-translate-api": "^4.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "firebase": "^7.14.3",
-    "firebase-admin": "^8.13.0",
-    "fuse.js": "^6.4.3",
-    "jsdom": "^16.4.0",
     "mongodb": "^7.1.1",
-    "neural-chatbot": "^2.0.18",
-    "neural-phrasex": "^1.0.18",
-    "node-cache": "^5.1.2",
-    "node-cron": "^4.2.1",
-    "node-wit": "^6.0.0",
     "nodemon": "^3.1.14",
-    "openweather-apis": "^4.3.1",
     "puppeteer": "^24.41.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-adblocker": "^2.13.6",
     "puppeteer-extra-plugin-anonymize-ua": "^2.4.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "soundcloud.ts": "^0.7.4",
+    "ytmusic-api": "^5.3.1"
+  },
+  "_unused_dependencies": {
+    "@vitalets/google-translate-api": "^4.0.0",
+    "firebase": "^7.14.3",
+    "firebase-admin": "^8.13.0",
+    "fuse.js": "^6.4.3",
+    "jsdom": "^16.4.0",
+    "neural-chatbot": "^2.0.18",
+    "neural-phrasex": "^1.0.18",
+    "node-cache": "^5.1.2",
+    "node-cron": "^4.2.1",
+    "node-wit": "^6.0.0",
+    "openweather-apis": "^4.3.1",
     "random-animals-api": "^1.2.0",
     "simple-node-logger": "^18.12.24",
     "socket.io": "^3.0.1",
-    "soundcloud.ts": "^0.7.4",
     "telegraf": "^3.38.0",
-    "wikijs": "^6.0.1",
-    "ytmusic-api": "^5.3.1"
+    "wikijs": "^6.0.1"
   }
 }
