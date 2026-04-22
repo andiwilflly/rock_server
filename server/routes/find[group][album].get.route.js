@@ -73,7 +73,8 @@ module.exports = async function (req, res) {
     const album = req.params.album.toLowerCase().trim();
     const requestedSources = resources.length ? resources : ALL_SOURCES;
 
-    console.time(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
+    const timerLabel = `👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')} | ${Date.now()}`;
+    console.time(timerLabel);
 
     // Phase 1: check cache
     const cachedResults = {};
@@ -92,7 +93,7 @@ module.exports = async function (req, res) {
 
     if (!sourcesToFetch.length) {
         console.log(`👮 FIND ALBUM | all from cache | ${group} - ${album}`);
-        console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
+        console.timeEnd(timerLabel);
         res.send(cachedResults);
         await postCallback(callback, group, album, cachedResults);
         return;
@@ -112,7 +113,7 @@ module.exports = async function (req, res) {
 
     if (!browserSources.length) {
         console.log(`👮 FIND ALBUM | all from API | ${group} - ${album}`);
-        console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
+        console.timeEnd(timerLabel);
         res.send(intermediateResults);
         await postCallback(callback, group, album, intermediateResults);
         return;
@@ -135,6 +136,6 @@ module.exports = async function (req, res) {
     } finally {
         if (browser) await browser.close();
         browser = null;
-        console.timeEnd(`👮 TIME FIND ALBUM | ${group} - ${album} | ${resources.join(',')}`);
+        console.timeEnd(timerLabel);
     }
 };
