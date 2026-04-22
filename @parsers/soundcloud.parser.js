@@ -1,4 +1,58 @@
-// const Soundcloud = require("soundcloud.ts").default;
+const Soundcloud = require('soundcloud.ts').default;
+
+
+async function fetchFromApi(group, album) {
+    const sc = new Soundcloud();
+    const query = `${group} ${album}`;
+    const groupLower = group.toLowerCase();
+    const albumLower = album.toLowerCase();
+
+    const playlistResults = await sc.playlists.search({ q: query });
+    const playlists = playlistResults.collection || [];
+
+    const playlistMatch =
+        playlists.find(item =>
+            item.title?.toLowerCase() === `${groupLower} – ${albumLower}` ||
+            item.title?.toLowerCase() === `${groupLower} - ${albumLower}`
+        ) ||
+        playlists.find(item =>
+            item.title?.toLowerCase().includes(albumLower) &&
+            item.user?.username?.toLowerCase().includes(groupLower)
+        );
+
+    if (playlistMatch?.permalink_url) {
+        const image = playlistMatch.artwork_url?.replace('-large.', '-t500x500.') || null;
+        return {
+            source: 'soundcloud',
+            link: playlistMatch.permalink_url,
+            ...(image && { image }),
+        };
+    }
+
+    const trackResults = await sc.tracks.search({ q: query });
+    const tracks = trackResults.collection || [];
+
+    const trackMatch =
+        tracks.find(item =>
+            item.title?.toLowerCase() === `${groupLower} - ${albumLower}` &&
+            item.user?.username?.toLowerCase().includes(groupLower)
+        ) ||
+        tracks.find(item =>
+            item.title?.toLowerCase().includes(albumLower) &&
+            item.user?.username?.toLowerCase().includes(groupLower)
+        );
+
+    if (trackMatch?.permalink_url) {
+        const image = trackMatch.artwork_url?.replace('-large.', '-t500x500.') || null;
+        return {
+            source: 'soundcloud',
+            link: trackMatch.permalink_url,
+            ...(image && { image }),
+        };
+    }
+
+    return { source: 'soundcloud', error: `Not found via API: ${group} - ${album}` };
+}
 
 
 async function newSearch(page, group, song, url) {
@@ -67,7 +121,9 @@ async function parsePage(browser, group, song) {
 
 async function start(browser, group, album) {
     console.log('✨ SOUNDCLOUD PARSER:START...');
-    return await parsePage(browser, group, album);
+    const response = await fetchFromApi(group, album);
+    console.log('✨ SOUNDCLOUD PARSER:END', response);
+    return response;
 }
 
 module.exports = start;

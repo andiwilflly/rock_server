@@ -1057,6 +1057,11 @@ braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
+browser-id3-writer@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/browser-id3-writer/-/browser-id3-writer-6.3.1.tgz#049b6f00374fdc76396daf479044c3e3d6fdc54f"
+  integrity sha512-sRA4Uq9Q3NsmXiVpLvIDxzomtgCdbw6SY85A6fw7dUQGRVoOBg1/buFv6spPhYiSo6FlVtN5OJQTvvhbmfx9rQ==
+
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz"
@@ -4107,10 +4112,12 @@ socks@^2.8.3:
     ip-address "^10.0.1"
     smart-buffer "^4.2.0"
 
-soundcloud.ts@^0.6.0:
-  version "0.6.9"
-  resolved "https://registry.npmjs.org/soundcloud.ts/-/soundcloud.ts-0.6.9.tgz"
-  integrity sha512-mOUpdtNFPhoz8xwoEQMLY/W6VQeXhAeoWEwaMVZozhb0qKX1IfWcXKr2LyxoDpZgOUovIb+gOx9wHQNj1YcO3w==
+soundcloud.ts@^0.7.4:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/soundcloud.ts/-/soundcloud.ts-0.7.4.tgz#1ead56f54cd6908cac10223c2a549a376ce43e9a"
+  integrity sha512-lP8INW6uloP3dHR75cj7CtRhwXLlxySW2WK/yzi2RlaRqOODF2F8E0xCZJxviqW8AtwtkU0jVjspaN4iRbEa5g==
+  dependencies:
+    browser-id3-writer "^6.3.1"
 
 source-map@~0.6.1:
   version "0.6.1"

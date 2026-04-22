@@ -15,7 +15,7 @@ async function fetchFromApi(group, album) {
         ) ||
         albumResults.find(item =>
             item.name?.toLowerCase().includes(albumLower) &&
-            item.artist?.name?.toLowerCase().includes(groupLower)
+            item.artist?.name?.toLowerCase() === groupLower
         );
 
     if (albumMatch?.albumId) {
@@ -35,7 +35,7 @@ async function fetchFromApi(group, album) {
         ) ||
         songResults.find(item =>
             item.name?.toLowerCase().includes(albumLower) &&
-            item.artist?.name?.toLowerCase().includes(groupLower)
+            item.artist?.name?.toLowerCase() === groupLower
         );
 
     const albumId = songMatch?.album?.albumId;
