@@ -15,13 +15,13 @@ const setupBrowser = require('../utils/setupBrowser.utils');
 // heroku builds:cancel
 
 const ALL_SOURCES = ['deezer', 'spotify', 'soundcloud', 'lastfm', 'youtube', 'apple'];
-const API_SOURCES = new Set(['deezer', 'lastfm', 'youtube', 'soundcloud', 'apple']);
+const API_SOURCES = new Set(['deezer', 'lastfm', 'youtube', 'soundcloud', 'apple', 'spotify']);
 
 const PARSERS = {
     deezer:     (_browser, group, album) => deezerParser(null, group, album),
     lastfm:     (_browser, group, album) => lastFmParser(null, group, album),
     youtube:    (_browser, group, album) => youTubeParser(null, group, album),
-    spotify:    (browser, group, album) => spotifyParser(browser, group, album),
+    spotify:    (_browser, group, album) => spotifyParser(null, group, album),
     soundcloud: (_browser, group, album) => soundCloudParser(null, group, album),
     apple:      (_browser, group, album) => appleParser(null, group, album),
 };
