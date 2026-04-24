@@ -39,16 +39,37 @@ async function fetchFromApi(group, album) {
         );
 
     const albumId = songMatch?.album?.albumId;
-    if (!albumId) {
-        return { source: 'youtube', error: `Not found via API: ${group} - ${album}` };
+    if (albumId) {
+        const image = songMatch.thumbnails?.at(-1)?.url?.replace(/=w\d+-h\d+/, '=w800-h800') || null;
+        return {
+            source: 'youtube',
+            link: `https://music.youtube.com/browse/${albumId}`,
+            ...(image && { image }),
+        };
     }
 
-    const image = songMatch.thumbnails?.at(-1)?.url?.replace(/=w\d+-h\d+/, '=w800-h800') || null;
-    return {
-        source: 'youtube',
-        link: `https://music.youtube.com/browse/${albumId}`,
-        ...(image && { image }),
-    };
+    // Fallback: find artist by name, then check their topAlbums and topSingles
+    const artistResults = await ytmusic.searchArtists(group);
+    const artistMatch = artistResults.find(a => a.name?.toLowerCase() === groupLower);
+    if (artistMatch?.artistId) {
+        const artistData = await ytmusic.getArtist(artistMatch.artistId);
+        const allReleases = [...(artistData.topAlbums || []), ...(artistData.topSingles || [])];
+        const releaseMatch =
+            allReleases.find(a => a.name?.toLowerCase().replace(/ - single$| - ep$/, '') === albumLower) ||
+            allReleases.find(a => a.name?.toLowerCase().includes(albumLower));
+        if (releaseMatch?.albumId) {
+            console.log(`✨ YOUTUBE PARSER | found via artist lookup fallback: ${releaseMatch.name}`);
+            const albumData = await ytmusic.getAlbum(releaseMatch.albumId);
+            const image = albumData?.thumbnails?.at(-1)?.url?.replace(/=w\d+-h\d+/, '=w800-h800') || null;
+            return {
+                source: 'youtube',
+                link: `https://music.youtube.com/browse/${releaseMatch.albumId}`,
+                ...(image && { image }),
+            };
+        }
+    }
+
+    return { source: 'youtube', error: `Not found via API: ${group} - ${album}` };
 }
 
 
