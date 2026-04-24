@@ -68,6 +68,7 @@ async function fetchFromApi(group, album) {
             albums.find(a => a.collectionName?.toLowerCase().replace(/ - single$| - ep$/, '') === albumLower) ||
             albums.find(a => a.collectionName?.toLowerCase().includes(albumLower));
         if (albumMatch) {
+            console.log(`✨ APPLE PARSER | found via artist lookup fallback: ${albumMatch.collectionName}`);
             const image = albumMatch.artworkUrl100?.replace('100x100bb', '800x800bb') || null;
             const link = albumMatch.collectionViewUrl?.replace(/\?.*$/, '') || null;
             return {
