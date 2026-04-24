@@ -157,6 +157,30 @@ async function fetchFromApi(group, album) {
         );
 
     if (!match) {
+        // Fallback: find artist by name, then search their discography
+        const artistSearchRes = await fetch(`https://api.deezer.com/search/artist?q=${encodeURIComponent(group)}`);
+        const artistSearchData = await artistSearchRes.json();
+        const artistMatch = artistSearchData.data?.find(a => a.name?.toLowerCase() === groupLower);
+        if (artistMatch?.id) {
+            const albumsRes = await fetch(`https://api.deezer.com/artist/${artistMatch.id}/albums?limit=100`);
+            const albumsData = await albumsRes.json();
+            const albums = albumsData.data || [];
+            const albumMatch =
+                albums.find(a => a.title?.toLowerCase().replace(/ - single$| - ep$/, '') === albumLower) ||
+                albums.find(a => a.title?.toLowerCase().includes(albumLower));
+            if (albumMatch) {
+                console.log(`✨ DEZZER PARSER | found via artist lookup fallback: ${albumMatch.title}`);
+                const detailRes = await fetch(`https://api.deezer.com/album/${albumMatch.id}`);
+                const detail = await detailRes.json();
+                const image = detail.cover_xl?.replace(/\d+x\d+/, '800x800') || null;
+                return {
+                    source: 'deezer',
+                    type: 'album',
+                    link: detail.link || `https://www.deezer.com/album/${albumMatch.id}`,
+                    ...(image && { image }),
+                };
+            }
+        }
         return { source: 'deezer', error: `Album not found: ${group} - ${album}` };
     }
 
