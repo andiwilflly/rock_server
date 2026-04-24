@@ -44,18 +44,41 @@ async function fetchFromApi(group, album) {
             item.artistName?.toLowerCase() === groupLower
         );
 
-    if (!songMatch) {
-        return { source: 'apple', error: `Not found via API: ${group} - ${album}` };
+    if (songMatch) {
+        const image = songMatch.artworkUrl100?.replace('100x100bb', '800x800bb') || null;
+        const link = songMatch.trackViewUrl?.replace(/[?&]uo=\d+/g, '').replace(/[?&]$/, '') || null;
+        return {
+            source: 'apple',
+            link,
+            ...(image && { image }),
+        };
     }
 
-    const image = songMatch.artworkUrl100?.replace('100x100bb', '800x800bb') || null;
-    const link = songMatch.trackViewUrl?.replace(/[?&]uo=\d+/g, '').replace(/[?&]$/, '') || null;
+    // Fallback: find artist by name, then lookup all their albums
+    const artistSearchUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(group)}&media=music&entity=musicArtist&limit=5`;
+    const artistSearchRes = await fetch(artistSearchUrl);
+    const artistSearchData = await artistSearchRes.json();
+    const artistMatch = artistSearchData.results?.find(a => a.artistName?.toLowerCase() === groupLower);
+    if (artistMatch?.artistId) {
+        const lookupUrl = `https://itunes.apple.com/lookup?id=${artistMatch.artistId}&entity=album&limit=200`;
+        const lookupRes = await fetch(lookupUrl);
+        const lookupData = await lookupRes.json();
+        const albums = lookupData.results?.filter(r => r.wrapperType === 'collection') || [];
+        const albumMatch =
+            albums.find(a => a.collectionName?.toLowerCase().replace(/ - single$| - ep$/, '') === albumLower) ||
+            albums.find(a => a.collectionName?.toLowerCase().includes(albumLower));
+        if (albumMatch) {
+            const image = albumMatch.artworkUrl100?.replace('100x100bb', '800x800bb') || null;
+            const link = albumMatch.collectionViewUrl?.replace(/\?.*$/, '') || null;
+            return {
+                source: 'apple',
+                link,
+                ...(image && { image }),
+            };
+        }
+    }
 
-    return {
-        source: 'apple',
-        link,
-        ...(image && { image }),
-    };
+    return { source: 'apple', error: `Not found via API: ${group} - ${album}` };
 }
 
 
